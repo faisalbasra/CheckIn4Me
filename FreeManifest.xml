@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- *****************************************************************************
+      This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+  
+      CheckIn4Me is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+
+      CheckIn4Me is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
+     ***************************************************************************** -->
 <!--
  ***  FREE VERSION  *** 
  -->
@@ -49,11 +65,11 @@
 		</activity>
 		
 		<!-- ServiceConnection Activity -->
-		<activity android:name="com.davidivins.checkin4me.ServiceConnection" android:label="@string/service_connection_title">
+		<activity android:name="com.davidivins.checkin4me.activities.ServiceConnection" android:label="@string/service_connection_title">
 		</activity>
     
     	<!-- Authorization Activity -->
-    	<activity android:name="com.davidivins.checkin4me.Authorization" android:label="@string/authorization_title">
+    	<activity android:name="com.davidivins.checkin4me.activities.Authorization" android:label="@string/authorization_title">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
@@ -63,7 +79,7 @@
 		</activity>
         
         <!-- NearbyPlaces Activity -->
-		<activity android:name="com.davidivins.checkin4me.NearbyPlaces" android:label="@string/nearby_places_title" android:launchMode="singleTop">
+		<activity android:name="com.davidivins.checkin4me.activities.NearbyPlaces" android:label="@string/nearby_places_title" android:launchMode="singleTop">
 			<intent-filter>
 				<action android:name="android.intent.action.SEARCH" />
 			</intent-filter>
@@ -71,7 +87,7 @@
 		</activity>
 		
 		<!-- LocationDetails Activity -->
-		<activity android:name="com.davidivins.checkin4me.LocationDetails" android:label="@string/location_details_title">
+		<activity android:name="com.davidivins.checkin4me.activities.LocationDetails" android:label="@string/location_details_title">
 		</activity>
 
 	</application>
