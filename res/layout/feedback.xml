@@ -15,17 +15,7 @@
       You should have received a copy of the GNU General Public License
       along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
      ***************************************************************************** -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:id="@+id/refresh"
-		android:icon="@drawable/ic_menu_refresh"
-		android:title="@string/menu_option_refresh" />
-	<item android:id="@+id/search"
-		android:icon="@android:drawable/ic_menu_search"
-		android:title="@string/menu_option_search" />
-	<item android:id="@+id/connect_services"
-		android:icon="@android:drawable/ic_menu_add"
-		android:title="@string/menu_option_connect" />
-	<item android:id="@+id/feedback"
-		android:icon="@drawable/ic_menu_emoticons"
-		android:title="@string/menu_option_feedback" />
-</menu>
+<WebView  xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/feedback"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" />

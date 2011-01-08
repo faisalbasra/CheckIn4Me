@@ -26,6 +26,7 @@ import org.json.JSONObject;
 
 import com.davidivins.checkin4me.core.Locale;
 import com.davidivins.checkin4me.interfaces.APIInterface;
+import com.davidivins.checkin4me.oauth.OAuth2Request;
 import com.davidivins.checkin4me.oauth.OAuthResponse;
 
 import android.content.SharedPreferences;
@@ -142,7 +143,7 @@ public class FoursquareAPI implements APIInterface
 			Log.i(TAG, "Retrieving Foursquare Locations");
 
 			// build new oauth request
-			FoursquareOAuthRequest request = new FoursquareOAuthRequest(
+			OAuth2Request request = new OAuth2Request(
 					config.getProperty("api_http_method"), config.getProperty("api_host"), 
 					config.getProperty("api_version") + config.getProperty("api_locations_endpoint"));
 			
@@ -275,7 +276,7 @@ public class FoursquareAPI implements APIInterface
 			Log.i(TAG, "Checking in on Foursquare");
 
 			// build new oauth request
-			FoursquareOAuthRequest request = new FoursquareOAuthRequest(
+			OAuth2Request request = new OAuth2Request(
 					config.getProperty("api_checkin_http_method"), config.getProperty("api_host"), 
 					config.getProperty("api_version") + config.getProperty("api_checkin_endpoint"));
 			

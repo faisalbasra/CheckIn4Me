@@ -14,42 +14,46 @@
 //    You should have received a copy of the GNU General Public License
 //    along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
 //*****************************************************************************
-package com.davidivins.checkin4me.gowalla;
+package com.davidivins.checkin4me.oauth;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import javax.net.ssl.SSLException;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.AbstractVerifier;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import com.davidivins.checkin4me.oauth.OAuthResponse;
 import com.davidivins.checkin4me.util.Request;
 import com.davidivins.checkin4me.util.Response;
 
 import android.util.Log;
 
 /**
- * GowallaOAuthRequest
+ * OAuthRequest
  * 
  * @author david ivins
  */
-public class GowallaOAuthRequest extends Request 
+public class OAuth2Request extends Request 
 {
-	private static final String TAG               = "GowallaOAuthRequest";
+	private static final String TAG               = "OAuth2Request";
 	private static final String RESPONSE_ENCODING = "UTF-8";
-		
+	
 	/**
-	 * FoursquareOAuthRequest
+	 * OAuth2Request
 	 * 
 	 * @param method
 	 * @param host
 	 * @param endpoint
 	 */
-	public GowallaOAuthRequest(String method, String host, String endpoint)
+	public OAuth2Request(String method, String host, String endpoint)
 	{
 		super(method, host, endpoint);
 	}
@@ -65,7 +69,7 @@ public class GowallaOAuthRequest extends Request
 		BufferedReader page = null;
 		OAuthResponse response = new OAuthResponse();
 
-		Log.i(TAG, "executing Gowalla OAuth request...");
+		Log.i(TAG, "executing OAuth 2.0 request...");
 		
 		// make request
 		String url_string  = generateURL();
@@ -75,7 +79,7 @@ public class GowallaOAuthRequest extends Request
 		try
 		{
 			// make background http request for temporary token
-			HttpClient httpclient = new DefaultHttpClient();
+			HttpClient httpclient = getTolerantClient();//new DefaultHttpClient();
 			HttpResponse http_response;
 			
 			if (method.equals("GET"))
@@ -122,6 +126,91 @@ public class GowallaOAuthRequest extends Request
 	private String generateURL()
 	{
 		return host + endpoint + "?" + getURIQueryParametersAsString();
+	}
+	
+	/**
+	 * getTolerantClient
+	 * 
+	 * Stolen from stackoverflow.com
+	 * http://stackoverflow.com/questions/3135679/android-httpclient-hostname-in-certificate-didnt-match-example-com-exa
+	 * 
+	 * @return DefaultttpClient
+	 */
+	public DefaultHttpClient getTolerantClient() 
+	{
+		DefaultHttpClient client = new DefaultHttpClient();
+		
+		SSLSocketFactory sslSocketFactory = (SSLSocketFactory)client
+			.getConnectionManager().getSchemeRegistry().getScheme("https")
+			.getSocketFactory();
+		
+		final X509HostnameVerifier delegate = sslSocketFactory.getHostnameVerifier();
+		
+		if(!(delegate instanceof TolerantVerifier)) 
+			sslSocketFactory.setHostnameVerifier(new TolerantVerifier(delegate));
+		
+		return client;
+	}
+	
+	/**
+	 * TolerantVerifier
+	 * 
+	 * Stolen from stackoverflow.com
+	 * http://stackoverflow.com/questions/3135679/android-httpclient-hostname-in-certificate-didnt-match-example-com-exa
+	 * 
+	 * @author noah@stackoverflow
+	 */
+	class TolerantVerifier extends AbstractVerifier 
+	{
+		private final X509HostnameVerifier delegate;
+
+		/**
+		 * TolerantVerfier
+		 * 
+		 * @param delegate
+		 */
+		public TolerantVerifier(final X509HostnameVerifier delegate) 
+		{
+			this.delegate = delegate;
+		}
+
+		/**
+		 * verify
+		 * 
+		 * @param host
+		 * @param cns
+		 * @param subjectAlts
+		 */
+		public final void verify(String host, String[] cns, String[] subjectAlts) //throws SSLException 
+		{
+			boolean ok = false;
+			
+			try 
+			{
+				delegate.verify(host, cns, subjectAlts);
+			} 
+			catch (SSLException e) 
+			{
+				for (String cn : cns) 
+				{
+					if (cn.startsWith("*.")) 
+					{
+						try 
+						{
+							delegate.verify(host, new String[] { cn.substring(2) }, subjectAlts);
+							ok = true;
+						} 
+						catch (Exception e1) 
+						{
+							Log.e(TAG, "We are here and I'm not sure why...");
+						}
+					}
+				}
+				
+				if(!ok) 
+					Log.i(TAG, "Failed verification"); //throw e;
+			}
+		}
 	}
 }
 

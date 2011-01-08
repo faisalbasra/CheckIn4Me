@@ -26,6 +26,7 @@ import org.json.JSONObject;
 
 import com.davidivins.checkin4me.core.Locale;
 import com.davidivins.checkin4me.interfaces.APIInterface;
+import com.davidivins.checkin4me.oauth.OAuth2Request;
 import com.davidivins.checkin4me.oauth.OAuthResponse;
 import com.davidivins.checkin4me.util.HTTPRequest;
 
@@ -329,7 +330,7 @@ public class GowallaAPI implements APIInterface
 			
 			if (settings.getString("gowalla_refresh_token", "-1") != "-1")
 			{
-				GowallaOAuthRequest request = new GowallaOAuthRequest(
+				OAuth2Request request = new OAuth2Request(
 						config.getProperty("oauth_http_method"), config.getProperty("oauth_host"), 
 						config.getProperty("oauth_access_token_endpoint"));
 				

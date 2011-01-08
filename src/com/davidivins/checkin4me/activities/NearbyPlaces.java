@@ -484,6 +484,10 @@ public class NearbyPlaces extends ListActivity
 			onSearchRequested();
 			result = true;
 		}
+		else if (GeneratedResources.getId("feedback") == id)
+		{
+			startActivity(new Intent(this, Feedback.class));
+		}
 		else
 		{
 			// do nothing

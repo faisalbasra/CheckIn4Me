@@ -21,6 +21,7 @@ import java.util.Properties;
 
 import org.json.JSONObject;
 
+import com.davidivins.checkin4me.oauth.OAuth2Request;
 import com.davidivins.checkin4me.oauth.OAuthConnector;
 import com.davidivins.checkin4me.oauth.OAuthResponse;
 
@@ -148,7 +149,7 @@ public class FoursquareOAuthConnector implements OAuthConnector
 		
 		if (settings.getString("foursquare_code", null) != null)
 		{
-			FoursquareOAuthRequest request = new FoursquareOAuthRequest(
+			OAuth2Request request = new OAuth2Request(
 					config.getProperty("oauth_http_method", "OAUTH_HTTP_METHOD_HERE"), 
 					config.getProperty("oauth_host", "OAUTH_HOST_HERE"), 
 					config.getProperty("oauth_access_token_endpoint", "OAUTH_ACCESS_TOKEN_ENDPOINT_HERE"));

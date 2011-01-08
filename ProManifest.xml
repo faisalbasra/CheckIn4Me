@@ -89,6 +89,10 @@
 		<!-- LocationDetails Activity -->
 		<activity android:name="com.davidivins.checkin4me.activities.LocationDetails" android:label="@string/location_details_title">
 		</activity>
+		
+		<!-- Feedback Activity -->
+		<activity android:name="com.davidivins.checkin4me.activities.Feedback" android:label="@string/feedback_title" android:theme="@android:style/Theme.NoTitleBar">
+		</activity>
 
 	</application>
 </manifest> 
