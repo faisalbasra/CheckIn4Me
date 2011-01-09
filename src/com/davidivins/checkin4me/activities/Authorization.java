@@ -83,6 +83,12 @@ public class Authorization extends Activity
 				oauth_connector.storeNecessaryInitialResponseData(settings_editor, response);
 				i.setData(Uri.parse(oauth_connector.generateAuthorizationURL(settings)));
 			}
+			else
+			{
+				Log.e(TAG, "Failed to begin handshake: " + response.getResponseString());
+				Toast.makeText(getApplicationContext(), "Failed to begin handshake.", Toast.LENGTH_SHORT).show();
+				i = new Intent(this, ServiceConnection.class);
+			}
 		}
 		// check if we are returning here from the middle of an oauth handshake
 		else if (settings.getBoolean("handshake_in_progress", false) && 
@@ -124,19 +130,21 @@ public class Authorization extends Activity
 				{
 					Log.e(TAG, "Failed to complete handshake: " + response.getResponseString());
 					Toast.makeText(getApplicationContext(), "Failed to complete handshake.", Toast.LENGTH_SHORT).show();
+					i = new Intent(this, ServiceConnection.class);
 				}
 			}
 			else
 			{
 				Log.e(TAG, "Failed to authorize app: " + uri.toString());
 				Toast.makeText(getApplicationContext(), "Failed to authorize app.", Toast.LENGTH_SHORT).show();
+				i = new Intent(this, ServiceConnection.class);
 			}
 		}
 		else
 		{
 			Log.i(TAG, "No service clicked and no handshake in progress");
-			Toast.makeText(getApplicationContext(), "No service clicked and no handshake in progress.", 
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "No service clicked and no handshake in progress.", Toast.LENGTH_SHORT).show();
+			i = new Intent(this, ServiceConnection.class);
 		}
 		
 		settings_editor.commit();

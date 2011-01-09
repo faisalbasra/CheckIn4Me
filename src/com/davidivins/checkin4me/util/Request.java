@@ -16,6 +16,7 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.util;
 
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.TreeMap;
 import android.util.Log;
@@ -136,6 +137,26 @@ abstract public class Request
 	public void addQueryParameter(String key, String value)
 	{
 		query_parameters.put(key, value.replace(" ", "%20"));
+	}
+	
+	/**
+	 * addQueryParameterAndEncode
+	 * 
+	 * @param key
+	 * @param value
+	 */
+	public void addQueryParameterAndEncode(String key, String value)
+	{
+		try
+		{
+			String encoded_value = URLEncoder.encode(value, ENCODING);
+			query_parameters.put(key, encoded_value.replace(" ", "%20"));
+		}
+		catch (Exception e)
+		{
+			Log.i(TAG, "Encoding doesn't exist!?");
+		}
+		
 	}
 	
 	/**

@@ -23,6 +23,7 @@ import java.util.Set;
 
 import com.davidivins.checkin4me.comparators.LocaleNameComparator;
 import com.davidivins.checkin4me.comparators.LocaleServicesTotalComparator;
+import com.davidivins.checkin4me.facebook.FacebookService;
 import com.davidivins.checkin4me.foursquare.FoursquareService;
 import com.davidivins.checkin4me.gowalla.GowallaService;
 import com.davidivins.checkin4me.interfaces.ServiceInterface;
@@ -53,6 +54,7 @@ public class Services
 		int service_count = 0;
 		
 		services = new ArrayList<ServiceInterface>();
+		services.add(new FacebookService(resources, service_count++));
 		services.add(new FoursquareService(resources, service_count++));
 		services.add(new GowallaService(resources, service_count++));
 		
