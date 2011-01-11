@@ -44,7 +44,6 @@ import com.google.android.maps.OverlayItem;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -395,8 +394,7 @@ public class LocationDetails extends MapActivity
 	public void onClick(DialogInterface dialog, int which) 
 	{
 		// return to nearby places
-		Intent i = new Intent(this, NearbyPlaces.class);
-		startActivity(i);
+		finish();
 	}
 		
 	/**
