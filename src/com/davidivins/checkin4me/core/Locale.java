@@ -44,6 +44,8 @@ public class Locale
 	private String state;
 	private String zip;
 	
+	private String distance;
+	
 	HashMap<Integer, String> service_location_ids;
 	
 	/**
@@ -61,6 +63,8 @@ public class Locale
 		city = "";
 		state = "";
 		zip = "";
+		
+		distance = "";
 		
 		service_location_ids = new HashMap<Integer, String>();
 	}
@@ -161,6 +165,26 @@ public class Locale
 			out_address += " " + zip;
 
 		return out_address;
+	}
+	
+	/**
+	 * setDistance
+	 * 
+	 * @param String
+	 */
+	public void setDistance(String distance)
+	{
+		this.distance = distance;
+	}
+	
+	/**
+	 * getDistance
+	 * 
+	 * @return distance
+	 */
+	public String getDistance()
+	{
+		return distance;
 	}
 	
 	/**

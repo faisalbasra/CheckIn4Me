@@ -17,6 +17,7 @@
 package com.davidivins.checkin4me.foursquare;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -24,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.davidivins.checkin4me.comparators.LocaleDistanceComparator;
 import com.davidivins.checkin4me.core.Locale;
 import com.davidivins.checkin4me.interfaces.APIInterface;
 import com.davidivins.checkin4me.oauth.OAuth2Request;
@@ -82,6 +84,7 @@ public class FoursquareAPI implements APIInterface
 	 */
 	public ArrayList<Locale> getLatestLocations()
 	{
+		Collections.sort(latest_locations, new LocaleDistanceComparator());
 		return latest_locations;
 	}
 	
@@ -152,9 +155,15 @@ public class FoursquareAPI implements APIInterface
 			
 			// set query parameters
 			if (query != null)
+			{
 				request.addQueryParameter("query", query);
+				request.addQueryParameter("limit", "10");
+			}
+			else
+				request.addQueryParameter("limit", "50");
+
 			request.addQueryParameter("ll", latitude + "," + longitude);
-			request.addQueryParameter("l", "50");
+			request.addQueryParameter("intent", "checkin");
 			request.addQueryParameter("oauth_token", 
 					settings.getString("foursquare_oauth_token_secret", "FOURSQUARE_ACCESS_TOKEN_HERE"));
 			
