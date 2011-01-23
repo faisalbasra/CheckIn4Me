@@ -18,7 +18,7 @@ package com.davidivins.checkin4me.activities;
 
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.core.Services;
-import com.davidivins.checkin4me.oauth.OAuthConnector;
+import com.davidivins.checkin4me.oauth.OAuthConnectorInterface;
 import com.davidivins.checkin4me.oauth.OAuthResponse;
 
 import android.app.Activity;
@@ -67,7 +67,7 @@ public class Authorization extends Activity
 			Log.i(TAG, "service_id = " + service_id);
 			
 			// get oauth connector
-			OAuthConnector oauth_connector = 
+			OAuthConnectorInterface oauth_connector = 
 				Services.getInstance(this).getServiceById(service_id).getOAuthConnector();
 			
 			// begin handshake process
@@ -96,7 +96,7 @@ public class Authorization extends Activity
 		{
 			// get the oauth connector for the service currently in the middle of a handshake
 			int service_id = settings.getInt("handshake_service_id", -1);
-			OAuthConnector oauth_connector = 
+			OAuthConnectorInterface oauth_connector = 
 				Services.getInstance(this).getServiceById(service_id).getOAuthConnector();
 			
 			// get the response for the authorization request

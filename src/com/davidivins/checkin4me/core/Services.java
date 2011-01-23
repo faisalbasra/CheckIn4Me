@@ -19,6 +19,7 @@ package com.davidivins.checkin4me.core;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.davidivins.checkin4me.brightkite.BrightkiteService;
 import com.davidivins.checkin4me.facebook.FacebookService;
 import com.davidivins.checkin4me.foursquare.FoursquareService;
 import com.davidivins.checkin4me.gowalla.GowallaService;
@@ -50,12 +51,10 @@ public class Services
 		int service_count = 0;
 		
 		services = new ArrayList<ServiceInterface>();
+		services.add(new BrightkiteService(resources, service_count++));
 		services.add(new FacebookService(resources, service_count++));
 		services.add(new FoursquareService(resources, service_count++));
 		services.add(new GowallaService(resources, service_count++));
-		
-		// add debug conditional here.
-		//services.add(new BrightkiteService(resources, service_count++));	
 	}
 	
 	/**

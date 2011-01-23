@@ -22,7 +22,7 @@ import java.util.Properties;
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.interfaces.APIInterface;
 import com.davidivins.checkin4me.interfaces.ServiceInterface;
-import com.davidivins.checkin4me.oauth.OAuthConnector;
+import com.davidivins.checkin4me.oauth.OAuthConnectorInterface;
 
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -38,6 +38,8 @@ public class BrightkiteService implements ServiceInterface
 	private static final String TAG = "BrightkiteService";
 	private Properties config;
 	private int service_id;
+	private OAuthConnectorInterface oauth_connector;
+	private APIInterface api_adapter;
 	
 	/**
 	 * BrightkiteService
@@ -58,6 +60,9 @@ public class BrightkiteService implements ServiceInterface
 		{
 			Log.e(TAG, "Failed to open config file");
 		}
+		
+		oauth_connector = new BrightkiteOAuthConnector(config);
+		api_adapter = new BrightkiteAPI(config, service_id);
 	}
 	
 	/**
@@ -105,10 +110,9 @@ public class BrightkiteService implements ServiceInterface
 	 * 
 	 * @return null
 	 */
-	public OAuthConnector getOAuthConnector() 
+	public OAuthConnectorInterface getOAuthConnector() 
 	{
-		// brightkite doesn't work yet
-		return null;
+		return oauth_connector;
 	}
 	
 	/**
@@ -118,8 +122,7 @@ public class BrightkiteService implements ServiceInterface
 	 */
 	public APIInterface getAPIInterface()
 	{
-		// brightkite doesn't work yet
-		return null;
+		return api_adapter;
 	}
 	
 	/**
@@ -130,6 +133,7 @@ public class BrightkiteService implements ServiceInterface
 	 */
 	public boolean connected(SharedPreferences settings)
 	{
-		return false;
+		return settings.contains("brightkite_oauth_token") && 
+			settings.contains("brightkite_oauth_token_secret");
 	}
 }

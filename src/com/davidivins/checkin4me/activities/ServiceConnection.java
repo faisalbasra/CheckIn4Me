@@ -181,8 +181,5 @@ public class ServiceConnection extends ListActivity implements OnItemClickListen
 		return result;
 	}
 
-	public void onClick(DialogInterface dialog, int which) 
-	{
-		// TODO Auto-generated method stub
-	}
+	public void onClick(DialogInterface dialog, int which) { }
 }

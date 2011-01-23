@@ -16,6 +16,8 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.util;
 
+import java.util.TreeMap;
+
 /**
  * Response
  * 
@@ -108,4 +110,5 @@ public class Response
 	{
 		return response_string;
 	}
+	
 }

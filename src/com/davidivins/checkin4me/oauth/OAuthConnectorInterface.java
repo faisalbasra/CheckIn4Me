@@ -26,7 +26,7 @@ import android.net.Uri;
  * 
  * @author david ivins
  */
-public abstract interface OAuthConnector
+public abstract interface OAuthConnectorInterface
 {
 	abstract OAuthResponse beginHandshake();
 	abstract boolean isSuccessfulInitialResponse(OAuthResponse response);

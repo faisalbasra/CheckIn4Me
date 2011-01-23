@@ -22,7 +22,7 @@ import java.util.Properties;
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.interfaces.APIInterface;
 import com.davidivins.checkin4me.interfaces.ServiceInterface;
-import com.davidivins.checkin4me.oauth.OAuthConnector;
+import com.davidivins.checkin4me.oauth.OAuthConnectorInterface;
 
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -37,7 +37,7 @@ public class FacebookService implements ServiceInterface
 {
 	private static final String TAG = "FacebookService";
 	private Properties config;
-	private OAuthConnector oauth_connector;
+	private OAuthConnectorInterface oauth_connector;
 	private APIInterface api_adapter;
 	private int service_id;
 	
@@ -110,7 +110,7 @@ public class FacebookService implements ServiceInterface
 	 * 
 	 * @return OAuthConnector
 	 */
-	public OAuthConnector getOAuthConnector() 
+	public OAuthConnectorInterface getOAuthConnector() 
 	{
 		return oauth_connector;
 	}

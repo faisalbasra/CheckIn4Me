@@ -16,7 +16,7 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.interfaces;
 
-import com.davidivins.checkin4me.oauth.OAuthConnector;
+import com.davidivins.checkin4me.oauth.OAuthConnectorInterface;
 
 import android.content.SharedPreferences;
 
@@ -31,7 +31,7 @@ public interface ServiceInterface
 	abstract public String getName();
 	abstract public int getLogoDrawable();
 	abstract public int getIconDrawable();
-	abstract public OAuthConnector getOAuthConnector();
+	abstract public OAuthConnectorInterface getOAuthConnector();
 	abstract public APIInterface getAPIInterface();
 	abstract public boolean connected(SharedPreferences settings);
 }
