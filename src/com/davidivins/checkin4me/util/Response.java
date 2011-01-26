@@ -16,8 +16,6 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.util;
 
-import java.util.TreeMap;
-
 /**
  * Response
  * 

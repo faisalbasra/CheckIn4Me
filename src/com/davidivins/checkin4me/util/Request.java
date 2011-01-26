@@ -149,8 +149,9 @@ abstract public class Request
 	{
 		try
 		{
+			String encoded_key = URLEncoder.encode(key, ENCODING);
 			String encoded_value = URLEncoder.encode(value, ENCODING);
-			query_parameters.put(key, encoded_value.replace(" ", "%20"));
+			query_parameters.put(encoded_key.replace(" ", "%20"), encoded_value.replace(" ", "%20"));
 		}
 		catch (Exception e)
 		{
