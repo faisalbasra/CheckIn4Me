@@ -56,6 +56,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -215,6 +216,31 @@ public class LocationDetails extends MapActivity
 	 * @param View view
 	 */
 	public void onClick(View view) 
+	{	
+		LayoutInflater factory = LayoutInflater.from(this);
+		final View alert_view = factory.inflate(GeneratedResources.getLayout("checkin_message"), null);
+        
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		EditText input = (EditText)alert_view.findViewById(GeneratedResources.getId("checkin_message_text_entry"));
+		
+		alert.setView(alert_view);
+		alert.setMessage("Check-In Message:");
+		alert.setPositiveButton("Check-In", new CheckInMessageOnClickListener(input)); 
+		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int button) {
+				dialog.cancel();
+			}
+		});
+		
+		alert.show();
+	}
+
+	/**
+	 * checkIn
+	 * 
+	 * @param message
+	 */
+	private void checkIn(String message)
 	{
 		// cancel acquiring location dialog
 		if (null != checking_in_dialog && checking_in_dialog.isShowing())
@@ -248,7 +274,7 @@ public class LocationDetails extends MapActivity
 			
 			// create and start check-in thread
 			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-			checkin_requester = new CheckInRequester(this, this, handler, service_ids, current_location, settings);
+			checkin_requester = new CheckInRequester(this, this, handler, service_ids, current_location, message, settings);
 			checkin_thread = new Thread(checkin_requester, "CheckInThread");
 			checkin_thread.start();
 		}
@@ -444,5 +470,37 @@ public class LocationDetails extends MapActivity
 	public Runnable getCheckInCompletedCallback() 
 	{
 		return process_check_in;
+	}
+	
+	/**
+	 * CheckInMessageOnClickListener
+	 */
+	private class CheckInMessageOnClickListener implements DialogInterface.OnClickListener
+	{
+		private EditText input;
+		
+		/**
+		 * CheckInMessageOnClickListener
+		 * 
+		 * @param input
+		 */
+		public CheckInMessageOnClickListener(EditText input)
+		{
+			this.input = input;
+		}
+		
+		/**
+		 * onClick
+		 * 
+		 * @param DialogInterface dialog
+		 * @param int button
+		 */
+		public void onClick(DialogInterface dialog, int button) 
+		{
+			String message = input.getText().toString().trim();
+			
+			Log.i(TAG,"message = *" + message + "*");
+			checkIn(message);
+		}
 	}
 }

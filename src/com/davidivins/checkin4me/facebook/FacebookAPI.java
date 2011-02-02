@@ -92,10 +92,10 @@ public class FacebookAPI implements APIInterface
 	 * @param settings
 	 * @return CheckInThread
 	 */
-	public Runnable getCheckInThread(Locale location, SharedPreferences settings)
+	public Runnable getCheckInThread(Locale location, String message, SharedPreferences settings)
 	{
 		latest_checkin_status = false;
-		return new CheckInThread(location, settings);
+		return new CheckInThread(location, message, settings);
 	}
 	
 	/**
@@ -222,6 +222,7 @@ public class FacebookAPI implements APIInterface
 	class CheckInThread implements Runnable
 	{
 		private Locale location;
+		private String message;
 		private SharedPreferences settings;
 		
 		/**
@@ -230,10 +231,11 @@ public class FacebookAPI implements APIInterface
 		 * @param location
 		 * @param settings
 		 */
-		CheckInThread(Locale location, SharedPreferences settings)
+		CheckInThread(Locale location, String message, SharedPreferences settings)
 		{
 			this.location = location;
 			this.settings = settings;
+			this.message = message;
 		}
 
 		/**
@@ -261,8 +263,8 @@ public class FacebookAPI implements APIInterface
 			request.addQueryParameter("access_token", 
 					settings.getString("facebook_access_token", "FACEBOOK_ACCESS_TOKEN_HERE"));
 			
-			//if (message != null)
-			//	request.addQueryParameter("message", message);
+			if (!message.equals(""))
+				request.addQueryParameter("message", message);
 
 			request.addQueryParameter("place", place_id);
 			request.addQueryParameterAndEncode("coordinates", coordinates);

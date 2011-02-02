@@ -94,10 +94,10 @@ public class GowallaAPI implements APIInterface
 	 * @param settings
 	 * @return CheckInThread
 	 */
-	public Runnable getCheckInThread(Locale location, SharedPreferences settings)
+	public Runnable getCheckInThread(Locale location, String message, SharedPreferences settings)
 	{
 		latest_checkin_status = false;
-		return new CheckInThread(location, settings);
+		return new CheckInThread(location, message, settings);
 	}
 	
 	/**
@@ -225,6 +225,7 @@ public class GowallaAPI implements APIInterface
 	class CheckInThread implements Runnable
 	{
 		private Locale location;
+		private String message;
 		private SharedPreferences settings;
 		private boolean token_refresh_attempted;
 		
@@ -234,9 +235,10 @@ public class GowallaAPI implements APIInterface
 		 * @param location
 		 * @param settings
 		 */
-		CheckInThread(Locale location, SharedPreferences settings)
+		CheckInThread(Locale location, String message, SharedPreferences settings)
 		{
 			this.location = location;
+			this.message = message;
 			this.settings = settings;
 			this.token_refresh_attempted = false;
 		}
@@ -269,7 +271,10 @@ public class GowallaAPI implements APIInterface
 			request.addQueryParameter("lng", settings.getString("current_longitude", "-1"));
 			request.addQueryParameter("post_to_twitter", "0");
 			request.addQueryParameter("post_to_facebook", "0");
-			
+					
+			if (!message.equals(""))
+				request.addQueryParameter("comment", message);
+				
 			// execute http request
 			OAuthResponse response = (OAuthResponse)request.execute();
 			

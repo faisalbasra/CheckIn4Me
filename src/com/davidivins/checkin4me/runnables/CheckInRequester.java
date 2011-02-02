@@ -39,6 +39,7 @@ public class CheckInRequester implements Runnable
 	Handler handler;
 	ArrayList<Integer> service_ids;
 	Locale location;
+	String message;
 	SharedPreferences settings;
 	HashMap<Integer, Boolean> checkin_statuses;
 	
@@ -49,13 +50,15 @@ public class CheckInRequester implements Runnable
 	 * @param service_ids
 	 * @param settings
 	 */
-	public CheckInRequester(Activity activity, CheckInRequesterListener listener, Handler handler, ArrayList<Integer> service_ids, Locale location, SharedPreferences settings)
+	public CheckInRequester(Activity activity, CheckInRequesterListener listener, Handler handler, 
+			ArrayList<Integer> service_ids, Locale location, String message, SharedPreferences settings)
 	{
 		this.activity = activity;
 		this.listener = listener;
 		this.handler = handler;
 		this.service_ids = service_ids;
 		this.location = location;
+		this.message = message;
 		this.settings = settings;
 		
 		this.checkin_statuses = new HashMap<Integer, Boolean>();
@@ -66,8 +69,7 @@ public class CheckInRequester implements Runnable
 	 */
 	public void run() 
 	{		
-		checkin_statuses = Services.getInstance(activity).checkIn(service_ids, location, settings);	
-		//handler.post(process_check_in);
+		checkin_statuses = Services.getInstance(activity).checkIn(service_ids, location, message, settings);	
 		handler.post(listener.getCheckInCompletedCallback());
 	}
 	

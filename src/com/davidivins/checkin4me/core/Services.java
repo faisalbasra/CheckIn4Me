@@ -53,9 +53,6 @@ public class Services
 		services.add(new FacebookService(resources, service_count++));
 		services.add(new FoursquareService(resources, service_count++));
 		services.add(new GowallaService(resources, service_count++));
-		
-		// add debug conditional here.
-		//services.add(new BrightkiteService(resources, service_count++));	
 	}
 	
 	/**
@@ -211,7 +208,7 @@ public class Services
 	 * @param location
 	 * @param settings
 	 */
-	public HashMap<Integer, Boolean> checkIn(ArrayList<Integer> service_ids, Locale location, SharedPreferences settings)
+	public HashMap<Integer, Boolean> checkIn(ArrayList<Integer> service_ids, Locale location, String message, SharedPreferences settings)
 	{
 		ArrayList<Thread> threads = new ArrayList<Thread>();
 		HashMap<Integer, Boolean> checkin_statuses = new HashMap<Integer, Boolean>();
@@ -221,7 +218,7 @@ public class Services
 		{
 			ServiceInterface service = getServiceById(service_id);
 			if (service.connected(settings))
-				threads.add(new Thread(service.getAPIInterface().getCheckInThread(location, settings), service.getName()));			
+				threads.add(new Thread(service.getAPIInterface().getCheckInThread(location, message, settings), service.getName()));			
 		}
 		
 		// start threads

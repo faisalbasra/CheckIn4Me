@@ -31,6 +31,6 @@ public interface APIInterface
 {
 	abstract public Runnable getLocationThread(String query, String longitude, String latitude, SharedPreferences settings);
 	abstract public ArrayList<Locale> getLatestLocations();
-	abstract public Runnable getCheckInThread(Locale location, SharedPreferences settings);
+	abstract public Runnable getCheckInThread(Locale location, String message, SharedPreferences settings);
 	abstract public boolean getLatestCheckInStatus();
 }

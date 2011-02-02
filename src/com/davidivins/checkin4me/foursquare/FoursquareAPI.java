@@ -95,10 +95,10 @@ public class FoursquareAPI implements APIInterface
 	 * @param settings
 	 * @return CheckInThread
 	 */
-	public Runnable getCheckInThread(Locale location, SharedPreferences settings)
+	public Runnable getCheckInThread(Locale location, String message, SharedPreferences settings)
 	{
 		latest_checkin_status = false;
-		return new CheckInThread(location, settings);
+		return new CheckInThread(location, message, settings);
 	}
 	
 	/**
@@ -263,6 +263,7 @@ public class FoursquareAPI implements APIInterface
 	class CheckInThread implements Runnable
 	{
 		private Locale location;
+		private String message;
 		private SharedPreferences settings;
 		
 		/**
@@ -271,9 +272,10 @@ public class FoursquareAPI implements APIInterface
 		 * @param location
 		 * @param settings
 		 */
-		CheckInThread(Locale location, SharedPreferences settings)
+		CheckInThread(Locale location, String message, SharedPreferences settings)
 		{
 			this.location = location;
+			this.message = message;
 			this.settings = settings;
 		}
 
@@ -303,6 +305,9 @@ public class FoursquareAPI implements APIInterface
 			request.addQueryParameter("ll", settings.getString("current_latitude", "CURRENT_LATITUDE_HERE") + "," +
 					 settings.getString("current_longitude", "CURRENT_LONGITUDE_HERE"));
 			request.addQueryParameter("broadcast", "public");
+			
+			if (!message.equals(""))
+				request.addQueryParameter("shout", message);
 			
 			// execute http request
 			OAuthResponse response = (OAuthResponse)request.execute();
