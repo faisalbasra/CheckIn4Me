@@ -132,4 +132,12 @@ public class BrightkiteService implements ServiceInterface
 	{
 		return false;
 	}
+	
+	/**
+	 * hasSettings
+	 */
+	public boolean hasSettings()
+	{
+		return false;
+	}
 }

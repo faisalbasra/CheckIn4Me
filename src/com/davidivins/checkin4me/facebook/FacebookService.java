@@ -136,4 +136,12 @@ public class FacebookService implements ServiceInterface
 		return settings.contains("facebook_access_token") && 
 			(settings.getString("facebook_access_token", null) != null);
 	}
+	
+	/**
+	 * hasSettings
+	 */
+	 public boolean hasSettings()
+	 {
+		 return false;
+	 }
 }

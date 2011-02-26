@@ -34,4 +34,5 @@ public interface ServiceInterface
 	abstract public OAuthConnector getOAuthConnector();
 	abstract public APIInterface getAPIInterface();
 	abstract public boolean connected(SharedPreferences settings);
+	abstract public boolean hasSettings();
 }

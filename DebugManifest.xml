@@ -103,6 +103,14 @@
 		<!-- Feedback Activity -->
 		<activity android:name="com.davidivins.checkin4me.activities.Feedback" android:label="@string/feedback_title" android:theme="@android:style/Theme.NoTitleBar">
 		</activity>
+		
+		<!-- Settings Activity -->
+		<activity android:name="com.davidivins.checkin4me.activities.Settings" android:label="@string/settings_title">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
 
 	</application>
 </manifest> 

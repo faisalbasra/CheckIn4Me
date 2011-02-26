@@ -488,6 +488,10 @@ public class NearbyPlaces extends ListActivity
 		{
 			startActivity(new Intent(this, Feedback.class));
 		}
+		else if (GeneratedResources.getId("settings") == id)
+		{
+			startActivity(new Intent(this, Settings.class));
+		}
 		else
 		{
 			// do nothing

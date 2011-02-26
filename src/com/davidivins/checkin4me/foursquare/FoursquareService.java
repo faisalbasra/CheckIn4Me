@@ -138,4 +138,12 @@ public class FoursquareService implements ServiceInterface
 		return settings.contains("foursquare_oauth_token_secret") && 
 			(settings.getString("foursquare_oauth_token_secret", null) != null);
 	}
+	
+	/**
+	 * hasSettings
+	 */
+	 public boolean hasSettings()
+	 {
+		 return true;
+	 }
 }

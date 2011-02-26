@@ -136,4 +136,12 @@ public class GowallaService implements ServiceInterface
 		return settings.contains("gowalla_access_token") && 
 			(settings.getString("gowalla_access_token", null) != null);
 	}
+	
+	/**
+	 * hasSettings
+	 */
+	 public boolean hasSettings()
+	 {
+		 return true;
+	 }
 }

@@ -91,6 +91,22 @@ public class Services
 	}
 	
 	/**
+	 * getServicesWithSettingsAsArrayList
+	 */
+	public ArrayList<ServiceInterface> getConnectedServicesWithSettingsAsArrayList(SharedPreferences settings)
+	{
+		ArrayList<ServiceInterface> services_with_settings = new ArrayList<ServiceInterface>();
+		
+		for (ServiceInterface service : services)
+		{
+			if (service.hasSettings() && service.connected(settings))
+				services_with_settings.add(service);
+		}
+		
+		return services_with_settings;
+	}
+	
+	/**
 	 * getConnectedServicesAsArrayList
 	 * 
 	 * @param SharedPreferences settings
