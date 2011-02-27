@@ -16,6 +16,7 @@
       along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
      ***************************************************************************** -->
 <resources>
+
 	<string name="app_name">CheckIn4Me</string>
 	<string name="app_name_pro">CheckIn4Me Pro</string>
 	<string name="app_name_free">CheckIn4Me Free</string>
@@ -38,5 +39,5 @@
 	<string name="no_nearby_places_msg">There are not any places nearby!</string>
 	
 	<string name="search_hint">Search for a place...</string>
-    
+	
 </resources>

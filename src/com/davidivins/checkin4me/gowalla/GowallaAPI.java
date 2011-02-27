@@ -172,7 +172,7 @@ public class GowallaAPI implements APIInterface
 		 * @param json
 		 * @throws JSONException 
 		 */
-		private void setLocationsFromJson(String json_string)
+		synchronized private void setLocationsFromJson(String json_string)
 		{
 			// clear locations
 			latest_locations.clear();
@@ -296,7 +296,7 @@ public class GowallaAPI implements APIInterface
 		 * @param json
 		 * @throws JSONException 
 		 */
-		private boolean setStatusFromJson(String json_string)
+		synchronized private boolean setStatusFromJson(String json_string)
 		{
 			// clear latest status
 			latest_checkin_status = false;

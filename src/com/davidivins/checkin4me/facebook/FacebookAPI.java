@@ -169,7 +169,7 @@ public class FacebookAPI implements APIInterface
 		 * @param json
 		 * @throws JSONException 
 		 */
-		private void setLocationsFromJson(String json_string)
+		synchronized private void setLocationsFromJson(String json_string)
 		{
 			// clear locations
 			latest_locations.clear();
@@ -282,7 +282,7 @@ public class FacebookAPI implements APIInterface
 		 * 
 		 * @param json
 		 */
-		private void setStatusFromJson(String json_string)
+		synchronized private void setStatusFromJson(String json_string)
 		{
 			// clear latest status
 			latest_checkin_status = false;

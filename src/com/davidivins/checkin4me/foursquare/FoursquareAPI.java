@@ -180,7 +180,7 @@ public class FoursquareAPI implements APIInterface
 		 * 
 		 * @param json
 		 */
-		private void setLocationsFromJson(String json_string, String query)
+		synchronized private void setLocationsFromJson(String json_string, String query)
 		{
 			Log.i(TAG, "json_string = " + json_string);
 			if (null != query) Log.i(TAG, "query = " + query);
@@ -322,7 +322,7 @@ public class FoursquareAPI implements APIInterface
 		 * 
 		 * @param json
 		 */
-		private void setLocationsFromJson(String json_string)
+		synchronized private void setLocationsFromJson(String json_string)
 		{
 			Log.i(TAG, "json_string = " + json_string);
 			
