@@ -153,7 +153,7 @@ public class GowallaAPI implements APIInterface
 			
 			// set query parameters
 			if (query != null)
-				request.addQueryParameter("q", query);
+				request.addQueryParameterAndEncode("q", query);
 			request.addQueryParameter("lat", latitude);
 			request.addQueryParameter("lng", longitude);
 			request.addQueryParameter("radius", "50");
@@ -266,14 +266,11 @@ public class GowallaAPI implements APIInterface
 			// set query parameters
 			request.addQueryParameter("oauth_token", settings.getString("gowalla_access_token", "-1"));
 			request.addQueryParameter("spot_id", spot_id);
-			request.addQueryParameter("comment", "");
+			request.addQueryParameterAndEncode("comment", message);
 			request.addQueryParameter("lat", settings.getString("current_latitude", "-1"));
 			request.addQueryParameter("lng", settings.getString("current_longitude", "-1"));
 			request.addQueryParameter("post_to_twitter", "0");
-			request.addQueryParameter("post_to_facebook", "0");
-					
-			if (!message.equals(""))
-				request.addQueryParameter("comment", message);
+			request.addQueryParameter("post_to_facebook", "0");					
 				
 			// execute http request
 			OAuthResponse response = (OAuthResponse)request.execute();

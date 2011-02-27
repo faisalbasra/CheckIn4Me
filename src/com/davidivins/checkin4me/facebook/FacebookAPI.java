@@ -150,7 +150,7 @@ public class FacebookAPI implements APIInterface
 			// set query parameters
 			request.addQueryParameter("access_token", settings.getString("facebook_access_token", "FACEBOOK_ACCESS_TOKEN_HERE"));
 			if (query != null)
-				request.addQueryParameter("q", query);
+				request.addQueryParameterAndEncode("q", query);
 			request.addQueryParameter("type", "place");
 			request.addQueryParameter("center", latitude + "," + longitude);
 			request.addQueryParameter("distance", "1000");
@@ -264,7 +264,7 @@ public class FacebookAPI implements APIInterface
 					settings.getString("facebook_access_token", "FACEBOOK_ACCESS_TOKEN_HERE"));
 			
 			if (!message.equals(""))
-				request.addQueryParameter("message", message);
+				request.addQueryParameterAndEncode("message", message);
 
 			request.addQueryParameter("place", place_id);
 			request.addQueryParameterAndEncode("coordinates", coordinates);

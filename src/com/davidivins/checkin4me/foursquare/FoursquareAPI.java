@@ -156,7 +156,7 @@ public class FoursquareAPI implements APIInterface
 			// set query parameters
 			if (query != null)
 			{
-				request.addQueryParameter("query", query);
+				request.addQueryParameterAndEncode("query", query);
 				request.addQueryParameter("limit", "10");
 			}
 			else
@@ -307,7 +307,7 @@ public class FoursquareAPI implements APIInterface
 			request.addQueryParameter("broadcast", "public");
 			
 			if (!message.equals(""))
-				request.addQueryParameter("shout", message);
+				request.addQueryParameterAndEncode("shout", message);
 			
 			// execute http request
 			OAuthResponse response = (OAuthResponse)request.execute();

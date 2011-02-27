@@ -64,7 +64,7 @@ public class OAuth2Request extends Request
 	 * @return Response from executing the request
 	 */
 	@Override
-	public Response execute() 
+	public Response execute()
 	{
 		BufferedReader page = null;
 		OAuthResponse response = new OAuthResponse();
@@ -79,7 +79,7 @@ public class OAuth2Request extends Request
 		try
 		{
 			// make background http request for temporary token
-			HttpClient httpclient = getTolerantClient();//new DefaultHttpClient();
+			HttpClient httpclient = getTolerantClient();
 			HttpResponse http_response;
 			
 			if (method.equals("GET"))
