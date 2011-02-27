@@ -44,7 +44,7 @@ public class Locale
 	private String state;
 	private String zip;
 	
-	private String distance;
+	private double distance_from_user;
 	
 	HashMap<Integer, String> service_location_ids;
 	
@@ -64,7 +64,7 @@ public class Locale
 		state = "";
 		zip = "";
 		
-		distance = "";
+		distance_from_user = 1000; // over 1000 km
 		
 		service_location_ids = new HashMap<Integer, String>();
 	}
@@ -89,6 +89,8 @@ public class Locale
 		this.city = city;
 		this.state = state;
 		this.zip = zip;
+		
+		this.distance_from_user = 1000.0; // over 1000 km
 		
 		service_location_ids = new HashMap<Integer, String>();
 	}
@@ -168,23 +170,25 @@ public class Locale
 	}
 	
 	/**
-	 * setDistance
+	 * calculateAndSetDistance
 	 * 
 	 * @param String
 	 */
-	public void setDistance(String distance)
+	public void calculateAndSetDistanceFromUser(double user_longitude, double user_latitude)
 	{
-		this.distance = distance;
+		this.distance_from_user = Math.abs(Algorithms.getDistance(
+				Double.valueOf(longitude), Double.valueOf(latitude),
+				user_longitude, user_latitude));
 	}
 	
 	/**
-	 * getDistance
+	 * getDistanceFromUser
 	 * 
 	 * @return distance
 	 */
-	public String getDistance()
-	{
-		return distance;
+	public double getDistanceFromUser()
+	{		
+		return distance_from_user;
 	}
 	
 	/**

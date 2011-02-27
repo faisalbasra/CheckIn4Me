@@ -17,6 +17,7 @@
 package com.davidivins.checkin4me.gowalla;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -24,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.davidivins.checkin4me.comparators.LocaleDistanceComparator;
 import com.davidivins.checkin4me.core.Locale;
 import com.davidivins.checkin4me.interfaces.APIInterface;
 import com.davidivins.checkin4me.oauth.OAuth2Request;
@@ -74,7 +76,7 @@ public class GowallaAPI implements APIInterface
 	 */
 	public Runnable getLocationThread(String query,String longitude, String latitude, SharedPreferences settings)
 	{
-		return new LocationThread(query, longitude, latitude);
+		return new LocationThread(query, longitude, latitude, settings);
 	}
 	
 	/**
@@ -84,6 +86,7 @@ public class GowallaAPI implements APIInterface
 	 */
 	public ArrayList<Locale> getLatestLocations()
 	{
+		Collections.sort(latest_locations, new LocaleDistanceComparator());
 		return latest_locations;
 	}
 	
@@ -120,6 +123,7 @@ public class GowallaAPI implements APIInterface
 		private String query;
 		private String longitude;
 		private String latitude;
+		private SharedPreferences settings;
 		
 		/**
 		 * LocationThread
@@ -128,11 +132,12 @@ public class GowallaAPI implements APIInterface
 		 * @param longitude
 		 * @param latitude
 		 */
-		LocationThread(String query, String longitude, String latitude)
+		LocationThread(String query, String longitude, String latitude, SharedPreferences settings)
 		{
 			this.query = query;
 			this.longitude = longitude;
 			this.latitude = latitude;
+			this.settings = settings;
 		}
 
 		/**
@@ -177,6 +182,10 @@ public class GowallaAPI implements APIInterface
 			// clear locations
 			latest_locations.clear();
 			
+			// get user's current location as doubles
+			double user_longitude = Double.valueOf(settings.getString("current_longitude", "0.0"));
+			double user_latitude  = Double.valueOf(settings.getString("current_latitude", "0.0"));
+			
 			try 
 			{
 				JSONObject json = new JSONObject(json_string);
@@ -205,6 +214,7 @@ public class GowallaAPI implements APIInterface
 					
 					Locale location = new Locale(name, description, longitude, latitude, 
 							address, city, state, zip);
+					location.calculateAndSetDistanceFromUser(user_longitude, user_latitude);
 					location.mapServiceIdToLocationId(service_id, spot_id);
 					latest_locations.add(location);
 				}

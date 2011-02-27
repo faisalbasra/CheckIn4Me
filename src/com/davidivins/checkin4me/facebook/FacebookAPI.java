@@ -17,6 +17,7 @@
 package com.davidivins.checkin4me.facebook;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -24,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.davidivins.checkin4me.comparators.LocaleDistanceComparator;
 import com.davidivins.checkin4me.core.Locale;
 import com.davidivins.checkin4me.interfaces.APIInterface;
 import com.davidivins.checkin4me.oauth.OAuthResponse;
@@ -82,6 +84,7 @@ public class FacebookAPI implements APIInterface
 	 */
 	public ArrayList<Locale> getLatestLocations()
 	{
+		Collections.sort(latest_locations, new LocaleDistanceComparator());
 		return latest_locations;
 	}
 	
@@ -174,6 +177,10 @@ public class FacebookAPI implements APIInterface
 			// clear locations
 			latest_locations.clear();
 			
+			// get user's current location as doubles
+			double user_longitude = Double.valueOf(settings.getString("current_longitude", "0.0"));
+			double user_latitude  = Double.valueOf(settings.getString("current_latitude", "0.0"));
+			
 			try 
 			{
 				JSONObject json = new JSONObject(json_string);
@@ -201,6 +208,7 @@ public class FacebookAPI implements APIInterface
 						
 						Locale location = new Locale(name, description, longitude, latitude, 
 								street, city, state, zip);
+						location.calculateAndSetDistanceFromUser(user_longitude, user_latitude);
 						location.mapServiceIdToLocationId(service_id, location_id);
 						latest_locations.add(location);
 					}

@@ -40,19 +40,8 @@ public class LocaleDistanceComparator implements Comparator<Locale>
 	*/
 	public int compare(Locale location_1, Locale location_2)
 	{
-		int distance_1 = 0;
-		int distance_2 = 0;
-		
-		try
-		{
-			distance_1 = Integer.parseInt(location_1.getDistance());
-			distance_2 = Integer.parseInt(location_2.getDistance());
-		}
-		catch(Exception e)
-		{
-			Log.i(TAG, "Not numbers");
-		}
-		
-		return distance_1 - distance_2;
+		Double distance_1 = new Double(location_1.getDistanceFromUser());
+		Double distance_2 = new Double(location_2.getDistanceFromUser());
+		return distance_1.compareTo(distance_2);
 	}
 }

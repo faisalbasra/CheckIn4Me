@@ -185,7 +185,14 @@ public class FoursquareAPI implements APIInterface
 			Log.i(TAG, "json_string = " + json_string);
 			if (null != query) Log.i(TAG, "query = " + query);
 			
+			// clear locations list
 			latest_locations.clear();
+			
+			// get user's current location as doubles
+			double user_longitude = Double.valueOf(settings.getString("current_longitude", "0.0"));
+			double user_latitude  = Double.valueOf(settings.getString("current_latitude", "0.0"));
+			
+			// default to nearby places
 			String type = "nearby";
 			
 			// if a query exists, look for the "places" group instead of "nearby"
@@ -237,6 +244,7 @@ public class FoursquareAPI implements APIInterface
 							// create a new locale object with the venue's data
 							Locale location = new Locale(name, description, longitude, latitude,
 									address, city, state, zip);
+							location.calculateAndSetDistanceFromUser(user_longitude, user_latitude);
 							location.mapServiceIdToLocationId(service_id, venue_id);
 							
 							// add the new locale to the latest locations list
