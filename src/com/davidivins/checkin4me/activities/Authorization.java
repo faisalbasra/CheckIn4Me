@@ -39,7 +39,15 @@ import android.widget.Toast;
 public class Authorization extends Activity
 {	
 	private static final String TAG = "Authorization";
-
+	
+	/**
+	 * constructor
+	 */
+	public Authorization()
+	{
+		GeneratedResources.generate(this);
+	}
+	
 	/**
 	 * onCreate
 	 * 

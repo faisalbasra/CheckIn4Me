@@ -92,6 +92,14 @@ public class LocationDetails extends MapActivity
 	};
 	
 	/**
+	 * constructor
+	 */
+	public LocationDetails()
+	{
+		GeneratedResources.generate(this);
+	}
+	
+	/**
 	 * onCreate
 	 * 
 	 * @param saved_instance_state

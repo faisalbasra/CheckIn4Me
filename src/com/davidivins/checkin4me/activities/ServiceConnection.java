@@ -49,6 +49,14 @@ public class ServiceConnection extends ListActivity implements OnItemClickListen
 	private static int latest_service_id_selected = 0;
 	
 	/**
+	 * constructor
+	 */
+	public ServiceConnection()
+	{
+		GeneratedResources.generate(this);
+	}
+	
+	/**
 	 * onCreate
 	 * 
 	 * @param Bundle savedInstanceState

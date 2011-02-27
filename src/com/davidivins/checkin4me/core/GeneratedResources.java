@@ -42,30 +42,37 @@ public class GeneratedResources
 	 */
 	public static void generate(Activity activity)
 	{
-		Bundle meta_data = null;
-		
-		try
+		if (areNotGenerated())
 		{
-			ApplicationInfo app_info = 
-				activity.getPackageManager().getApplicationInfo(activity.getPackageName(), PackageManager.GET_META_DATA);
-			meta_data = app_info.metaData;
-		}
-		catch(Exception e)
-		{
-			Log.i(TAG, "Failed to get app info");
-		}
-		
-		if (null != meta_data)
-		{
-			// assume pro, don't want to screw up paying customers
-			version = (meta_data.getString("VERSION") == null) ? "professional" : meta_data.getString("VERSION");			
-			String class_name = "com.davidivins.checkin4me." + version + ".R";
+			Bundle meta_data = null;
 			
-			generated_resources = new ParsedGeneratedResources(class_name);
+			try
+			{
+				ApplicationInfo app_info = 
+					activity.getPackageManager().getApplicationInfo(activity.getPackageName(), PackageManager.GET_META_DATA);
+				meta_data = app_info.metaData;
+			}
+			catch(Exception e)
+			{
+				Log.i(TAG, "Failed to get app info");
+			}
+			
+			if (null != meta_data)
+			{
+				// assume pro, don't want to screw up paying customers
+				version = (meta_data.getString("VERSION") == null) ? "professional" : meta_data.getString("VERSION");			
+				String class_name = "com.davidivins.checkin4me." + version + ".R";
+				
+				generated_resources = new ParsedGeneratedResources(class_name);
+			}
+			else // assume pro, don't want to screw up paying customers
+			{
+				generated_resources = new ParsedGeneratedResources("com.davidivins.checkin4me.pro.R");
+			}
 		}
-		else // assume pro, don't want to screw up paying customers
+		else
 		{
-			generated_resources = new ParsedGeneratedResources("com.davidivins.checkin4me.pro.R");
+			//Log.i(TAG, "GeneratedResources already parsed");
 		}
 	}
 	

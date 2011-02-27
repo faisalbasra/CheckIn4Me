@@ -30,6 +30,14 @@ import android.webkit.WebView;
 public class Feedback extends Activity 
 {
 	/**
+	 * constructor
+	 */
+	public Feedback()
+	{
+		GeneratedResources.generate(this);
+	}
+	
+	/**
 	 * onCreate
 	 * 
 	 * @param saved_instance_state

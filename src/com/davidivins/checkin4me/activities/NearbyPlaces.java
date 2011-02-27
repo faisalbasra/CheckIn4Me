@@ -82,6 +82,14 @@ public class NearbyPlaces extends ListActivity
 	private String current_latitude;
 
 	/**
+	 * constructor
+	 */
+	public NearbyPlaces()
+	{
+		GeneratedResources.generate(this);
+	}
+	
+	/**
 	 * onCreate
 	 * 
 	 * @param Bundle savedInstanceState
@@ -90,7 +98,7 @@ public class NearbyPlaces extends ListActivity
 	public void onCreate(Bundle saved_instance_state)
 	{
 		super.onCreate(saved_instance_state);
-
+		
 		// handle the current intent of this activity
 		handleIntent(getIntent());
 		
