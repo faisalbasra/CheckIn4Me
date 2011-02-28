@@ -276,7 +276,7 @@ public class GowallaAPI implements APIInterface
 			// set query parameters
 			request.addQueryParameter("oauth_token", settings.getString("gowalla_access_token", "-1"));
 			request.addQueryParameter("spot_id", spot_id);
-			request.addQueryParameterAndEncode("comment", message);
+			request.addQueryParameterAndEncode("comment", message); // gowalla wants comment, doesn't care if empty
 			request.addQueryParameter("lat", settings.getString("current_latitude", "-1"));
 			request.addQueryParameter("lng", settings.getString("current_longitude", "-1"));
 			request.addQueryParameter("post_to_twitter", "0");

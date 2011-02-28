@@ -29,10 +29,12 @@ import com.davidivins.checkin4me.monitors.NetworkTimeoutMonitor;
 import com.davidivins.checkin4me.runnables.LocationsRetriever;
 import com.davidivins.checkin4me.util.CleanableProgressDialog;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -477,7 +479,12 @@ public class NearbyPlaces extends ListActivity
 		}
 		else if (GeneratedResources.getId("refresh") == id)
 		{
-			requestCoordinates();
+			// check if a query already exists and prompt user to clear it
+			if (current_query != null)
+				displayClearQueryAlert();
+			else
+				requestCoordinates();
+			
 			result = true;
 		}
 		else if (GeneratedResources.getId("search") == id)
@@ -532,5 +539,28 @@ public class NearbyPlaces extends ListActivity
 	public void onDialogInterruptedBySearchButton() 
 	{
 		cleanUp();
+	}
+	
+	/**
+	 * displayClearQueryAlert
+	 */
+	public void displayClearQueryAlert()
+	{ 
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+		alert.setMessage("Would you like to clear your current search of \"" + current_query + "\" before refreshing?");
+		alert.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int button) {
+				current_query = null;
+				requestCoordinates();
+			}
+		}); 
+		alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int button) {
+				requestCoordinates();
+			}
+		});
+		
+		alert.show();
 	}
 }
