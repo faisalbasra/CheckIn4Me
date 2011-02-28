@@ -279,7 +279,7 @@ public class NearbyPlaces extends ListActivity
 			loading_dialog.cancel();
 
 		// start retrieving locations dialog
-		loading_dialog = new CleanableProgressDialog(this, this, "", "Retrieving Service Locations...", true);
+		loading_dialog = new CleanableProgressDialog(this, this, "", "Retrieving Locations...", true);
 		loading_dialog.show();
 		
 		// get longitude and latitude
