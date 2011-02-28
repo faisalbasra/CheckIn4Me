@@ -41,14 +41,6 @@ public class Authorization extends Activity
 	private static final String TAG = "Authorization";
 	
 	/**
-	 * constructor
-	 */
-	public Authorization()
-	{
-		GeneratedResources.generate(this);
-	}
-	
-	/**
 	 * onCreate
 	 * 
 	 * @param Bundle saved_instance_state
@@ -57,9 +49,7 @@ public class Authorization extends Activity
 	public void onCreate(Bundle saved_instance_state)
 	{
 		super.onCreate(saved_instance_state);
-		
-		if (GeneratedResources.areNotGenerated())
-			GeneratedResources.generate(this);
+		GeneratedResources.generate(this);
 		
 		setContentView(GeneratedResources.getLayout("authorization"));
 		Intent i = new Intent(Intent.ACTION_VIEW);

@@ -49,14 +49,6 @@ public class ServiceConnection extends ListActivity implements OnItemClickListen
 	private static int latest_service_id_selected = 0;
 	
 	/**
-	 * constructor
-	 */
-	public ServiceConnection()
-	{
-		GeneratedResources.generate(this);
-	}
-	
-	/**
 	 * onCreate
 	 * 
 	 * @param Bundle savedInstanceState
@@ -65,6 +57,7 @@ public class ServiceConnection extends ListActivity implements OnItemClickListen
 	public void onCreate(Bundle saved_instance_state)
 	{
 		super.onCreate(saved_instance_state);
+		GeneratedResources.generate(this);
 
 		// set the current layout for the activity
 		setContentView(GeneratedResources.getLayout("service_connection"));

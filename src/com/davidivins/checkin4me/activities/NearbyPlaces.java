@@ -80,14 +80,6 @@ public class NearbyPlaces extends ListActivity
 	private boolean timeouts_cancelled                     = false;
 	private String current_longitude;
 	private String current_latitude;
-
-	/**
-	 * constructor
-	 */
-	public NearbyPlaces()
-	{
-		GeneratedResources.generate(this);
-	}
 	
 	/**
 	 * onCreate
@@ -98,6 +90,7 @@ public class NearbyPlaces extends ListActivity
 	public void onCreate(Bundle saved_instance_state)
 	{
 		super.onCreate(saved_instance_state);
+		GeneratedResources.generate(this);
 		
 		// handle the current intent of this activity
 		handleIntent(getIntent());

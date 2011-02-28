@@ -16,7 +16,6 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.professional;
 
-import com.davidivins.checkin4me.*;
 import com.davidivins.checkin4me.core.Analytics;
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.core.StartProgramDelayer;
@@ -24,11 +23,8 @@ import com.davidivins.checkin4me.core.StartProgramDelayer;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 
 /**
  * CheckIn4Me **PRO**
@@ -49,9 +45,8 @@ public class CheckIn4Me extends Activity
 	public void onCreate(Bundle saved_instance_state)
 	{
 		super.onCreate(saved_instance_state);
-		
 		GeneratedResources.generate(this);
-		
+				
 		setContentView(GeneratedResources.getLayout("checkin4me"));
 				
 		Analytics analytics = new Analytics(this);

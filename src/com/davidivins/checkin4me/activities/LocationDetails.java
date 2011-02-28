@@ -92,14 +92,6 @@ public class LocationDetails extends MapActivity
 	};
 	
 	/**
-	 * constructor
-	 */
-	public LocationDetails()
-	{
-		GeneratedResources.generate(this);
-	}
-	
-	/**
 	 * onCreate
 	 * 
 	 * @param saved_instance_state
@@ -108,6 +100,7 @@ public class LocationDetails extends MapActivity
 	public void onCreate(Bundle saved_instance_state)
 	{
 		super.onCreate(saved_instance_state);
+		GeneratedResources.generate(this);
 		
 		// set the layout for the current activity
 		setContentView(GeneratedResources.getLayout("location_details"));

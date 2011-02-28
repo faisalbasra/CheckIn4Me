@@ -30,14 +30,6 @@ import android.webkit.WebView;
 public class Feedback extends Activity 
 {
 	/**
-	 * constructor
-	 */
-	public Feedback()
-	{
-		GeneratedResources.generate(this);
-	}
-	
-	/**
 	 * onCreate
 	 * 
 	 * @param saved_instance_state
@@ -46,6 +38,8 @@ public class Feedback extends Activity
 	public void onCreate(Bundle saved_instance_state) 
 	{
 		super.onCreate(saved_instance_state);
+		GeneratedResources.generate(this);
+
 		setContentView(GeneratedResources.getLayout("feedback"));
 
 	    WebView view = (WebView)findViewById(GeneratedResources.getId("feedback"));

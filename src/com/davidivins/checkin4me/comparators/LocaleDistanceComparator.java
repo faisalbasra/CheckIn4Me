@@ -18,8 +18,6 @@ package com.davidivins.checkin4me.comparators;
 
 import java.util.Comparator;
 
-import android.util.Log;
-
 import com.davidivins.checkin4me.core.Locale;
 
 /**
@@ -29,7 +27,7 @@ import com.davidivins.checkin4me.core.Locale;
 */
 public class LocaleDistanceComparator implements Comparator<Locale>
 {
-	static private final String TAG = "LocaleDistanceComparator";
+	//static private final String TAG = "LocaleDistanceComparator";
 	
 	/**
 	* compare
