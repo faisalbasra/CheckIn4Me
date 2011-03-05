@@ -16,12 +16,10 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.core;
 
-import com.davidivins.checkin4me.activities.NearbyPlaces;
-import com.davidivins.checkin4me.activities.ServiceConnection;
+import com.davidivins.checkin4me.activities.MainTabbedContainer;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.preference.PreferenceManager;
 
 /**
  * StartProgram
@@ -47,14 +45,6 @@ public class StartProgramDelayer implements Runnable
 	 */
 	public void run() 
 	{
-		Intent intent;
-		
-		// go straight to nearby places if atleast one service is connected
-		if (Services.getInstance(activity).atLeastOneConnected(PreferenceManager.getDefaultSharedPreferences(activity)))
-			intent = new Intent(activity, NearbyPlaces.class);
-		else
-			intent = new Intent(activity, ServiceConnection.class);
-		
-		activity.startActivity(intent);
+		activity.startActivity(new Intent(activity, MainTabbedContainer.class));
 	}
 }

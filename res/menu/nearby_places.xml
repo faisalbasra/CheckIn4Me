@@ -22,13 +22,4 @@
 	<item android:id="@+id/search"
 		android:icon="@android:drawable/ic_menu_search"
 		android:title="@string/menu_option_search" />
-	<item android:id="@+id/connect_services"
-		android:icon="@android:drawable/ic_menu_add"
-		android:title="@string/menu_option_connect" />
-	<item android:id="@+id/settings"
-		android:icon="@drawable/ic_menu_preferences"
-		android:title="@string/menu_option_settings" />
-	<item android:id="@+id/feedback"
-		android:icon="@drawable/ic_menu_emoticons"
-		android:title="@string/menu_option_feedback" />
 </menu>

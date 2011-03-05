@@ -19,7 +19,6 @@ package com.davidivins.checkin4me.activities;
 import java.util.ArrayList;
 
 import com.davidivins.checkin4me.adapters.SettingsAdapter;
-import com.davidivins.checkin4me.core.Ad;
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.core.Services;
 import com.davidivins.checkin4me.interfaces.ServiceInterface;
@@ -63,10 +62,6 @@ public class Settings extends ListActivity implements OnItemClickListener
 		getListView().setTextFilterEnabled(true);
 		getListView().setBackgroundColor(Color.WHITE);
 		getListView().setCacheColorHint(Color.WHITE);
-		
-		// display ad if this is not the pro version
-		Ad ad = new Ad(this);
-		ad.refreshAd();
 	}
 	
 	/**
@@ -76,7 +71,7 @@ public class Settings extends ListActivity implements OnItemClickListener
 	{
 		displaying_settings = false;
 
-		final String[] services = { "Facebook Settings", "Foursquare Settings", "Gowalla Settings" };
+		final String[] services = { "Facebook Settings", "Foursquare Settings", "Gowalla Settings", "Visit the Feedback Site" };
 		SettingsAdapter adapter = new SettingsAdapter(
 				this, GeneratedResources.getLayout("settings_row"), services);
 		setListAdapter(adapter);

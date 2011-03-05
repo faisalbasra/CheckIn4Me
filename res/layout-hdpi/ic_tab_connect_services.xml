@@ -15,5 +15,7 @@
       You should have received a copy of the GNU General Public License
       along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
      ***************************************************************************** -->
-<resources>
-</resources>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:drawable="@drawable/ic_tab_link_active" android:state_selected="true" />	
+	<item android:drawable="@drawable/ic_tab_link_inactive" />
+</selector>

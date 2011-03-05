@@ -64,6 +64,12 @@
 			</intent-filter>
 		</activity>
 		
+		<!-- MainTabbedContainer Activity -->
+		<activity android:name="com.davidivins.checkin4me.activities.MainTabbedContainer" 
+			android:label="@string/app_name"
+			android:theme="@android:style/Theme.NoTitleBar">
+		</activity>
+		
 		<!-- ServiceConnection Activity -->
 		<activity android:name="com.davidivins.checkin4me.activities.ServiceConnection" android:label="@string/service_connection_title">
 		</activity>

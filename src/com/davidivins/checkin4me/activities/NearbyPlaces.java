@@ -17,7 +17,6 @@
 package com.davidivins.checkin4me.activities;
 
 import com.davidivins.checkin4me.adapters.LocaleAdapter;
-import com.davidivins.checkin4me.core.Ad;
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.core.Locale;
 import com.davidivins.checkin4me.listeners.CleanableProgressDialogListener;
@@ -93,10 +92,6 @@ public class NearbyPlaces extends ListActivity
 
 		// handle the current intent of this activity
 		handleIntent(getIntent());
-		
-		// display the add if this is not the pro version
-		Ad ad = new Ad(this);
-		ad.refreshAd();
 	}
 	
 	/**
@@ -237,26 +232,23 @@ public class NearbyPlaces extends ListActivity
 	private void handleIntent(Intent intent) 
 	{
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) 
-		{
 			current_query = intent.getStringExtra(SearchManager.QUERY);
-			this.setTitle("Results");
-		}
 		else
-		{
 			current_query = null;
-			this.setTitle("Nearby Places");
-		}
 		
 		Log.i(TAG, "current_query = " + current_query);
 		
-		requestCoordinates();
-
-		setContentView(GeneratedResources.getLayout("nearby_places"));
-		
-		getListView().setTextFilterEnabled(true);
-		getListView().setOnItemClickListener(this);
-		getListView().setBackgroundColor(Color.WHITE);
-		getListView().setCacheColorHint(Color.WHITE);
+		if (this.getListAdapter() == null)
+		{
+			requestCoordinates();
+	
+			setContentView(GeneratedResources.getLayout("nearby_places"));
+			
+			getListView().setTextFilterEnabled(true);
+			getListView().setOnItemClickListener(this);
+			getListView().setBackgroundColor(Color.WHITE);
+			getListView().setCacheColorHint(Color.WHITE);
+		}
 	}
 
 	/**
@@ -469,12 +461,7 @@ public class NearbyPlaces extends ListActivity
 		boolean result = false;		
 		int id = item.getItemId();
 		
-		if (GeneratedResources.getId("connect_services") == id)
-		{
-			startActivity(new Intent(this, ServiceConnection.class));
-			result = true;
-		}
-		else if (GeneratedResources.getId("refresh") == id)
+		if (GeneratedResources.getId("refresh") == id)
 		{
 			requestCoordinates();
 			result = true;
@@ -484,14 +471,10 @@ public class NearbyPlaces extends ListActivity
 			onSearchRequested();
 			result = true;
 		}
-		else if (GeneratedResources.getId("feedback") == id)
-		{
-			startActivity(new Intent(this, Feedback.class));
-		}
-		else if (GeneratedResources.getId("settings") == id)
-		{
-			startActivity(new Intent(this, Settings.class));
-		}
+//		else if (GeneratedResources.getId("feedback") == id)
+//		{
+//			startActivity(new Intent(this, Feedback.class));
+//		}
 		else
 		{
 			// do nothing

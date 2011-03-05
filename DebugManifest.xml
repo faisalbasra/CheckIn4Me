@@ -36,7 +36,7 @@
 		<meta-data android:value="debug" android:name="VERSION" />
 		<meta-data android:value="false" android:name="IS_PRO_VERSION" />
 		<meta-data android:value="true" android:name="ADMOB_ALLOW_LOCATION_FOR_ADS" />
-		
+
 		<!-- AdMobActivity definition -->
 		<activity android:name="com.admob.android.ads.AdMobActivity" 
 			android:theme="@android:style/Theme.NoTitleBar.Fullscreen" 
@@ -62,6 +62,12 @@
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
+		</activity>
+
+		<!-- MainTabbedContainer Activity -->
+		<activity android:name="com.davidivins.checkin4me.activities.MainTabbedContainer" 
+			android:label="@string/app_name"
+			android:theme="@android:style/Theme.NoTitleBar">
 		</activity>
 		
 		<!-- ServiceConnection Activity -->
