@@ -38,7 +38,8 @@ public class ParsedGeneratedResources implements GeneratedResourcesInterface
 		resources = new HashMap<String, HashMap<String, Integer>>();
 		
 		try
-		{                    
+		{
+			// reflection!
 			Class<?> r_class = Class.forName(class_name);
 			Class<?>[] r_classes = r_class.getClasses();
 	            

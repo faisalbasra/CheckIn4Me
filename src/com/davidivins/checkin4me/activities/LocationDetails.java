@@ -27,6 +27,7 @@ import com.davidivins.checkin4me.adapters.ServiceCheckListAdapter;
 import com.davidivins.checkin4me.core.Ad;
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.core.Locale;
+import com.davidivins.checkin4me.core.MetaData;
 import com.davidivins.checkin4me.core.Services;
 import com.davidivins.checkin4me.interfaces.ServiceInterface;
 import com.davidivins.checkin4me.listeners.CheckInRequesterListener;
@@ -144,7 +145,8 @@ public class LocationDetails extends MapActivity
 		//
 		// map stuff
 		//
-		MapView location_map = new MapView(this, config.getProperty(GeneratedResources.getVersion() + "_api_key"));
+		MapView location_map = new MapView(
+			this, config.getProperty(MetaData.getInstance(this).getString("VERSION") + "_api_key"));
 		location_map.setClickable(true);
 		
 		List<Overlay> map_overlays = location_map.getOverlays();

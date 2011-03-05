@@ -19,16 +19,13 @@ package com.davidivins.checkin4me.core;
 import com.davidivins.checkin4me.interfaces.GeneratedResourcesInterface;
 
 import android.app.Activity;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.util.Log;
 
 public class GeneratedResources
 {
 	private static final String TAG = "GeneratedResources";
-	private static GeneratedResourcesInterface generated_resources;
-	private static String version;
+	private static GeneratedResourcesInterface generated_resources = null;
+	private static boolean good_meta_data = false;
 	
 	/**
 	 * GeneratedResources
@@ -42,30 +39,24 @@ public class GeneratedResources
 	 */
 	public static void generate(Activity activity)
 	{
-		Bundle meta_data = null;
-		
-		try
+		if (null == generated_resources || !good_meta_data)
 		{
-			ApplicationInfo app_info = 
-				activity.getPackageManager().getApplicationInfo(activity.getPackageName(), PackageManager.GET_META_DATA);
-			meta_data = app_info.metaData;
-		}
-		catch(Exception e)
-		{
-			Log.i(TAG, "Failed to get app info");
-		}
-		
-		if (null != meta_data)
-		{
-			// assume pro, don't want to screw up paying customers
-			version = (meta_data.getString("VERSION") == null) ? "professional" : meta_data.getString("VERSION");			
-			String class_name = "com.davidivins.checkin4me." + version + ".R";
+			String version = MetaData.getInstance(activity).getString("VERSION");
 			
+			// if null, assume pro. don't screw up paying customers
+			if (null == version)
+			{
+				version = "professional";
+				good_meta_data = false;
+			}
+			else
+				good_meta_data = true;
+			
+			// get generated resources for app version
+			String class_name = "com.davidivins.checkin4me." + version + ".R";		
 			generated_resources = new ParsedGeneratedResources(class_name);
-		}
-		else // assume pro, don't want to screw up paying customers
-		{
-			generated_resources = new ParsedGeneratedResources("com.davidivins.checkin4me.pro.R");
+			
+			Log.i(TAG, "resources generated!");
 		}
 	}
 	
@@ -79,15 +70,15 @@ public class GeneratedResources
 		return (null == generated_resources) ? true : false;
 	}
 	
-	/**
-	 * getVersion
-	 * 
-	 * @return String
-	 */
-	public static String getVersion()
-	{
-		return version;
-	}
+//	/**
+//	 * getVersion
+//	 * 
+//	 * @return String
+//	 */
+//	public static String getVersion()
+//	{
+//		return version;
+//	}
 	
 	/**
 	 * getAttr
