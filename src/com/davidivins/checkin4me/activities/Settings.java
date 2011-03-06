@@ -16,112 +16,62 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.activities;
 
-import java.util.ArrayList;
-
 import com.davidivins.checkin4me.adapters.SettingsAdapter;
-import com.davidivins.checkin4me.core.GeneratedResources;
-import com.davidivins.checkin4me.core.Services;
-import com.davidivins.checkin4me.interfaces.ServiceInterface;
 
-import android.app.ListActivity;
-import android.content.SharedPreferences;
+import android.app.ExpandableListActivity;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 
 /**
- * LocationDetails
+ * Settings
  * 
- * @author david ivins
+ * @author david
  */
-public class Settings extends ListActivity implements OnItemClickListener
+public class Settings extends ExpandableListActivity implements OnChildClickListener
 {
-	boolean displaying_settings;
-	ArrayList<ServiceInterface> services;
+	static private final String TAG = "Settings";
 	
 	/**
 	 * onCreate
 	 * 
-	 * @param saved_instance_state
+	 * @param Bundle saved_instance_state
 	 */
 	@Override
-	public void onCreate(Bundle saved_instance_state)
+	public void onCreate(Bundle saved_instance_state) 
 	{
-		super.onCreate(saved_instance_state);		
-		setContentView(GeneratedResources.getLayout("settings"));
+		super.onCreate(saved_instance_state);
 		
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-		displaying_settings = false;
-		services = Services.getInstance(this).getConnectedServicesWithSettingsAsArrayList(settings);
-
-		displayServices();
+		// Set up our adapter
+		SettingsAdapter adapter;
+		adapter = new SettingsAdapter();
+		adapter.setActivity(this);
 		
-		getListView().setTextFilterEnabled(true);
-		getListView().setBackgroundColor(Color.WHITE);
-		getListView().setCacheColorHint(Color.WHITE);
-	}
-	
-	/**
-	 * displayServices
-	 */
-	public void displayServices()
-	{
-		displaying_settings = false;
-
-		final String[] services = { "Facebook Settings", "Foursquare Settings", "Gowalla Settings", "Visit the Feedback Site" };
-		SettingsAdapter adapter = new SettingsAdapter(
-				this, GeneratedResources.getLayout("settings_row"), services);
 		setListAdapter(adapter);
-		getListView().setOnItemClickListener(this);
-		this.setTitle("Settings");
+		getExpandableListView().setOnChildClickListener(this);
+		getExpandableListView().setBackgroundColor(Color.WHITE);
+		getExpandableListView().setCacheColorHint(Color.WHITE);		
 	}
-	
-	/**
-	 * displaySettings
-	 * 
-	 * @param service_id
-	 */
-	public void displaySettings(int service_id)
-	{
-		displaying_settings = true;
-		final String[] settings = { "Post to Facebook", "Post to Twitter" };
 
-		SettingsAdapter adapter = new SettingsAdapter(
-				this, GeneratedResources.getLayout("settings_row"), settings);
-		setListAdapter(adapter);
-		getListView().setOnItemClickListener(null);
-		this.setTitle("Service Settings");
-	}
-	
 	/**
-	 * onItemClick
+	 * onChildClick
 	 * 
-	 * @param AdapterView<?> adapter_view
+	 * @param ExpandableListView parent
 	 * @param View view
-	 * @param int  
-	 * @param long arg3
-	 */
-	public void onItemClick(AdapterView<?> adapter_view, View view, int position, long arg3) 
-	{
-		displaySettings(position);
-	}
-	
-	/**
-	 * onBackPressed
+	 * @param int group_position
+	 * @param int child_position
+	 * @param long id
+	 * @return boolean
 	 */
 	@Override
-	public void onBackPressed()
+	public boolean onChildClick(ExpandableListView parent, View v, int group_position, int child_position, long id) 
 	{
-		if (displaying_settings)
-		{
-			displayServices();
-		}
-		else
-		{
-			super.onBackPressed();
-		}
+		Log.i(TAG, "group_position = " + group_position);
+		Log.i(TAG, "child_position = " + child_position);
+		Log.i(TAG, "id = " + id);
+		return true;
 	}
 }

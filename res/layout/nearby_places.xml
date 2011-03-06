@@ -29,6 +29,7 @@
 		android:id="@+id/android:empty"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
+		android:gravity="center"
 		android:background="@color/white"
 		android:text="@string/no_nearby_places_msg" 
 		android:textColor="@color/black" />

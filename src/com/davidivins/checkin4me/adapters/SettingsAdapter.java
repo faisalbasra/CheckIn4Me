@@ -16,112 +16,206 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.adapters;
 
-import com.davidivins.checkin4me.core.GeneratedResources;
-import com.davidivins.checkin4me.core.Services;
-
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Color;
-import android.view.LayoutInflater;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
+import android.widget.AbsListView;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 /**
  * SettingsAdapter
  * 
- * @author david ivins
+ * @author david
  */
-public class SettingsAdapter extends ArrayAdapter<String> implements OnCheckedChangeListener
+public class SettingsAdapter extends BaseExpandableListAdapter 
 {
-	//private static final String TAG = "ServiceCheckListAdapter";
-	private Context context;
-	private int row_resource_id;
-	private String[] items;
+	//private static final String TAG = "SettingsAdapter";
+	private Activity activity = null;
 	
+	private String[] groups = 
+	{ 
+		"Facebook Settings", 
+		"Foursquare Settings", 
+		"Gowalla Settings", 
+		"CheckIn4Me" 
+	};
+	
+	private String[][] children = 
+	{
+		{ "X", "Y", "Z" },
+		{ "Post to Facebook", "Post to Twitter" },
+		{ "Post to Facebook", "Post to Twitter" },
+		{ "Visit Feedback Site" }
+	};
+
 	/**
-	 * SettingsAdapter
+	 * setActivity
 	 * 
 	 * @param activity
-	 * @param context
-	 * @param row_resource_id
-	 * @param items
 	 */
-	public SettingsAdapter(Context context, int row_resource_id, String[] items) 
+	public void setActivity(Activity activity)
 	{
-		super(context, row_resource_id, items);
-		this.context = context;
-		this.row_resource_id = row_resource_id;
-		this.items = items;
+		this.activity = activity;
+	}
+	
+	/**
+	 * getChild
+	 * 
+	 * @param int group_position
+	 * @param int child_position
+	 * @return Object
+	 */
+	public Object getChild(int group_position, int child_position) 
+	{
+		return children[group_position][child_position];
+	}
+
+	/**
+	 * getChildId
+	 * 
+	 * @param int group_position
+	 * @param int child_position
+	 * @return long
+	 */
+	public long getChildId(int group_position, int child_position) 
+	{
+		return child_position;
+	}
+
+	/**
+	 * getChildrenCount
+	 * 
+	 * @param int group_position
+	 * @return int
+	 */
+	public int getChildrenCount(int group_position) 
+	{
+		return children[group_position].length;
     }
 
 	/**
-	 * getView
+	 * getGenericView
 	 * 
-	 * @param int position
+	 * @return TextView
+	 */
+	public TextView getGenericView() 
+	{
+		// Layout parameters for the ExpandableListView
+		AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
+			ViewGroup.LayoutParams.MATCH_PARENT, 64);
+
+		TextView textView = new TextView(activity);
+		textView.setLayoutParams(lp);
+		
+		// Center the text vertically
+		textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
+		
+		// Set the text starting position
+		textView.setPadding(45, 0, 0, 0);
+		
+		return textView;
+	}
+
+	/**
+	 * getChildView
+	 * 
+	 * @param int group_position
+	 * @param int child_position
+	 * @param boolean is_last_child
 	 * @param View convert_view
 	 * @param ViewGroup parent
 	 * @return View
 	 */
-	@Override
-	public View getView(int position, View convert_view, ViewGroup parent) 
+	public View getChildView(int group_position, int child_position, boolean is_last_child,
+		View convert_view, ViewGroup parent) 
 	{
-		View view = convert_view;
-		String setting = items[position];
+		TextView textView = getGenericView();
+		textView.setText(getChild(group_position, child_position).toString());
+		textView.setTextColor(Color.BLACK);
 		
-		if (view == null)
-		{
-			LayoutInflater layout_inflater = 
-				(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			view = layout_inflater.inflate(row_resource_id, null);
-		}
+		LinearLayout layout = new LinearLayout(activity);
+		layout.addView(textView);
 		
-		if (setting != null) 
-		{
-			LinearLayout settings_row = (LinearLayout)view.findViewById(GeneratedResources.getId("settings_row"));			
-			settings_row.removeAllViews();
-
-			ImageView icon = new ImageView(parent.getContext());
-			icon.setImageResource(
-				Services.getInstance((Activity)context).getServiceById(1).getIconDrawable());
-			icon.setPadding(15, 15, 15, 15);
-			
-			TextView setting_title = new TextView(parent.getContext());
-			setting_title.setText(setting);
-			setting_title.setTextColor(Color.BLACK);
-			setting_title.setPadding(0, 15, 15, 15);
-			setting_title.setTextSize(20);
-
-			settings_row.addView(icon);
-			settings_row.addView(setting_title);
-		}
-			
-		return view;
-    }
-
-	/**
-	 * onCheckedChanged
-	 * 
-	 * @param CompountButton button_view
-	 * @param boolean is_checked
-	 */
-	public void onCheckedChanged(CompoundButton button_view, boolean is_checked) 
-	{
-		//services_checked.put(button_view.getId(), is_checked);
+		//CheckBox check_box = new CheckBox(activity);
+		//layout.addView(check_box);
+		return layout;
 	}
-	
+
 	/**
-	 * getServicesChecked
+	 * getGroup
 	 * 
-	 * @return HashMap<Integer, Boolean> services_checked
+	 * @param int group_position
+	 * @return Object
 	 */
-//	public HashMap<Integer, Boolean> getServicesChecked()
-//	{
-//		//return services_checked;
-//	}
+	public Object getGroup(int group_position) 
+	{
+		return groups[group_position];
+	}
+
+	/**
+	 * getGroupCount
+	 * 
+	 * @return int
+	 */
+	public int getGroupCount() 
+	{
+		return groups.length;
+	}
+
+	/**
+	 * getGroupId
+	 * 
+	 * @param int group_position
+	 * @return long
+	 */
+	public long getGroupId(int group_position) 
+	{
+		return group_position;
+	}
+
+	/**
+	 * getGroupView
+	 * 
+	 * @param int group_position
+	 * @param boolean is_expanded
+	 * @param View convert_view
+	 * @param ViewGroup parent
+	 * @return View
+	 */
+	public View getGroupView(int group_position, boolean is_expanded, View convert_view, ViewGroup parent) 
+	{
+		TextView textView = getGenericView();
+		textView.setText(getGroup(group_position).toString());
+		textView.setTextColor(Color.BLACK);
+		
+		LinearLayout layout = new LinearLayout(activity);
+		layout.addView(textView);
+		return layout;
+	}
+
+	/**
+	 * isChildSelectable
+	 * 
+	 * @param int group_position
+	 * @param int child_position
+	 * @return boolean
+	 */
+	public boolean isChildSelectable(int group_position, int child_position) 
+	{
+		return true;
+	}
+
+	/**
+	 * hasStableIds
+	 * 
+	 * @return boolean
+	 */
+	public boolean hasStableIds() 
+	{
+		return true;
+	}
 }
