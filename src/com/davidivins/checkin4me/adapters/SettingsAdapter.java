@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -130,19 +131,51 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 	 * @param ViewGroup parent
 	 * @return View
 	 */
-	public View getChildView(int group_position, int child_position, boolean is_last_child,
-		View convert_view, ViewGroup parent) 
+	public View getChildView(int group_position, int child_position, boolean is_last_child, View convert_view, ViewGroup parent) 
 	{
-		TextView textView = getGenericView();
-		textView.setText(getChild(group_position, child_position).toString());
-		textView.setTextColor(Color.BLACK);
+		// create a text layout
+		AbsListView.LayoutParams text_layout_params = new AbsListView.LayoutParams(
+				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		LinearLayout text_layout = new LinearLayout(activity);
+		TextView text_view = getGenericView();
 		
-		LinearLayout layout = new LinearLayout(activity);
-		layout.addView(textView);
+		text_view.setText(getChild(group_position, child_position).toString());
+		text_view.setTextColor(Color.BLACK);
+		text_layout.setLayoutParams(text_layout_params);
+		text_layout.setOrientation(LinearLayout.HORIZONTAL);
+		text_layout.addView(text_view);
+
+		// create a check box layout
+		AbsListView.LayoutParams check_box_layout_params = new AbsListView.LayoutParams(
+				ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		CheckBox check_box = new CheckBox(activity);
+		LinearLayout check_box_layout = new LinearLayout(activity);
 		
-		//CheckBox check_box = new CheckBox(activity);
-		//layout.addView(check_box);
-		return layout;
+		check_box_layout.setLayoutParams(check_box_layout_params);
+		check_box_layout.setGravity(Gravity.RIGHT);
+		check_box_layout.setPadding(0, 0, 5, 0);
+		check_box_layout.addView(check_box);
+		
+		// create row and add text and check box layouts to it
+		AbsListView.LayoutParams main_layout_params = new AbsListView.LayoutParams(
+				ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
+		LinearLayout main_layout = new LinearLayout(activity);
+		
+		main_layout.setLayoutParams(main_layout_params);
+		main_layout.setOrientation(LinearLayout.HORIZONTAL);
+		main_layout.addView(text_layout);
+		
+		if (3 != group_position)
+		{
+			main_layout.setGravity(Gravity.CENTER);
+			main_layout.addView(check_box_layout);
+		}
+		else
+		{
+			main_layout.setGravity(Gravity.CENTER_VERTICAL); 
+		}
+		
+		return main_layout;
 	}
 
 	/**
