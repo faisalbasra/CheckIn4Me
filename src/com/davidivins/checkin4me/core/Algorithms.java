@@ -38,7 +38,7 @@ public class Algorithms
 	 * @param ArrayList<ArrayList<Locale>> location_lists
 	 * @return ArrayList<Locale>
 	 */
-	static public ArrayList<Locale> mergeLocations(ArrayList<ArrayList<Locale>> location_lists)
+	synchronized static public ArrayList<Locale> mergeLocations(ArrayList<ArrayList<Locale>> location_lists)
 	{
 		int current_index = 0;
 		ArrayList<Locale> locations = new ArrayList<Locale>();
