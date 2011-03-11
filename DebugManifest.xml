@@ -57,7 +57,7 @@
 		</receiver>
 	
 		<!-- CheckIn4Me Activity -->
-		<activity android:name=".CheckIn4Me" android:label="@string/app_name_debug">
+		<activity android:name=".CheckIn4Me" android:label="@string/app_name_debug" android:theme="@android:style/Theme.NoTitleBar">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -67,7 +67,7 @@
 		<!-- MainTabbedContainer Activity -->
 		<activity android:name="com.davidivins.checkin4me.activities.MainTabbedContainer" 
 			android:label="@string/app_name"
-			android:theme="@android:style/Theme.NoTitleBar">
+			android:theme="@android:style/Theme.NoTitleBar">	
 		</activity>
 		
 		<!-- ServiceConnection Activity -->

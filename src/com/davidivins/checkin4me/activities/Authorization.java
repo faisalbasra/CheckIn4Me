@@ -121,7 +121,8 @@ public class Authorization extends Activity
 					oauth_connector.storeNecessaryCompletionResponseData(settings_editor, response);
 					
 					// start nearby places event
-					i = new Intent(this, NearbyPlaces.class);
+					i.putExtra("tab_to_display", MainTabbedContainer.NEARBY_PLACES_TAB);
+					i = new Intent(this, MainTabbedContainer.class);
 					
 					// clear temporary data
 					oauth_connector.clearTemporaryData(settings_editor);
@@ -130,21 +131,27 @@ public class Authorization extends Activity
 				{
 					Log.e(TAG, "Failed to complete handshake: " + response.getResponseString());
 					Toast.makeText(getApplicationContext(), "Failed to complete handshake.", Toast.LENGTH_SHORT).show();
-					i = new Intent(this, ServiceConnection.class);
+					
+					i.putExtra("tab_to_display", MainTabbedContainer.SERVICE_CONNECTION_TAB);
+					i = new Intent(this, MainTabbedContainer.class);
 				}
 			}
 			else
 			{
 				Log.e(TAG, "Failed to authorize app: " + uri.toString());
 				Toast.makeText(getApplicationContext(), "Failed to authorize app.", Toast.LENGTH_SHORT).show();
-				i = new Intent(this, ServiceConnection.class);
+				
+				i.putExtra("tab_to_display", MainTabbedContainer.SERVICE_CONNECTION_TAB);
+				i = new Intent(this, MainTabbedContainer.class);
 			}
 		}
 		else
 		{
 			Log.i(TAG, "No service clicked and no handshake in progress");
 			Toast.makeText(getApplicationContext(), "No service clicked and no handshake in progress.", Toast.LENGTH_SHORT).show();
-			i = new Intent(this, ServiceConnection.class);
+
+			i.putExtra("tab_to_display", MainTabbedContainer.SERVICE_CONNECTION_TAB);
+			i = new Intent(this, MainTabbedContainer.class);			
 		}
 		
 		settings_editor.commit();

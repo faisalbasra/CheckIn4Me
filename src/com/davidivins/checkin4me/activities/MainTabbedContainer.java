@@ -59,14 +59,28 @@ public class MainTabbedContainer extends TabActivity
 			res.getDrawable(GeneratedResources.getLayout("ic_tab_settings"))).setContent(intent);
 		tab_host.addTab(spec);
 
-		// set current tab based on the service locations connected
-		if (Services.getInstance(this).atLeastOneConnected(PreferenceManager.getDefaultSharedPreferences(this)))
-			tab_host.setCurrentTab(1);
+		// if tab to set is specified
+		int tab_to_display = this.getIntent().getIntExtra("tab_to_display", -1);
+		if (-1 != tab_to_display)
+		{
+			tab_host.setCurrentTab(tab_to_display);
+		}
 		else
-			tab_host.setCurrentTab(0);
+		{
+			// set current tab based on the service locations connected
+			if (Services.getInstance(this).atLeastOneConnected(PreferenceManager.getDefaultSharedPreferences(this)))
+				tab_host.setCurrentTab(NEARBY_PLACES_TAB);
+			else
+				tab_host.setCurrentTab(SERVICE_CONNECTION_TAB);
+		}
 		
 		// display the add if this is not the pro version
 		Ad ad = new Ad(this);
 		ad.refreshAd();
 	}
+	
+	public static final int SERVICE_CONNECTION_TAB = 0;
+	public static final int NEARBY_PLACES_TAB = 1;
+	public static final int SETTINGS_TAB = 2;
+
 }

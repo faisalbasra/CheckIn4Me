@@ -57,7 +57,7 @@
 		</receiver>
 	
 		<!-- CheckIn4Me Activity -->
-		<activity android:name=".CheckIn4Me" android:label="@string/app_name_free">
+		<activity android:name=".CheckIn4Me" android:label="@string/app_name_free" android:theme="@android:style/Theme.NoTitleBar">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />

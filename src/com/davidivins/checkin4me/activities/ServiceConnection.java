@@ -94,7 +94,7 @@ public class ServiceConnection extends ListActivity implements OnItemClickListen
 					.setCancelable(false)
 					.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
-							loadAuthorizationActivity();
+							beginAuthorization();
 						}
 					})
 					.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -108,7 +108,7 @@ public class ServiceConnection extends ListActivity implements OnItemClickListen
 			}
 			else
 			{
-				loadAuthorizationActivity();
+				beginAuthorization();
 			}
 		}
 		else
@@ -121,15 +121,21 @@ public class ServiceConnection extends ListActivity implements OnItemClickListen
 	}
 	
 	/**
-	 * loadAuthorizationActivity
+	 * beginAuthorization
 	 */
-	public void loadAuthorizationActivity()
+	private void beginAuthorization()
 	{
 		Intent i = new Intent(this, Authorization.class);
 		i.putExtra("service_id", latest_service_id_selected);
 		startActivity(i);
 	}
-
+	
+	/**
+	 * onClick
+	 * 
+	 * @param dialog
+	 * @param which
+	 */
 	public void onClick(DialogInterface dialog, int which) 
 	{
 		// TODO Auto-generated method stub

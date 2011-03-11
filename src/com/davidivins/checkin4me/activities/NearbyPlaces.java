@@ -19,6 +19,7 @@ package com.davidivins.checkin4me.activities;
 import com.davidivins.checkin4me.adapters.LocaleAdapter;
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.core.Locale;
+import com.davidivins.checkin4me.core.Services;
 import com.davidivins.checkin4me.listeners.CleanableProgressDialogListener;
 import com.davidivins.checkin4me.listeners.GPSTimeoutListener;
 import com.davidivins.checkin4me.listeners.LocationsRetrieverListener;
@@ -50,6 +51,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -90,8 +92,18 @@ public class NearbyPlaces extends ListActivity
 	{
 		super.onCreate(saved_instance_state);
 
-		// handle the current intent of this activity
-		handleIntent(getIntent());
+		// if no services are connected, display error message, otherwise, process intent
+		if (Services.getInstance(this).atLeastOneConnected(PreferenceManager.getDefaultSharedPreferences(this)))
+		{
+			// handle the current intent of this activity
+			handleIntent(getIntent());
+		}
+		else
+		{
+			setContentView(GeneratedResources.getLayout("nearby_places"));
+			TextView empty_list = (TextView)findViewById(android.R.id.empty);
+			empty_list.setText("No Services Connected");
+		}
 	}
 	
 	/**
@@ -220,8 +232,18 @@ public class NearbyPlaces extends ListActivity
 	@Override
 	protected void onNewIntent(Intent intent) 
 	{
-		setIntent(intent);
-		handleIntent(intent);
+		// if no services are connected, display error message, otherwise, process intent
+		if (Services.getInstance(this).atLeastOneConnected(PreferenceManager.getDefaultSharedPreferences(this)))
+		{
+			setIntent(intent);
+			handleIntent(intent);
+		}
+		else
+		{
+			setContentView(GeneratedResources.getLayout("nearby_places"));
+			TextView empty_list = (TextView)findViewById(android.R.id.empty);
+			empty_list.setText("No Services Connected");
+		}
 	}
 	
 	/**
@@ -445,8 +467,13 @@ public class NearbyPlaces extends ListActivity
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
 	{
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(GeneratedResources.getMenu("nearby_places"), menu);
+		// if no services are connected, don't display menu options
+		if (Services.getInstance(this).atLeastOneConnected(PreferenceManager.getDefaultSharedPreferences(this)))
+		{
+			MenuInflater inflater = getMenuInflater();
+			inflater.inflate(GeneratedResources.getMenu("nearby_places"), menu);
+		}
+		
 		return true;
 	}
 	
@@ -471,10 +498,6 @@ public class NearbyPlaces extends ListActivity
 			onSearchRequested();
 			result = true;
 		}
-//		else if (GeneratedResources.getId("feedback") == id)
-//		{
-//			startActivity(new Intent(this, Feedback.class));
-//		}
 		else
 		{
 			// do nothing
