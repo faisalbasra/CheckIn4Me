@@ -102,7 +102,7 @@ public class NearbyPlaces extends ListActivity
 		{
 			setContentView(GeneratedResources.getLayout("nearby_places"));
 			TextView empty_list = (TextView)findViewById(android.R.id.empty);
-			empty_list.setText("No Services Connected");
+			empty_list.setText("No services connected!");
 		}
 	}
 	
@@ -242,7 +242,7 @@ public class NearbyPlaces extends ListActivity
 		{
 			setContentView(GeneratedResources.getLayout("nearby_places"));
 			TextView empty_list = (TextView)findViewById(android.R.id.empty);
-			empty_list.setText("No Services Connected");
+			empty_list.setText("No services connected!");
 		}
 	}
 	

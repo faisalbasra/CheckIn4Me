@@ -5,7 +5,7 @@
 	android:layout_width="fill_parent"
  	android:layout_height="fill_parent">
 
-	<ListView android:id="@+id/android:list"
+	<ExpandableListView android:id="@+id/android:list"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent" />
 		
@@ -13,6 +13,7 @@
 		android:id="@+id/android:empty"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
+		android:gravity="center"
 		android:background="@color/white"
 		android:text="@string/no_settings_msg" 
 		android:textColor="@color/black" />

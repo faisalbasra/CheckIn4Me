@@ -17,10 +17,13 @@
 package com.davidivins.checkin4me.activities;
 
 import com.davidivins.checkin4me.adapters.SettingsAdapter;
+import com.davidivins.checkin4me.core.GeneratedResources;
+import com.davidivins.checkin4me.core.Services;
 
 import android.app.ExpandableListActivity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -44,16 +47,21 @@ public class Settings extends ExpandableListActivity implements OnChildClickList
 	public void onCreate(Bundle saved_instance_state) 
 	{
 		super.onCreate(saved_instance_state);
-		
-		// Set up our adapter
-		SettingsAdapter adapter;
-		adapter = new SettingsAdapter();
-		adapter.setActivity(this);
-		
-		setListAdapter(adapter);
-		getExpandableListView().setOnChildClickListener(this);
-		getExpandableListView().setBackgroundColor(Color.WHITE);
-		getExpandableListView().setCacheColorHint(Color.WHITE);		
+		setContentView(GeneratedResources.getLayout("settings"));
+
+		// don't list any settings if there are not any services connected
+		if (Services.getInstance(this).atLeastOneConnected(PreferenceManager.getDefaultSharedPreferences(this)))
+		{		
+			// Set up our adapter
+			SettingsAdapter adapter;
+			adapter = new SettingsAdapter();
+			adapter.setActivity(this);
+			
+			setListAdapter(adapter);
+			getExpandableListView().setOnChildClickListener(this);
+			getExpandableListView().setBackgroundColor(Color.WHITE);
+			getExpandableListView().setCacheColorHint(Color.WHITE);
+		}
 	}
 
 	/**
