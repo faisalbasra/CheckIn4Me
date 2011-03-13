@@ -20,8 +20,7 @@ import com.davidivins.checkin4me.adapters.SettingsAdapter;
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.core.Services;
 
-import android.app.ExpandableListActivity;
-import android.graphics.Color;
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,9 +30,12 @@ import android.widget.ExpandableListView.OnChildClickListener;
 /**
  * Settings
  * 
+ * **THIS CANNOT EXTEND ExpandableListActivity. Bug in Android on orientation change will cause crash.**
+ * 
  * @author david
  */
-public class Settings extends ExpandableListActivity implements OnChildClickListener
+//public class Settings extends ExpandableListActivity implements OnChildClickListener
+public class Settings extends Activity implements OnChildClickListener
 {
 	static private final String TAG = "Settings";
 	
@@ -46,20 +48,16 @@ public class Settings extends ExpandableListActivity implements OnChildClickList
 	public void onCreate(Bundle saved_instance_state) 
 	{
 		super.onCreate(saved_instance_state);
+		GeneratedResources.generate(this);
 		setContentView(GeneratedResources.getLayout("settings"));
 
 		// don't list any settings if there are not any services connected
 		if (Services.getInstance(this).atLeastOneConnected())
 		{		
 			// Set up our adapter
-			SettingsAdapter adapter;
-			adapter = new SettingsAdapter();
-			adapter.setActivity(this);
-			
-			setListAdapter(adapter);
-			getExpandableListView().setOnChildClickListener(this);
-			getExpandableListView().setBackgroundColor(Color.WHITE);
-			getExpandableListView().setCacheColorHint(Color.WHITE);
+			ExpandableListView list = (ExpandableListView)this.findViewById(GeneratedResources.getId("settings"));
+			list.setAdapter(new SettingsAdapter(this));
+			list.setOnChildClickListener(this);
 		}
 	}
 
@@ -73,7 +71,6 @@ public class Settings extends ExpandableListActivity implements OnChildClickList
 	 * @param long id
 	 * @return boolean
 	 */
-	@Override
 	public boolean onChildClick(ExpandableListView parent, View v, int group_position, int child_position, long id) 
 	{
 		Log.i(TAG, "group_position = " + group_position);

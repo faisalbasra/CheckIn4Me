@@ -46,8 +46,10 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 	private ArrayList<String> groups;
 	private ArrayList<ArrayList<String>> children;
 	
-	public SettingsAdapter()
+	public SettingsAdapter(Activity activity)
 	{
+		this.activity = activity;
+
 		groups = new ArrayList<String>();
 		children = new ArrayList<ArrayList<String>>();
 		
@@ -68,16 +70,6 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 			
 			children.add(setting_names);			
 		}
-	}
-
-	/**
-	 * setActivity
-	 * 
-	 * @param activity
-	 */
-	public void setActivity(Activity activity)
-	{
-		this.activity = activity;
 	}
 	
 	/**
@@ -238,12 +230,13 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 	 */
 	public View getGroupView(int group_position, boolean is_expanded, View convert_view, ViewGroup parent) 
 	{
-		TextView textView = getGenericView();
-		textView.setText(getGroup(group_position).toString());
-		textView.setTextColor(Color.BLACK);
+		TextView text_view = getGenericView();
+		text_view.setText(getGroup(group_position).toString());
+		text_view.setTextColor(Color.BLACK);
+		text_view.setPadding(55, 0, 0, 0);
 		
 		LinearLayout layout = new LinearLayout(activity);
-		layout.addView(textView);
+		layout.addView(text_view);
 		return layout;
 	}
 

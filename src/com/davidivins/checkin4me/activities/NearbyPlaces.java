@@ -16,6 +16,8 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.activities;
 
+import java.util.ArrayList;
+
 import com.davidivins.checkin4me.adapters.LocaleAdapter;
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.core.Locale;
@@ -79,8 +81,9 @@ public class NearbyPlaces extends ListActivity
 	private Runnable network_timeout_callback              = null;
 	private Handler handler                                = null;
 	private boolean timeouts_cancelled                     = false;
-	private String current_longitude;
-	private String current_latitude;
+	private static ArrayList<Locale> current_locations     = null;
+	private static String current_longitude;
+	private static String current_latitude;
 
 	/**
 	 * onCreate
@@ -262,7 +265,10 @@ public class NearbyPlaces extends ListActivity
 		
 		if (this.getListAdapter() == null)
 		{
-			requestCoordinates();
+			if (null == current_locations || null == current_longitude || null == current_latitude)
+				requestCoordinates();
+			else
+				setLocationsList();
 	
 			setContentView(GeneratedResources.getLayout("nearby_places"));
 			
@@ -321,7 +327,7 @@ public class NearbyPlaces extends ListActivity
 	/**
 	 * requestCoordinates
 	 */
-	public void requestCoordinates()
+	private void requestCoordinates()
 	{
 		setup();
 		timeouts_cancelled = false;
@@ -371,6 +377,9 @@ public class NearbyPlaces extends ListActivity
 		// Acquire a reference to the system Location Manager
 		if (null == location_manager)
 			location_manager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+
+		// cancel updates for gps
+		location_manager.removeUpdates(this);
 		
 		// get network info
 		NetworkInfo mobile_network_info = 
@@ -388,7 +397,6 @@ public class NearbyPlaces extends ListActivity
 			network_timeout_thread.start();
 		
 			// Register the listener with the Location Manager to receive location updates
-			location_manager.removeUpdates(this);
 			location_manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener)this);
 		
 			// show loading dialog
@@ -427,12 +435,27 @@ public class NearbyPlaces extends ListActivity
 		Log.i(TAG, "received new location data.");
 		
 		// setup list for retrieved locations
-		LocaleAdapter adapter = new LocaleAdapter(
-				this, GeneratedResources.getLayout("nearby_place_row"), locations_runnable.getLocationsRetrieved());
-		setListAdapter(adapter);
+		current_locations = locations_runnable.getLocationsRetrieved();
 		
+		// set locations list
+		setLocationsList();
+				
 		// cancel loading dialog
 		loading_dialog.cancel();
+	}
+	
+	/**
+	 * setLocationsList
+	 */
+	private void setLocationsList()
+	{
+		if (0 < current_locations.size())
+		{
+			LocaleAdapter adapter = new LocaleAdapter(
+				this, GeneratedResources.getLayout("nearby_place_row"), current_locations);
+			setListAdapter(adapter);
+		}
+
 	}
 	
 	/**
