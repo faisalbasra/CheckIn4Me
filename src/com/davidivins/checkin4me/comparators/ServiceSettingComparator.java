@@ -14,29 +14,28 @@
 //    You should have received a copy of the GNU General Public License
 //    along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
 //*****************************************************************************
-package com.davidivins.checkin4me.interfaces;
+package com.davidivins.checkin4me.comparators;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Comparator;
 
 import com.davidivins.checkin4me.core.ServiceSetting;
-import com.davidivins.checkin4me.oauth.OAuthConnector;
 
 /**
- * ServiceInterface
- * 
- * @author david ivins
- */
-public interface ServiceInterface
+* ServiceSettingComparator
+* 
+* @author david ivins
+*/
+public class ServiceSettingComparator implements Comparator<ServiceSetting> 
 {
-	abstract public int getId();
-	abstract public String getName();
-	abstract public int getLogoDrawable();
-	abstract public int getIconDrawable();
-	abstract public OAuthConnector getOAuthConnector();
-	abstract public APIInterface getAPIInterface();
-	abstract public boolean connected();
-	abstract public boolean hasSettings();
-	abstract public HashMap<String, ServiceSetting> getSettingsAsHashMap();
-	abstract public ArrayList<ServiceSetting> getSettingsAsArrayList();
+	/**
+	* compare
+	* 
+	* @param ServiceSetting location_1
+	* @param ServiceSetting location_2
+	* @return int
+	*/
+	public int compare(ServiceSetting setting_1, ServiceSetting setting_2)
+	{
+		return setting_1.getDisplayName().compareToIgnoreCase(setting_2.getDisplayName());
+	}
 }

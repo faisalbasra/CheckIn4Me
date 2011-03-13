@@ -22,13 +22,15 @@ import org.w3c.dom.NodeList;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 /**
  * ServiceSetting
  * 
  * @author david
  */
-public class ServiceSetting 
+public class ServiceSetting implements OnClickListener
 {
 	private static final String TAG = "ServiceSetting";
 	private SharedPreferences persistent_storage;
@@ -96,5 +98,14 @@ public class ServiceSetting
 	public boolean getPrefValue()
 	{
 		return persistent_storage.getBoolean(pref_name, false);
+	}
+
+	/**
+	 * onClick
+	 */
+	public void onClick(View v) 
+	{
+		persistent_storage_editor.putBoolean(pref_name, !persistent_storage.getBoolean(pref_name, false));
+		persistent_storage_editor.commit();
 	}
 }

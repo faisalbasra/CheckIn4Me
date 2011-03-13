@@ -17,6 +17,8 @@
 package com.davidivins.checkin4me.facebook;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -27,6 +29,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.davidivins.checkin4me.comparators.ServiceSettingComparator;
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.core.ServiceSetting;
 import com.davidivins.checkin4me.interfaces.APIInterface;
@@ -184,16 +187,32 @@ public class FacebookService implements ServiceInterface
 	/**
 	 * hasSettings
 	 */
-	 public boolean hasSettings()
-	 {
-		 return (settings.size() > 0) ? true : false;
-	 }
+	public boolean hasSettings()
+	{
+		return (settings.size() > 0) ? true : false;
+	}
 	 
-	 /**
-	  * getSettings
-	  */
-	 public HashMap<String, ServiceSetting> getSettings()
-	 {
-		 return settings;
-	 }
+	/**
+	 * getSettingsAsHashMap
+	 */
+	public HashMap<String, ServiceSetting> getSettingsAsHashMap()
+	{
+		return settings;
+	}
+	 
+	/**
+	 * getSettingsAsArrayList
+	 */
+	public ArrayList<ServiceSetting> getSettingsAsArrayList()
+	{
+		ArrayList<ServiceSetting> settings_list = new ArrayList<ServiceSetting>();
+	 
+		for (String key : settings.keySet())
+		{
+			settings_list.add(settings.get(key));
+		}
+	 
+		Collections.sort(settings_list, new ServiceSettingComparator());
+		return settings_list;
+	}
 }

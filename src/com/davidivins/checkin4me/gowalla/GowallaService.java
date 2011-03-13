@@ -17,6 +17,8 @@
 package com.davidivins.checkin4me.gowalla;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Properties;
 
@@ -27,6 +29,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.davidivins.checkin4me.comparators.ServiceSettingComparator;
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.core.ServiceSetting;
 import com.davidivins.checkin4me.interfaces.APIInterface;
@@ -92,8 +95,8 @@ public class GowallaService implements ServiceInterface
 			Document dom = builder.parse(is);
 			Element root = dom.getDocumentElement();
 			NodeList settings_nodes = root.getElementsByTagName("setting");
-
-			if (settings != null && settings_nodes.getLength() > 0) 
+			
+			if (settings_nodes != null && settings_nodes.getLength() > 0) 
 			{
 				for (int i = 0 ; i < settings_nodes.getLength(); i++) 
 				{
@@ -101,7 +104,7 @@ public class GowallaService implements ServiceInterface
 					ServiceSetting current_setting = new ServiceSetting(setting_xml, persistent_storage);
 					settings.put(current_setting.getPrefName(), current_setting);
 				}
-			}
+			}			
 		} 
 		catch (Exception e) 
 		{
@@ -118,7 +121,7 @@ public class GowallaService implements ServiceInterface
 	{
 		return service_id;
 	}
-
+	
 	/**
 	 * getName
 	 * 
@@ -148,7 +151,7 @@ public class GowallaService implements ServiceInterface
 	{
 		return GeneratedResources.getDrawable("gowalla25x25");
 	}
-
+	
 	/**
 	 * getOAuthConnector
 	 * 
@@ -184,16 +187,32 @@ public class GowallaService implements ServiceInterface
 	/**
 	 * hasSettings
 	 */
-	 public boolean hasSettings()
-	 {
-		 return (settings.size() > 0) ? true : false;
-	 }
+	public boolean hasSettings()
+	{
+		return (settings.size() > 0) ? true : false;
+	}
 	 
-	 /**
-	  * getSettings
-	  */
-	 public HashMap<String, ServiceSetting> getSettings()
-	 {
-		 return settings;
-	 }
+	/**
+	 * getSettingsAsHashMap
+	 */
+	public HashMap<String, ServiceSetting> getSettingsAsHashMap()
+	{
+		return settings;
+	}
+	 
+	/**
+	 * getSettingsAsArrayList
+	 */
+	public ArrayList<ServiceSetting> getSettingsAsArrayList()
+	{
+		ArrayList<ServiceSetting> settings_list = new ArrayList<ServiceSetting>();
+	 
+		for (String key : settings.keySet())
+		{
+			settings_list.add(settings.get(key));
+		}
+	 
+		Collections.sort(settings_list, new ServiceSettingComparator());
+		return settings_list;
+	}
 }

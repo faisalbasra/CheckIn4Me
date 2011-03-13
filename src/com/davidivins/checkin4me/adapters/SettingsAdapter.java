@@ -17,7 +17,6 @@
 package com.davidivins.checkin4me.adapters;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.davidivins.checkin4me.core.ServiceSetting;
 import com.davidivins.checkin4me.core.Services;
@@ -44,14 +43,14 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 	//private static final String TAG = "SettingsAdapter";
 	private Activity activity = null;
 	private ArrayList<String> groups;
-	private ArrayList<ArrayList<String>> children;
+	private ArrayList<ArrayList<ServiceSetting>> children;
 	
 	public SettingsAdapter(Activity activity)
 	{
 		this.activity = activity;
 
 		groups = new ArrayList<String>();
-		children = new ArrayList<ArrayList<String>>();
+		children = new ArrayList<ArrayList<ServiceSetting>>();
 		
 		ArrayList<ServiceInterface> services = 
 			Services.getInstance(activity).getConnectedServicesWithSettingsAsArrayList();
@@ -60,15 +59,15 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 		{
 			groups.add(service.getName() + " Settings");
 			
-			HashMap<String, ServiceSetting> settings = service.getSettings();
-			ArrayList<String> setting_names = new ArrayList<String>();
+			//HashMap<String, ServiceSetting> settings = service.getSettings();
+			ArrayList<ServiceSetting> settings = service.getSettingsAsArrayList();
 			
-			for (String key : settings.keySet())
-			{
-				setting_names.add(settings.get(key).getDisplayName());
-			}
+//			for (String key : settings.keySet())
+//			{
+//				setting_names.add(settings.get(key).getDisplayName());
+//			}
 			
-			children.add(setting_names);			
+			children.add(settings);			
 		}
 	}
 	
@@ -142,22 +141,29 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 	 */
 	public View getChildView(int group_position, int child_position, boolean is_last_child, View convert_view, ViewGroup parent) 
 	{
+		// get the current setting
+		ServiceSetting setting = (ServiceSetting)getChild(group_position, child_position);
+		
 		// create a text layout
 		AbsListView.LayoutParams text_layout_params = new AbsListView.LayoutParams(
 				ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		LinearLayout text_layout = new LinearLayout(activity);
 		TextView text_view = getGenericView();
-		
-		text_view.setText(getChild(group_position, child_position).toString());
+
+		text_view.setText(setting.getDisplayName());
 		text_view.setTextColor(Color.BLACK);
 		text_layout.setLayoutParams(text_layout_params);
 		text_layout.setOrientation(LinearLayout.HORIZONTAL);
 		text_layout.addView(text_view);
 
+		// create checkbox
+		CheckBox check_box = new CheckBox(activity);
+		check_box.setChecked(setting.getPrefValue());
+		check_box.setOnClickListener(setting);
+		
 		// create a check box layout
 		AbsListView.LayoutParams check_box_layout_params = new AbsListView.LayoutParams(
 				ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-		CheckBox check_box = new CheckBox(activity);
 		LinearLayout check_box_layout = new LinearLayout(activity);
 		
 		check_box_layout.setLayoutParams(check_box_layout_params);
@@ -170,19 +176,20 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 				ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT);
 		LinearLayout main_layout = new LinearLayout(activity);
 		
+		// add to main layout
 		main_layout.setLayoutParams(main_layout_params);
 		main_layout.setOrientation(LinearLayout.HORIZONTAL);
 		main_layout.addView(text_layout);
 		
-		if (3 != group_position)
-		{
+//		if (3 != group_position)
+//		{
 			main_layout.setGravity(Gravity.CENTER);
 			main_layout.addView(check_box_layout);
-		}
-		else
-		{
-			main_layout.setGravity(Gravity.CENTER_VERTICAL); 
-		}
+//		}
+//		else
+//		{
+//			main_layout.setGravity(Gravity.CENTER_VERTICAL); 
+//		}
 		
 		return main_layout;
 	}
