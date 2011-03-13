@@ -223,67 +223,67 @@ public class Locale
 	/**
 	 * store
 	 * 
-	 * @param SharedPreferences settings
+	 * @param SharedPreferences persistent_storage
 	 */
-	public void store(SharedPreferences settings)
+	public void store(SharedPreferences persistent_storage)
 	{
-		Editor settings_editor = settings.edit();
-		int last_saved_xref_count = settings.getInt("last_saved_xref_count", 0);
+		Editor persistent_storage_editor = persistent_storage.edit();
+		int last_saved_xref_count = persistent_storage.getInt("last_saved_xref_count", 0);
 		
-		settings_editor.putString("current_location_name", name);
-		settings_editor.putString("current_location_description", description);
-		settings_editor.putString("current_location_longitude", longitude);
-		settings_editor.putString("current_location_latitude", latitude);
+		persistent_storage_editor.putString("current_location_name", name);
+		persistent_storage_editor.putString("current_location_description", description);
+		persistent_storage_editor.putString("current_location_longitude", longitude);
+		persistent_storage_editor.putString("current_location_latitude", latitude);
 		
-		settings_editor.putString("current_location_address", address);
-		settings_editor.putString("current_location_city", city);
-		settings_editor.putString("current_location_state", state);
-		settings_editor.putString("current_location_zip", zip);
+		persistent_storage_editor.putString("current_location_address", address);
+		persistent_storage_editor.putString("current_location_city", city);
+		persistent_storage_editor.putString("current_location_state", state);
+		persistent_storage_editor.putString("current_location_zip", zip);
 		
 		Set<Integer> keys = service_location_ids.keySet();
 		int count = 0;
 		
 		for (int i = 0; i < last_saved_xref_count; i++)
 		{
-			settings_editor.remove("current_location_xref_key_" + i);
-			settings_editor.remove("current_location_xref_value_" + i);
+			persistent_storage_editor.remove("current_location_xref_key_" + i);
+			persistent_storage_editor.remove("current_location_xref_value_" + i);
 		}
 		
 		for (Integer key : keys)
 		{
 			String value = service_location_ids.get(key);
-			settings_editor.putString("current_location_xref_key_" + count, key.toString());
-			settings_editor.putString("current_location_xref_value_" + count, value);
+			persistent_storage_editor.putString("current_location_xref_key_" + count, key.toString());
+			persistent_storage_editor.putString("current_location_xref_value_" + count, value);
 			count++;
 		}
 		
 		Log.i(TAG, "Saved " + count + " mappings");
-		settings_editor.commit();
+		persistent_storage_editor.commit();
 	}
 	
 	/**
 	 * load
 	 * 
-	 * @param SharedPreferences settings
+	 * @param SharedPreferences persistent_storage
 	 */
-	public void load(SharedPreferences settings)
+	public void load(SharedPreferences persistent_storage)
 	{
-		Editor settings_editor = settings.edit();
+		Editor persistent_storage_editor = persistent_storage.edit();
 		
-		name = settings.getString("current_location_name", "");
-		description = settings.getString("current_location_description", "");
-		longitude = settings.getString("current_location_longitude", "");
-		latitude = settings.getString("current_location_latitude", "");
+		name = persistent_storage.getString("current_location_name", "");
+		description = persistent_storage.getString("current_location_description", "");
+		longitude = persistent_storage.getString("current_location_longitude", "");
+		latitude = persistent_storage.getString("current_location_latitude", "");
 		
-		address = settings.getString("current_location_address", "");
-		city = settings.getString("current_location_city", "");
-		state = settings.getString("current_location_state", "");
-		zip = settings.getString("current_location_zip", "");
+		address = persistent_storage.getString("current_location_address", "");
+		city = persistent_storage.getString("current_location_city", "");
+		state = persistent_storage.getString("current_location_state", "");
+		zip = persistent_storage.getString("current_location_zip", "");
 		
 		for (int i = 0; i != -1; i++) // <---  i know... :(
 		{
-			String key_string = settings.getString("current_location_xref_key_" + i, "");
-			String value = settings.getString("current_location_xref_value_" + i, "");
+			String key_string = persistent_storage.getString("current_location_xref_key_" + i, "");
+			String value = persistent_storage.getString("current_location_xref_value_" + i, "");
 			
 			if (!key_string.equals("") && !value.equals(""))
 			{
@@ -293,8 +293,8 @@ public class Locale
 			else
 			{
 				Log.i(TAG, "Loaded " + i + " mappings");
-				settings_editor.putInt("last_saved_xref_count", i);
-				settings_editor.commit();
+				persistent_storage_editor.putInt("last_saved_xref_count", i);
+				persistent_storage_editor.commit();
 				break;
 			}
 		}

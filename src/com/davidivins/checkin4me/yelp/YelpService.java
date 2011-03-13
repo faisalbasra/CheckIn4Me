@@ -47,7 +47,7 @@
 //	* 
 //	* @param resources
 //	*/
-//	public YelpService(Resources resources, int service_id)
+//	public YelpService(int service_id, SharedPreferences persistent_storage, Resources resources)
 //	{
 //		this.service_id = service_id;
 //		config = new Properties();
@@ -133,9 +133,9 @@
 //	* 
 //	* @return boolean
 //	*/
-//	public boolean connected(SharedPreferences settings)
+//	public boolean connected()
 //	{
-//		return settings.contains("yelp_oauth_token_secret") && 
-//			(settings.getString("yelp_oauth_token_secret", null) != null);
+//		return persistent_storage.contains("yelp_oauth_token_secret") && 
+//			(persistent_storage.getString("yelp_oauth_token_secret", null) != null);
 //	}
 //}

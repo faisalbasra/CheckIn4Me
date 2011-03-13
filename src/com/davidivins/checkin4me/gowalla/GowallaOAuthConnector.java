@@ -90,9 +90,9 @@ public class GowallaOAuthConnector implements OAuthConnector
 	 * @param Editor
 	 * @param OAuthResponse
 	 */
-	public void storeNecessaryInitialResponseData(Editor settingsEditor, OAuthResponse response) { }
+	public void storeNecessaryInitialResponseData(Editor persistent_storageEditor, OAuthResponse response) { }
 
-	public String generateAuthorizationURL(SharedPreferences settings) 
+	public String generateAuthorizationURL(SharedPreferences persistent_storage) 
 	{
 		String url = config.getProperty("oauth_host") + config.getProperty("oauth_new_token_endpoint")
 			+ "?client_id=" + config.getProperty("oauth_client_id")
@@ -126,11 +126,11 @@ public class GowallaOAuthConnector implements OAuthConnector
 	 * @param Editor
 	 * @param Uri
 	 */
-	public void storeNecessaryAuthorizationResponseData(Editor settings_editor, Uri response)
+	public void storeNecessaryAuthorizationResponseData(Editor persistent_storage_editor, Uri response)
 	{
 		Log.i(TAG, "code = " + response.getQueryParameter("code"));
-		settings_editor.putString("gowalla_code", response.getQueryParameter("code"));
-		settings_editor.commit();
+		persistent_storage_editor.putString("gowalla_code", response.getQueryParameter("code"));
+		persistent_storage_editor.commit();
 	}
 
 	/**
@@ -140,12 +140,12 @@ public class GowallaOAuthConnector implements OAuthConnector
 	 * @param Uri
 	 * @return OAuthResponse
 	 */
-	public OAuthResponse completeHandshake(SharedPreferences settings, Uri previous_response) 
+	public OAuthResponse completeHandshake(SharedPreferences persistent_storage, Uri previous_response) 
 	{
 		OAuthResponse response = new OAuthResponse();
-		Log.i(TAG, "code in settings = " + settings.getString("gowalla_code", "-1"));
+		Log.i(TAG, "code in persistent_storage = " + persistent_storage.getString("gowalla_code", "-1"));
 		
-		if (settings.getString("gowalla_code", "-1") != "-1")
+		if (persistent_storage.getString("gowalla_code", "-1") != "-1")
 		{
 			OAuth2Request request = new OAuth2Request(
 					config.getProperty("oauth_http_method"), config.getProperty("oauth_host"), 
@@ -154,7 +154,7 @@ public class GowallaOAuthConnector implements OAuthConnector
 			request.addQueryParameter("grant_type", "authorization_code");
 			request.addQueryParameter("client_id", config.getProperty("oauth_client_id"));
 			request.addQueryParameter("client_secret", config.getProperty("oauth_client_secret"));
-			request.addQueryParameter("code", settings.getString("gowalla_code", "-1"));
+			request.addQueryParameter("code", persistent_storage.getString("gowalla_code", "-1"));
 			request.addQueryParameter("redirect_uri", oauth_redirect_uri);
 			request.addQueryParameter("scope", config.getProperty("oauth_api_scope"));
 			
@@ -199,7 +199,7 @@ public class GowallaOAuthConnector implements OAuthConnector
 	 * @param Editor
 	 * @param OAuthResponse
 	 */
-	public void storeNecessaryCompletionResponseData(Editor settings_editor, OAuthResponse response) 
+	public void storeNecessaryCompletionResponseData(Editor persistent_storage_editor, OAuthResponse response) 
 	{ 
 		try
 		{
@@ -207,9 +207,9 @@ public class GowallaOAuthConnector implements OAuthConnector
 			Log.i(TAG, "access_token = " + json.getString("access_token"));
 			Log.i(TAG, "refresh_token = " + json.getString("refresh_token"));
 			
-			settings_editor.putString("gowalla_access_token", json.getString("access_token"));
-			settings_editor.putString("gowalla_refresh_token", json.getString("refresh_token"));
-			settings_editor.commit();
+			persistent_storage_editor.putString("gowalla_access_token", json.getString("access_token"));
+			persistent_storage_editor.putString("gowalla_refresh_token", json.getString("refresh_token"));
+			persistent_storage_editor.commit();
 		}
 		catch (Exception e)
 		{
@@ -222,10 +222,10 @@ public class GowallaOAuthConnector implements OAuthConnector
 	 * 
 	 * @param Editor
 	 */
-	public void clearTemporaryData(Editor settings_editor)
+	public void clearTemporaryData(Editor persistent_storage_editor)
 	{
 		// clear initial values
-		settings_editor.remove("gowalla_code");
-		settings_editor.commit();
+		persistent_storage_editor.remove("gowalla_code");
+		persistent_storage_editor.commit();
 	}
 }

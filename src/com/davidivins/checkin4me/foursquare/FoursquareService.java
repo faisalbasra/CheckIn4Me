@@ -17,9 +17,18 @@
 package com.davidivins.checkin4me.foursquare;
 
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Properties;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 import com.davidivins.checkin4me.core.GeneratedResources;
+import com.davidivins.checkin4me.core.ServiceSetting;
 import com.davidivins.checkin4me.interfaces.APIInterface;
 import com.davidivins.checkin4me.interfaces.ServiceInterface;
 import com.davidivins.checkin4me.oauth.OAuthConnector;
@@ -36,20 +45,28 @@ import android.util.Log;
 public class FoursquareService implements ServiceInterface
 {
 	private static final String TAG = "FoursquareService";
-	
+
+	private int service_id;
+	private SharedPreferences persistent_storage;
 	private Properties config;
 	private OAuthConnector oauth_connector;
 	private APIInterface api_adapter;
-	private int service_id;
+	private HashMap<String, ServiceSetting> settings;
 	
 	/**
 	 * FoursquareService
 	 * 
 	 * @param resources
 	 */
-	public FoursquareService(Resources resources, int service_id)
+	public FoursquareService(int service_id, SharedPreferences persistent_storage, Resources resources)
 	{
+		// store service_id
 		this.service_id = service_id;
+		
+		// save pointer to persistent storage object
+		this.persistent_storage = persistent_storage;
+		
+		// read configuration file
 		config = new Properties();
 		
 		try 
@@ -66,6 +83,32 @@ public class FoursquareService implements ServiceInterface
 			Log.e(TAG, "Failed to open config file");
 		}
 		
+		// read settings xml
+		settings = new HashMap<String, ServiceSetting>();
+		
+		try 
+		{
+			InputStream is = resources.openRawResource(GeneratedResources.getRaw("foursquare_settings"));
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document dom = builder.parse(is);
+			Element root = dom.getDocumentElement();
+			NodeList settings_nodes = root.getElementsByTagName("setting");
+
+			if (settings != null && settings_nodes.getLength() > 0) 
+			{
+				for (int i = 0 ; i < settings_nodes.getLength(); i++) 
+				{
+					Element setting_xml = (Element)settings_nodes.item(i);
+					ServiceSetting current_setting = new ServiceSetting(setting_xml, persistent_storage);
+					settings.put(current_setting.getPrefName(), current_setting);
+				}
+			}
+		} 
+		catch (Exception e) 
+		{
+			Log.e(TAG, "Failed to parse Foursquare settings");
+		}
 	}
 	
 	/**
@@ -133,10 +176,10 @@ public class FoursquareService implements ServiceInterface
 	 * 
 	 * @return boolean
 	 */
-	public boolean connected(SharedPreferences settings)
+	public boolean connected()
 	{
-		return settings.contains("foursquare_oauth_token_secret") && 
-			(settings.getString("foursquare_oauth_token_secret", null) != null);
+		return persistent_storage.contains("foursquare_oauth_token_secret") && 
+			(persistent_storage.getString("foursquare_oauth_token_secret", null) != null);
 	}
 	
 	/**

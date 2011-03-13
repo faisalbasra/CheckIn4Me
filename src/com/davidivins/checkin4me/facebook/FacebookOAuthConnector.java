@@ -90,9 +90,9 @@ public class FacebookOAuthConnector implements OAuthConnector
 	 * @param Editor
 	 * @param OAuthResponse
 	 */
-	public void storeNecessaryInitialResponseData(Editor settingsEditor, OAuthResponse response) { }
+	public void storeNecessaryInitialResponseData(Editor persistent_storageEditor, OAuthResponse response) { }
 
-	public String generateAuthorizationURL(SharedPreferences settings) 
+	public String generateAuthorizationURL(SharedPreferences persistent_storage) 
 	{
 		String url = config.getProperty("oauth_host") + config.getProperty("oauth_authorize_endpoint")
 			+ "?client_id="     + config.getProperty("oauth_client_id", "OAUTH_CLIENT_ID_HERE")
@@ -127,11 +127,11 @@ public class FacebookOAuthConnector implements OAuthConnector
 	 * @param Editor
 	 * @param Uri
 	 */
-	public void storeNecessaryAuthorizationResponseData(Editor settings_editor, Uri response)
+	public void storeNecessaryAuthorizationResponseData(Editor persistent_storage_editor, Uri response)
 	{
 		Log.i(TAG, "code = " + response.getQueryParameter("code"));
-		settings_editor.putString("facebook_code", response.getQueryParameter("code"));
-		settings_editor.commit();
+		persistent_storage_editor.putString("facebook_code", response.getQueryParameter("code"));
+		persistent_storage_editor.commit();
 	}
 
 	/**
@@ -141,12 +141,12 @@ public class FacebookOAuthConnector implements OAuthConnector
 	 * @param Uri
 	 * @return OAuthResponse
 	 */
-	public OAuthResponse completeHandshake(SharedPreferences settings, Uri previous_response) 
+	public OAuthResponse completeHandshake(SharedPreferences persistent_storage, Uri previous_response) 
 	{
 		OAuthResponse response = new OAuthResponse();
-		Log.i(TAG, "code in settings = " + settings.getString("facebook_code", "-1"));
+		Log.i(TAG, "code in persistent_storage = " + persistent_storage.getString("facebook_code", "-1"));
 		
-		if (settings.getString("facebook_code", "-1") != "-1")
+		if (persistent_storage.getString("facebook_code", "-1") != "-1")
 		{
 			OAuth2Request request = new OAuth2Request(
 					config.getProperty("oauth_http_method"), config.getProperty("oauth_host"), 
@@ -158,7 +158,7 @@ public class FacebookOAuthConnector implements OAuthConnector
 			
 			try 
 			{
-				request.addQueryParameter("code", URLEncoder.encode(settings.getString("facebook_code", "FACEBOOK_CODE_HERE"), ENCODING));
+				request.addQueryParameter("code", URLEncoder.encode(persistent_storage.getString("facebook_code", "FACEBOOK_CODE_HERE"), ENCODING));
 			} 
 			catch (UnsupportedEncodingException e) 
 			{
@@ -200,7 +200,7 @@ public class FacebookOAuthConnector implements OAuthConnector
 	 * @param Editor
 	 * @param OAuthResponse
 	 */
-	public void storeNecessaryCompletionResponseData(Editor settings_editor, OAuthResponse response) 
+	public void storeNecessaryCompletionResponseData(Editor persistent_storage_editor, OAuthResponse response) 
 	{
 		TreeMap<String, String> query_parameters = response.getQueryParameters();
 		Log.i(TAG, "access_token = " + query_parameters.get("access_token"));
@@ -208,8 +208,8 @@ public class FacebookOAuthConnector implements OAuthConnector
 		try 
 		{
 			// encode access code because facebook's contains illegal characters
-			settings_editor.putString("facebook_access_token", URLEncoder.encode(query_parameters.get("access_token"), ENCODING));
-			settings_editor.commit();
+			persistent_storage_editor.putString("facebook_access_token", URLEncoder.encode(query_parameters.get("access_token"), ENCODING));
+			persistent_storage_editor.commit();
 		} 
 		catch (UnsupportedEncodingException e) 
 		{
@@ -222,10 +222,10 @@ public class FacebookOAuthConnector implements OAuthConnector
 	 * 
 	 * @param Editor
 	 */
-	public void clearTemporaryData(Editor settings_editor)
+	public void clearTemporaryData(Editor persistent_storage_editor)
 	{
 		// clear initial values
-		settings_editor.remove("facebook_code");
-		settings_editor.commit();
+		persistent_storage_editor.remove("facebook_code");
+		persistent_storage_editor.commit();
 	}
 }

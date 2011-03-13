@@ -20,7 +20,6 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.widget.TabHost;
 
 import com.davidivins.checkin4me.core.Ad;
@@ -68,7 +67,7 @@ public class MainTabbedContainer extends TabActivity
 		else
 		{
 			// set current tab based on the service locations connected
-			if (Services.getInstance(this).atLeastOneConnected(PreferenceManager.getDefaultSharedPreferences(this)))
+			if (Services.getInstance(this).atLeastOneConnected())
 				tab_host.setCurrentTab(NEARBY_PLACES_TAB);
 			else
 				tab_host.setCurrentTab(SERVICE_CONNECTION_TAB);

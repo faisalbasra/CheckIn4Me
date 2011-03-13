@@ -58,16 +58,16 @@ public class CheckIn4Me extends Activity
         tracker.dispatch();
         tracker.stop();
 		
-        // clear settings for this version
-//        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-//        String clear_settings_tag = "VERSION_1.6_HAS_CLEARED_SETTINGS";
+        // clear persistent_storage for this version
+//        SharedPreferences persistent_storage = PreferenceManager.getDefaultSharedPreferences(this);
+//        String clear_persistent_storage_tag = "VERSION_1.6_HAS_CLEARED_SETTINGS";
 //        
-//        if (settings.getBoolean(clear_settings_tag, false) == false)
+//        if (persistent_storage.getBoolean(clear_persistent_storage_tag, false) == false)
 //        {
-//        	Editor settings_editor = settings.edit();
-//        	settings_editor.clear();
-//        	settings_editor.putBoolean(clear_settings_tag, true);
-//        	settings_editor.commit();
+//        	Editor persistent_storage_editor = persistent_storage.edit();
+//        	persistent_storage_editor.clear();
+//        	persistent_storage_editor.putBoolean(clear_persistent_storage_tag, true);
+//        	persistent_storage_editor.commit();
 //        }
 		
 		runProgram();

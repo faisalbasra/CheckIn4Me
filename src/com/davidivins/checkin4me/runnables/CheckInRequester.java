@@ -40,7 +40,7 @@ public class CheckInRequester implements Runnable
 	ArrayList<Integer> service_ids;
 	Locale location;
 	String message;
-	SharedPreferences settings;
+	SharedPreferences persistent_storage;
 	HashMap<Integer, Boolean> checkin_statuses;
 	
 	/**
@@ -48,10 +48,10 @@ public class CheckInRequester implements Runnable
 	 * 
 	 * @param activity
 	 * @param service_ids
-	 * @param settings
+	 * @param persistent_storage
 	 */
 	public CheckInRequester(Activity activity, CheckInRequesterListener listener, Handler handler, 
-			ArrayList<Integer> service_ids, Locale location, String message, SharedPreferences settings)
+			ArrayList<Integer> service_ids, Locale location, String message, SharedPreferences persistent_storage)
 	{
 		this.activity = activity;
 		this.listener = listener;
@@ -59,7 +59,7 @@ public class CheckInRequester implements Runnable
 		this.service_ids = service_ids;
 		this.location = location;
 		this.message = message;
-		this.settings = settings;
+		this.persistent_storage = persistent_storage;
 		
 		this.checkin_statuses = new HashMap<Integer, Boolean>();
 	}
@@ -69,7 +69,7 @@ public class CheckInRequester implements Runnable
 	 */
 	public void run() 
 	{		
-		checkin_statuses = Services.getInstance(activity).checkIn(service_ids, location, message, settings);	
+		checkin_statuses = Services.getInstance(activity).checkIn(service_ids, location, message, persistent_storage);	
 		handler.post(listener.getCheckInCompletedCallback());
 	}
 	

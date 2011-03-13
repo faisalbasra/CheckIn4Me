@@ -93,7 +93,7 @@ public class NearbyPlaces extends ListActivity
 		super.onCreate(saved_instance_state);
 
 		// if no services are connected, display error message, otherwise, process intent
-		if (Services.getInstance(this).atLeastOneConnected(PreferenceManager.getDefaultSharedPreferences(this)))
+		if (Services.getInstance(this).atLeastOneConnected())
 		{
 			// handle the current intent of this activity
 			handleIntent(getIntent());
@@ -233,7 +233,7 @@ public class NearbyPlaces extends ListActivity
 	protected void onNewIntent(Intent intent) 
 	{
 		// if no services are connected, display error message, otherwise, process intent
-		if (Services.getInstance(this).atLeastOneConnected(PreferenceManager.getDefaultSharedPreferences(this)))
+		if (Services.getInstance(this).atLeastOneConnected())
 		{
 			setIntent(intent);
 			handleIntent(intent);
@@ -298,15 +298,15 @@ public class NearbyPlaces extends ListActivity
 		current_latitude = Double.toString(location.getLatitude());
 		
 		// get preferences for retrieving locations
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-		Editor settings_editor = settings.edit();
+		SharedPreferences persistent_storage = PreferenceManager.getDefaultSharedPreferences(this);
+		Editor persistent_storage_editor = persistent_storage.edit();
 		
 		// store user's current longitude and latitude
-		settings_editor.putString("current_longitude", current_longitude);
-		settings_editor.putString("current_latitude", current_latitude);
-		settings_editor.commit();
+		persistent_storage_editor.putString("current_longitude", current_longitude);
+		persistent_storage_editor.putString("current_latitude", current_latitude);
+		persistent_storage_editor.commit();
 		
-		locations_runnable = new LocationsRetriever(this, this, handler, current_query, current_longitude, current_latitude, settings);
+		locations_runnable = new LocationsRetriever(this, this, handler, current_query, current_longitude, current_latitude, persistent_storage);
 		locations_thread = new Thread(locations_runnable, "LocationThread");
 		locations_thread.start();
 	}
@@ -468,7 +468,7 @@ public class NearbyPlaces extends ListActivity
 	public boolean onCreateOptionsMenu(Menu menu) 
 	{
 		// if no services are connected, don't display menu options
-		if (Services.getInstance(this).atLeastOneConnected(PreferenceManager.getDefaultSharedPreferences(this)))
+		if (Services.getInstance(this).atLeastOneConnected())
 		{
 			MenuInflater inflater = getMenuInflater();
 			inflater.inflate(GeneratedResources.getMenu("nearby_places"), menu);
@@ -517,11 +517,11 @@ public class NearbyPlaces extends ListActivity
 	public void onItemClick(AdapterView<?> adapter_view, View view, int position, long arg3) 
 	{
 		// get the settings and editor
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences persistent_storage = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		// store selected location
 		Locale location = locations_runnable.getLocationsRetrieved().get(position);
-		location.store(settings);
+		location.store(persistent_storage);
 		
 		// load location details activity
 		startActivity(new Intent(this, LocationDetails.class));

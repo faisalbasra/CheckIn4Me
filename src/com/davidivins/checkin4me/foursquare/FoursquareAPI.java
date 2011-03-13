@@ -69,12 +69,12 @@ public class FoursquareAPI implements APIInterface
 	 * @param query
 	 * @param longitude
 	 * @param latitude
-	 * @param settings
+	 * @param persistent_storage
 	 * @return LocationThread
 	 */
-	public Runnable getLocationThread(String query, String longitude, String latitude, SharedPreferences settings)
+	public Runnable getLocationThread(String query, String longitude, String latitude, SharedPreferences persistent_storage)
 	{
-		return new LocationThread(query, longitude, latitude, settings);
+		return new LocationThread(query, longitude, latitude, persistent_storage);
 	}
 	
 	/**
@@ -92,13 +92,13 @@ public class FoursquareAPI implements APIInterface
 	 * getCheckInThread
 	 * 
 	 * @param location
-	 * @param settings
+	 * @param persistent_storage
 	 * @return CheckInThread
 	 */
-	public Runnable getCheckInThread(Locale location, String message, SharedPreferences settings)
+	public Runnable getCheckInThread(Locale location, String message, SharedPreferences persistent_storage)
 	{
 		latest_checkin_status = false;
-		return new CheckInThread(location, message, settings);
+		return new CheckInThread(location, message, persistent_storage);
 	}
 	
 	/**
@@ -121,7 +121,7 @@ public class FoursquareAPI implements APIInterface
 		private String query;
 		private String longitude;
 		private String latitude;
-		private SharedPreferences settings;
+		private SharedPreferences persistent_storage;
 		
 		/**
 		 * LocationThread
@@ -130,12 +130,12 @@ public class FoursquareAPI implements APIInterface
 		 * @param longitude
 		 * @param latitude
 		 */
-		LocationThread(String query, String longitude, String latitude, SharedPreferences settings)
+		LocationThread(String query, String longitude, String latitude, SharedPreferences persistent_storage)
 		{
 			this.query     = query;
 			this.longitude = longitude;
 			this.latitude  = latitude;
-			this.settings  = settings;
+			this.persistent_storage  = persistent_storage;
 		}
 
 		/**
@@ -165,7 +165,7 @@ public class FoursquareAPI implements APIInterface
 			request.addQueryParameter("ll", latitude + "," + longitude);
 			request.addQueryParameter("intent", "checkin");
 			request.addQueryParameter("oauth_token", 
-					settings.getString("foursquare_oauth_token_secret", "FOURSQUARE_ACCESS_TOKEN_HERE"));
+					persistent_storage.getString("foursquare_oauth_token_secret", "FOURSQUARE_ACCESS_TOKEN_HERE"));
 			
 			// execute http request
 			OAuthResponse response = (OAuthResponse)request.execute();
@@ -264,19 +264,19 @@ public class FoursquareAPI implements APIInterface
 	{
 		private Locale location;
 		private String message;
-		private SharedPreferences settings;
+		private SharedPreferences persistent_storage;
 		
 		/**
 		 * CheckInThread
 		 * 
 		 * @param location
-		 * @param settings
+		 * @param persistent_storage
 		 */
-		CheckInThread(Locale location, String message, SharedPreferences settings)
+		CheckInThread(Locale location, String message, SharedPreferences persistent_storage)
 		{
 			this.location = location;
 			this.message = message;
-			this.settings = settings;
+			this.persistent_storage = persistent_storage;
 		}
 
 		/**
@@ -296,14 +296,14 @@ public class FoursquareAPI implements APIInterface
 			
 			// set query parameters
 			request.addQueryParameter("oauth_token", 
-					settings.getString("foursquare_oauth_token_secret", "FOURSQUARE_ACCESS_TOKEN_HERE"));
+					persistent_storage.getString("foursquare_oauth_token_secret", "FOURSQUARE_ACCESS_TOKEN_HERE"));
 			
 			HashMap<Integer, String> service_id_location_id_xref = location.getServiceIdToLocationIdMap();
 			String vid = service_id_location_id_xref.get(service_id);
 			
 			request.addQueryParameter("venueId", vid);
-			request.addQueryParameter("ll", settings.getString("current_latitude", "CURRENT_LATITUDE_HERE") + "," +
-					 settings.getString("current_longitude", "CURRENT_LONGITUDE_HERE"));
+			request.addQueryParameter("ll", persistent_storage.getString("current_latitude", "CURRENT_LATITUDE_HERE") + "," +
+					 persistent_storage.getString("current_longitude", "CURRENT_LONGITUDE_HERE"));
 			request.addQueryParameter("broadcast", "public");
 			
 			if (!message.equals(""))

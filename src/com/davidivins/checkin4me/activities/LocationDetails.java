@@ -126,12 +126,12 @@ public class LocationDetails extends MapActivity
 		}
 		
 		// load current location from preferences
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-		current_location.load(settings);
+		SharedPreferences persistent_storage = PreferenceManager.getDefaultSharedPreferences(this);
+		current_location.load(persistent_storage);
 		
 		// load current longitude and latitude from preferences
-		Double current_longitude = new Double(settings.getString("current_longitude", "0"));
-		Double current_latitude = new Double(settings.getString("current_latitude", "0"));
+		Double current_longitude = new Double(persistent_storage.getString("current_longitude", "0"));
+		Double current_latitude = new Double(persistent_storage.getString("current_latitude", "0"));
 		
 		// 
 		// location name and address
@@ -275,8 +275,8 @@ public class LocationDetails extends MapActivity
 			checking_in_dialog.show();
 			
 			// create and start check-in thread
-			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-			checkin_requester = new CheckInRequester(this, this, handler, service_ids, current_location, message, settings);
+			SharedPreferences persistent_storage = PreferenceManager.getDefaultSharedPreferences(this);
+			checkin_requester = new CheckInRequester(this, this, handler, service_ids, current_location, message, persistent_storage);
 			checkin_thread = new Thread(checkin_requester, "CheckInThread");
 			checkin_thread.start();
 		}

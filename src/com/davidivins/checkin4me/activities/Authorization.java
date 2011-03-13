@@ -56,8 +56,8 @@ public class Authorization extends Activity
 		setContentView(GeneratedResources.getLayout("authorization"));
 		Intent i = new Intent(Intent.ACTION_VIEW);
 		
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-		Editor settings_editor = settings.edit();
+		SharedPreferences persistent_storage = PreferenceManager.getDefaultSharedPreferences(this);
+		Editor persistent_storage_editor = persistent_storage.edit();
 
 		// check if a service was clicked to get here
 		if (getIntent().getIntExtra("service_id", -1) != -1)
@@ -77,11 +77,11 @@ public class Authorization extends Activity
 			// if so, store necessary data and generate authorization url
 			if (oauth_connector.isSuccessfulInitialResponse(response))
 			{
-				settings_editor.putBoolean("handshake_in_progress", true);
-				settings_editor.putInt("handshake_service_id", service_id);
+				persistent_storage_editor.putBoolean("handshake_in_progress", true);
+				persistent_storage_editor.putInt("handshake_service_id", service_id);
 				
-				oauth_connector.storeNecessaryInitialResponseData(settings_editor, response);
-				i.setData(Uri.parse(oauth_connector.generateAuthorizationURL(settings)));
+				oauth_connector.storeNecessaryInitialResponseData(persistent_storage_editor, response);
+				i.setData(Uri.parse(oauth_connector.generateAuthorizationURL(persistent_storage)));
 			}
 			else
 			{
@@ -91,11 +91,11 @@ public class Authorization extends Activity
 			}
 		}
 		// check if we are returning here from the middle of an oauth handshake
-		else if (settings.getBoolean("handshake_in_progress", false) && 
-				settings.getInt("handshake_service_id", -1) != -1)
+		else if (persistent_storage.getBoolean("handshake_in_progress", false) && 
+				persistent_storage.getInt("handshake_service_id", -1) != -1)
 		{
 			// get the oauth connector for the service currently in the middle of a handshake
-			int service_id = settings.getInt("handshake_service_id", -1);
+			int service_id = persistent_storage.getInt("handshake_service_id", -1);
 			OAuthConnector oauth_connector = 
 				Services.getInstance(this).getServiceById(service_id).getOAuthConnector();
 			
@@ -106,26 +106,26 @@ public class Authorization extends Activity
 			if (oauth_connector.isSuccessfulAuthorizationResponse(uri))
 			{				
 				// store necessary response data
-				oauth_connector.storeNecessaryAuthorizationResponseData(settings_editor, uri);
+				oauth_connector.storeNecessaryAuthorizationResponseData(persistent_storage_editor, uri);
 				
 				// attempt to complete the handshake
-				OAuthResponse response = (OAuthResponse)oauth_connector.completeHandshake(settings, uri);
+				OAuthResponse response = (OAuthResponse)oauth_connector.completeHandshake(persistent_storage, uri);
 				
 				// check if the completion response is valid
 				if (oauth_connector.isSuccessfulCompletionResponse(response))
 				{
-					settings_editor.putBoolean("handshake_in_progress", false);
-					settings_editor.putInt("handshake_service_id", -1);
+					persistent_storage_editor.putBoolean("handshake_in_progress", false);
+					persistent_storage_editor.putInt("handshake_service_id", -1);
 					
 					// store necessary response data
-					oauth_connector.storeNecessaryCompletionResponseData(settings_editor, response);
+					oauth_connector.storeNecessaryCompletionResponseData(persistent_storage_editor, response);
 					
 					// start nearby places event
 					i.putExtra("tab_to_display", MainTabbedContainer.NEARBY_PLACES_TAB);
 					i = new Intent(this, MainTabbedContainer.class);
 					
 					// clear temporary data
-					oauth_connector.clearTemporaryData(settings_editor);
+					oauth_connector.clearTemporaryData(persistent_storage_editor);
 				}
 				else
 				{
@@ -154,7 +154,7 @@ public class Authorization extends Activity
 			i = new Intent(this, MainTabbedContainer.class);			
 		}
 		
-		settings_editor.commit();
+		persistent_storage_editor.commit();
 		startActivity(i);
 	}
 }

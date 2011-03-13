@@ -44,7 +44,7 @@ public class BrightkiteService implements ServiceInterface
 	 * 
 	 * @param resources
 	 */
-	public BrightkiteService(Resources resources, int service_id)
+	public BrightkiteService(int service_id, SharedPreferences persistent_storage, Resources resources)
 	{
 		this.service_id = service_id;
 		config = new Properties();
@@ -128,7 +128,7 @@ public class BrightkiteService implements ServiceInterface
 	 * @param SharedPreferences 
 	 * @return boolean
 	 */
-	public boolean connected(SharedPreferences settings)
+	public boolean connected()
 	{
 		return false;
 	}

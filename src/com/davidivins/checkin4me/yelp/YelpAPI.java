@@ -66,12 +66,12 @@
 //	* @param query
 //	* @param longitude
 //	* @param latitude
-//	* @param settings
+//	* @param persistent_storage
 //	* @return LocationThread
 //	*/
-//	public Runnable getLocationThread(String query, String longitude, String latitude, SharedPreferences settings)
+//	public Runnable getLocationThread(String query, String longitude, String latitude, SharedPreferences persistent_storage)
 //	{
-//		return new LocationThread(query, longitude, latitude, settings);
+//		return new LocationThread(query, longitude, latitude, persistent_storage);
 //	}
 //	
 //	/**
@@ -88,13 +88,13 @@
 //	* getCheckInThread
 //	* 
 //	* @param location
-//	* @param settings
+//	* @param persistent_storage
 //	* @return CheckInThread
 //	*/
-//	public Runnable getCheckInThread(Locale location, SharedPreferences settings)
+//	public Runnable getCheckInThread(Locale location, SharedPreferences persistent_storage)
 //	{
 //		latest_checkin_status = false;
-//		return new CheckInThread(location, settings);
+//		return new CheckInThread(location, persistent_storage);
 //	}
 //	
 //	/**
@@ -117,7 +117,7 @@
 //		private String query;
 //		private String longitude;
 //		private String latitude;
-//		private SharedPreferences settings;
+//		private SharedPreferences persistent_storage;
 //		
 //		/**
 //		 * LocationThread
@@ -126,12 +126,12 @@
 //		 * @param longitude
 //		 * @param latitude
 //		 */
-//		LocationThread(String query, String longitude, String latitude, SharedPreferences settings)
+//		LocationThread(String query, String longitude, String latitude, SharedPreferences persistent_storage)
 //		{
 //			this.query     = query;
 //			this.longitude = longitude;
 //			this.latitude  = latitude;
-//			this.settings  = settings;
+//			this.persistent_storage = persistent_storage;
 //		}
 //	
 //		/**
@@ -155,7 +155,7 @@
 ////			request.addQueryParameter("ll", latitude + "," + longitude);
 ////			request.addQueryParameter("l", "50");
 ////			request.addQueryParameter("oauth_token", 
-////					settings.getString("foursquare_oauth_token_secret", "FOURSQUARE_ACCESS_TOKEN_HERE"));
+////					persistent_storage.getString("foursquare_oauth_token_secret", "FOURSQUARE_ACCESS_TOKEN_HERE"));
 ////			
 ////			// execute http request
 ////			OAuthResponse response = (OAuthResponse)request.execute();
@@ -253,18 +253,18 @@
 //	class CheckInThread implements Runnable
 //	{
 //		private Locale location;
-//		private SharedPreferences settings;
+//		private SharedPreferences persistent_storage;
 //		
 //		/**
 //		 * CheckInThread
 //		 * 
 //		 * @param location
-//		 * @param settings
+//		 * @param persistent_storage
 //		 */
-//		CheckInThread(Locale location, SharedPreferences settings)
+//		CheckInThread(Locale location, SharedPreferences persistent_storage)
 //		{
 //			this.location = location;
-//			this.settings = settings;
+//			this.persistent_storage = persistent_storage;
 //		}
 //	
 //		/**
@@ -284,14 +284,14 @@
 ////			
 ////			// set query parameters
 ////			request.addQueryParameter("oauth_token", 
-////					settings.getString("foursquare_oauth_token_secret", "FOURSQUARE_ACCESS_TOKEN_HERE"));
+////					persistent_storage.getString("foursquare_oauth_token_secret", "FOURSQUARE_ACCESS_TOKEN_HERE"));
 ////			
 ////			HashMap<Integer, String> service_id_location_id_xref = location.getServiceIdToLocationIdMap();
 ////			String vid = service_id_location_id_xref.get(service_id);
 ////			
 ////			request.addQueryParameter("venueId", vid);
-////			request.addQueryParameter("ll", settings.getString("current_latitude", "CURRENT_LATITUDE_HERE") + "," +
-////					 settings.getString("current_longitude", "CURRENT_LONGITUDE_HERE"));
+////			request.addQueryParameter("ll", persistent_storage.getString("current_latitude", "CURRENT_LATITUDE_HERE") + "," +
+////					 persistent_storage.getString("current_longitude", "CURRENT_LONGITUDE_HERE"));
 ////			request.addQueryParameter("broadcast", "public");
 ////			
 ////			// execute http request

@@ -23,7 +23,6 @@ import com.davidivins.checkin4me.core.Services;
 import android.app.ExpandableListActivity;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
@@ -50,7 +49,7 @@ public class Settings extends ExpandableListActivity implements OnChildClickList
 		setContentView(GeneratedResources.getLayout("settings"));
 
 		// don't list any settings if there are not any services connected
-		if (Services.getInstance(this).atLeastOneConnected(PreferenceManager.getDefaultSharedPreferences(this)))
+		if (Services.getInstance(this).atLeastOneConnected())
 		{		
 			// Set up our adapter
 			SettingsAdapter adapter;

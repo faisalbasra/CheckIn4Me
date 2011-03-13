@@ -24,7 +24,6 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
@@ -32,7 +31,6 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 /**
  * ServiceConnection
@@ -80,13 +78,12 @@ public class ServiceConnection extends ListActivity implements OnItemClickListen
 	{
 		// save position as service id for service connection activity
 		Log.i(TAG, "clicked service id = " + position);
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 
 		latest_service_id_selected = position;
 		
 		if (Services.getInstance(this).getServiceById(position).getOAuthConnector() != null)
 		{
-			if (Services.getInstance(this).getServiceById(position).connected(settings))
+			if (Services.getInstance(this).getServiceById(position).connected())
 			{
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				builder.setMessage(Services.getInstance(this).getServiceById(position).getName() + 
