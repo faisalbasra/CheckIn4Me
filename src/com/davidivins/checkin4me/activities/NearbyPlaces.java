@@ -543,7 +543,7 @@ public class NearbyPlaces extends ListActivity
 		SharedPreferences persistent_storage = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		// store selected location
-		Locale location = locations_runnable.getLocationsRetrieved().get(position);
+		Locale location = current_locations.get(position);
 		location.store(persistent_storage);
 		
 		// load location details activity
