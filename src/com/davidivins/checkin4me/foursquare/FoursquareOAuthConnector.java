@@ -158,8 +158,8 @@ public class FoursquareOAuthConnector implements OAuthConnector
 			request.addQueryParameter("client_secret", config.getProperty("oauth_client_secret", "OAUTH_CLIENT_SECRET_HERE"));
 			request.addQueryParameter("grant_type", "authorization_code");
 			request.addQueryParameter("redirect_uri", oauth_redirect_uri); 
-			request.addQueryParameter("code", persistent_storage.getString("foursquare_code", "CODE_HERE"));
-			
+			request.addQueryParameterAndEncode("code", persistent_storage.getString("foursquare_code", "CODE_HERE"));
+
 			response = (OAuthResponse)request.execute();
 		}
 		else
