@@ -67,7 +67,7 @@ public class ServiceCheckListAdapter extends ArrayAdapter<ServiceInterface> impl
 		services_checked = new HashMap<Integer, Boolean>();
 		for(ServiceInterface service : items)
 		{
-			services_checked.put(service.getId(), true);
+			services_checked.put(service.getId(), false);
 		}
     }
 
@@ -82,9 +82,11 @@ public class ServiceCheckListAdapter extends ArrayAdapter<ServiceInterface> impl
 	@Override
 	public View getView(int position, View convert_view, ViewGroup parent) 
 	{
+		// get view and current service
 		View view = convert_view;
 		ServiceInterface service = items.get(position);
 		
+		// inflate view
 		if (view == null)
 		{
 			LayoutInflater layout_inflater = 
@@ -92,28 +94,45 @@ public class ServiceCheckListAdapter extends ArrayAdapter<ServiceInterface> impl
 			view = layout_inflater.inflate(row_resource_id, null);
 		}
 		
+		// if service exists
 		if (service != null) 
 		{
+			// get views
 			LinearLayout icon_and_name_layout = (LinearLayout)view.findViewById(GeneratedResources.getId("service_icon_and_name"));
 			LinearLayout check_box_layout = (LinearLayout)view.findViewById(GeneratedResources.getId("service_checkbox"));
 			
+			// clean up
 			icon_and_name_layout.removeAllViews();
 			check_box_layout.removeAllViews();
 			
+			// create the icon portion
 			ImageView icon = new ImageView(parent.getContext());
 			icon.setImageResource(service.getIconDrawable());
 			icon.setPadding(0, 0, 5, 0);
 			
+			// create the text portion
 			TextView name = new TextView(parent.getContext());
 			name.setText(service.getName());
 			name.setTextColor(Color.BLACK);
 
+			// create check box and determine user's default behavior for checking in with this service
 			CheckBox check_box = new CheckBox(parent.getContext());
-			check_box.setChecked(true);
-			check_box.setId(service.getId());
+			boolean is_checked = false;
+			if (service.getSettingsAsHashMap().containsKey(service.getName().toLowerCase() + "_check_in_default"))
+			{
+				is_checked = service.getSettingsAsHashMap().get(
+						service.getName().toLowerCase() + "_check_in_default").getPrefValue();
+				check_box.setChecked(is_checked);
+			}
 			
+			// set the check box service id and the current state of the box
+			check_box.setId(service.getId());
+			services_checked.put(check_box.getId(), is_checked);
+			
+			// register for clicks
 			check_box.setOnCheckedChangeListener(this);
 
+			// set icon, name, and checkbox views
 			icon_and_name_layout.addView(icon);
 			icon_and_name_layout.addView(name);
 			check_box_layout.addView(check_box);
