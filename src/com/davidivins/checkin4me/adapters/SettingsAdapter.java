@@ -16,6 +16,13 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.adapters;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import com.davidivins.checkin4me.core.ServiceSetting;
+import com.davidivins.checkin4me.core.Services;
+import com.davidivins.checkin4me.interfaces.ServiceInterface;
+
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.Gravity;
@@ -36,22 +43,32 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 {
 	//private static final String TAG = "SettingsAdapter";
 	private Activity activity = null;
+	private ArrayList<String> groups;
+	private ArrayList<ArrayList<String>> children;
 	
-	private String[] groups = 
-	{ 
-		"Facebook Settings", 
-		"Foursquare Settings", 
-		"Gowalla Settings", 
-		"CheckIn4Me" 
-	};
-	
-	private String[][] children = 
+	public SettingsAdapter()
 	{
-		{ "X", "Y", "Z" },
-		{ "Post to Facebook", "Post to Twitter" },
-		{ "Post to Facebook", "Post to Twitter" },
-		{ "Visit Feedback Site" }
-	};
+		groups = new ArrayList<String>();
+		children = new ArrayList<ArrayList<String>>();
+		
+		ArrayList<ServiceInterface> services = 
+			Services.getInstance(activity).getConnectedServicesWithSettingsAsArrayList();
+
+		for (ServiceInterface service : services)
+		{
+			groups.add(service.getName() + " Settings");
+			
+			HashMap<String, ServiceSetting> settings = service.getSettings();
+			ArrayList<String> setting_names = new ArrayList<String>();
+			
+			for (String key : settings.keySet())
+			{
+				setting_names.add(settings.get(key).getDisplayName());
+			}
+			
+			children.add(setting_names);			
+		}
+	}
 
 	/**
 	 * setActivity
@@ -72,7 +89,7 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 	 */
 	public Object getChild(int group_position, int child_position) 
 	{
-		return children[group_position][child_position];
+		return children.get(group_position).get(child_position);
 	}
 
 	/**
@@ -95,7 +112,7 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 	 */
 	public int getChildrenCount(int group_position) 
 	{
-		return children[group_position].length;
+		return children.get(group_position).size();
     }
 
 	/**
@@ -186,7 +203,7 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 	 */
 	public Object getGroup(int group_position) 
 	{
-		return groups[group_position];
+		return groups.get(group_position);
 	}
 
 	/**
@@ -196,7 +213,7 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 	 */
 	public int getGroupCount() 
 	{
-		return groups.length;
+		return groups.size();
 	}
 
 	/**

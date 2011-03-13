@@ -16,6 +16,9 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.interfaces;
 
+import java.util.HashMap;
+
+import com.davidivins.checkin4me.core.ServiceSetting;
 import com.davidivins.checkin4me.oauth.OAuthConnector;
 
 /**
@@ -33,4 +36,5 @@ public interface ServiceInterface
 	abstract public APIInterface getAPIInterface();
 	abstract public boolean connected();
 	abstract public boolean hasSettings();
+	abstract public HashMap<String, ServiceSetting> getSettings();
 }

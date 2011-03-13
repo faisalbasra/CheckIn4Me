@@ -187,6 +187,14 @@ public class FoursquareService implements ServiceInterface
 	 */
 	 public boolean hasSettings()
 	 {
-		 return true;
+		 return (settings.size() > 0) ? true : false;
+	 }
+	 
+	 /**
+	  * getSettings
+	  */
+	 public HashMap<String, ServiceSetting> getSettings()
+	 {
+		 return settings;
 	 }
 }

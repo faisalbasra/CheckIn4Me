@@ -186,6 +186,14 @@ public class FacebookService implements ServiceInterface
 	 */
 	 public boolean hasSettings()
 	 {
-		 return false;
+		 return (settings.size() > 0) ? true : false;
+	 }
+	 
+	 /**
+	  * getSettings
+	  */
+	 public HashMap<String, ServiceSetting> getSettings()
+	 {
+		 return settings;
 	 }
 }
