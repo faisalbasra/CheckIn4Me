@@ -217,6 +217,14 @@ public class NearbyPlaces extends ListActivity
 	}
 	
 	/**
+	 * clearCurrentLocations
+	 */
+	public static void clearCurrentLocations()
+	{
+		current_locations = null;
+	}
+	
+	/**
 	 * onSearchRequested
 	 * 
 	 * @return boolean

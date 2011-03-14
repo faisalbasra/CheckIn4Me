@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.ExpandableListView.OnChildClickListener;
 
 /**
@@ -51,11 +52,15 @@ public class Settings extends Activity implements OnChildClickListener
 		GeneratedResources.generate(this);
 		setContentView(GeneratedResources.getLayout("settings"));
 
+		// fetch list and set empty view
+		ExpandableListView list = (ExpandableListView)this.findViewById(GeneratedResources.getId("settings"));
+		TextView empty = (TextView)this.findViewById(GeneratedResources.getId("empty"));
+		list.setEmptyView(empty);
+
 		// don't list any settings if there are not any services connected
 		if (Services.getInstance(this).atLeastOneConnected())
 		{		
-			// Set up our adapter
-			ExpandableListView list = (ExpandableListView)this.findViewById(GeneratedResources.getId("settings"));
+			// Set up our adapter and listener
 			list.setAdapter(new SettingsAdapter(this));
 			list.setOnChildClickListener(this);
 		}

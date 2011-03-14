@@ -304,10 +304,23 @@ public class FoursquareAPI implements APIInterface
 			request.addQueryParameter("venueId", vid);
 			request.addQueryParameter("ll", persistent_storage.getString("current_latitude", "CURRENT_LATITUDE_HERE") + "," +
 					 persistent_storage.getString("current_longitude", "CURRENT_LONGITUDE_HERE"));
-			request.addQueryParameter("broadcast", "public");
+			
+			// initialize broadcast to public
+			String broadcast = "public";
+			
+			// if post to facebook is enabled, post it
+			if (persistent_storage.getBoolean("foursquare_post_to_facebook", false))
+				broadcast += ",facebook";
+			
+			// if post to twitter is enabled, add it to broadcast
+			if (persistent_storage.getBoolean("foursquare_post_to_twitter", false))
+				broadcast += ",twitter";
+
+			// add broadcast preferences to request
+			request.addQueryParameterAndEncode("broadcast", broadcast);
 			
 			if (!message.equals(""))
-				request.addQueryParameter("shout", message);
+				request.addQueryParameterAndEncode("shout", message);
 			
 			// execute http request
 			OAuthResponse response = (OAuthResponse)request.execute();

@@ -130,9 +130,9 @@ public class GowallaAPI implements APIInterface
 		 */
 		LocationThread(String query, String longitude, String latitude)
 		{
-			this.query = query;
+			this.query     = query;
 			this.longitude = longitude;
-			this.latitude = latitude;
+			this.latitude  = latitude;
 		}
 
 		/**
@@ -157,7 +157,7 @@ public class GowallaAPI implements APIInterface
 			request.addQueryParameter("lat", latitude);
 			request.addQueryParameter("lng", longitude);
 			request.addQueryParameter("radius", "50");
-			
+
 			// execute http request
 			OAuthResponse response = (OAuthResponse)request.execute();
 			
@@ -269,11 +269,21 @@ public class GowallaAPI implements APIInterface
 			request.addQueryParameter("comment", "");
 			request.addQueryParameter("lat", persistent_storage.getString("current_latitude", "-1"));
 			request.addQueryParameter("lng", persistent_storage.getString("current_longitude", "-1"));
-			request.addQueryParameter("post_to_twitter", "0");
-			request.addQueryParameter("post_to_facebook", "0");
+
+			// if post to twitter is enabled, post it
+			if (persistent_storage.getBoolean("gowalla_post_to_twitter", false))
+				request.addQueryParameter("post_to_twitter", "1");
+			else
+				request.addQueryParameter("post_to_twitter", "0");
+			
+			// if post to facebook is enabled, post it
+			if (persistent_storage.getBoolean("gowalla_post_to_facebook", false))
+				request.addQueryParameter("post_to_facebook", "1");
+			else
+				request.addQueryParameter("post_to_facebook", "0");
 					
 			if (!message.equals(""))
-				request.addQueryParameter("comment", message);
+				request.addQueryParameterAndEncode("comment", message);
 				
 			// execute http request
 			OAuthResponse response = (OAuthResponse)request.execute();

@@ -264,7 +264,7 @@ public class FacebookAPI implements APIInterface
 					persistent_storage.getString("facebook_access_token", "FACEBOOK_ACCESS_TOKEN_HERE"));
 			
 			if (!message.equals(""))
-				request.addQueryParameter("message", message);
+				request.addQueryParameterAndEncode("message", message);
 
 			request.addQueryParameter("place", place_id);
 			request.addQueryParameterAndEncode("coordinates", coordinates);
