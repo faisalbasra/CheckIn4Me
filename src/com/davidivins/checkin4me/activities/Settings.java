@@ -22,11 +22,8 @@ import com.davidivins.checkin4me.core.Services;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
-import android.widget.ExpandableListView.OnChildClickListener;
 
 /**
  * Settings
@@ -35,10 +32,9 @@ import android.widget.ExpandableListView.OnChildClickListener;
  * 
  * @author david
  */
-//public class Settings extends ExpandableListActivity implements OnChildClickListener
-public class Settings extends Activity implements OnChildClickListener
+public class Settings extends Activity
 {
-	static private final String TAG = "Settings";
+	//static private final String TAG = "Settings";
 	
 	/**
 	 * onCreate
@@ -62,25 +58,6 @@ public class Settings extends Activity implements OnChildClickListener
 		{		
 			// Set up our adapter and listener
 			list.setAdapter(new SettingsAdapter(this));
-			list.setOnChildClickListener(this);
 		}
-	}
-
-	/**
-	 * onChildClick
-	 * 
-	 * @param ExpandableListView parent
-	 * @param View view
-	 * @param int group_position
-	 * @param int child_position
-	 * @param long id
-	 * @return boolean
-	 */
-	public boolean onChildClick(ExpandableListView parent, View v, int group_position, int child_position, long id) 
-	{
-		Log.i(TAG, "group_position = " + group_position);
-		Log.i(TAG, "child_position = " + child_position);
-		Log.i(TAG, "id = " + id);
-		return true;
 	}
 }

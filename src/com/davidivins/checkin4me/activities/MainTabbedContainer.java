@@ -16,18 +16,27 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.activities;
 
+import android.app.SearchManager;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TabHost;
 
 import com.davidivins.checkin4me.core.Ad;
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.core.Services;
 
-public class MainTabbedContainer extends TabActivity 
+public class MainTabbedContainer extends TabActivity
 {
+	private static final String TAG                  = "MainTabbedContainer";
+
+	// tabs
+	public static final int SERVICE_CONNECTION_TAB   = 0;
+	public static final int NEARBY_PLACES_TAB        = 1;
+	public static final int SETTINGS_TAB             = 2;
+	
 	public void onCreate(Bundle saved_instance_state) 
 	{
 		super.onCreate(saved_instance_state);
@@ -39,20 +48,19 @@ public class MainTabbedContainer extends TabActivity
 		TabHost.TabSpec spec;            // Resusable TabSpec for each tab
 		Intent intent;                   // Reusable Intent for each tab
 
-		// Create an Intent to launch an Activity for the tab (to be reused)
+		// service connection tab
 		intent = new Intent().setClass(this, ServiceConnection.class);
-
-		// Initialize a TabSpec for each tab and add it to the TabHost
 		spec = tab_host.newTabSpec("connect_services").setIndicator("Connect",
 			res.getDrawable(GeneratedResources.getLayout("ic_tab_connect_services"))).setContent(intent);
 		tab_host.addTab(spec);
 
-		// Do the same for the other tabs
+		// nearby places tab
 		intent = new Intent().setClass(this, NearbyPlaces.class);
 		spec = tab_host.newTabSpec("nearby_places").setIndicator("Nearby Places",
 			res.getDrawable(GeneratedResources.getLayout("ic_tab_nearby_places"))).setContent(intent);
 		tab_host.addTab(spec);
 
+		// settings tab
 		intent = new Intent().setClass(this, Settings.class);
 		spec = tab_host.newTabSpec("settings").setIndicator("Settings",
 			res.getDrawable(GeneratedResources.getLayout("ic_tab_settings"))).setContent(intent);
@@ -61,8 +69,16 @@ public class MainTabbedContainer extends TabActivity
 		// if tab to set is specified
 		int tab_to_display = this.getIntent().getIntExtra("tab_to_display", -1);
 		if (-1 != tab_to_display)
-		{
+		{			
 			tab_host.setCurrentTab(tab_to_display);
+		}
+		// check if this is a search on nearby places
+		else if (Intent.ACTION_SEARCH.equals(getIntent().getAction()) && 
+			getIntent().getStringExtra(SearchManager.QUERY) != null)
+		{			
+			Log.i(TAG, "query = " + getIntent().getStringExtra(SearchManager.QUERY));	
+			this.getIntent().putExtra("query", getIntent().getStringExtra(SearchManager.QUERY));
+			tab_host.setCurrentTab(NEARBY_PLACES_TAB);
 		}
 		else
 		{
@@ -78,8 +94,21 @@ public class MainTabbedContainer extends TabActivity
 		ad.refreshAd();
 	}
 	
-	public static final int SERVICE_CONNECTION_TAB = 0;
-	public static final int NEARBY_PLACES_TAB = 1;
-	public static final int SETTINGS_TAB = 2;
-
+	/**
+	 * onSearchRequested
+	 * 
+	 * @return boolean
+	 */
+	@Override
+	public boolean onSearchRequested() 
+	{
+		Log.i(TAG, "search requested");
+		
+		boolean result = false;
+		
+		if (null != getTabHost() && NEARBY_PLACES_TAB == getTabHost().getCurrentTab())
+			result = super.onSearchRequested();
+		
+		return result;
+	}
 }
