@@ -16,35 +16,54 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.core;
 
-import com.davidivins.checkin4me.activities.MainTabbedContainer;
-
 import android.app.Activity;
-import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+import android.util.Log;
 
 /**
- * StartProgram
+ * MetaData
  * 
  * @author david
  */
-public class StartProgramDelayer implements Runnable
+public class MetaData 
 {
-	private Activity activity;
+	private static final String TAG    = "MetaData";
+	private static Bundle meta_data    = null;
+	private static boolean good_bundle = false;
 	
 	/**
-	 * StartProgramDelayer
+	 * MetaData
+	 */
+	private MetaData() { }
+	
+	/**
+	 * initialize
 	 * 
 	 * @param activity
 	 */
-	public StartProgramDelayer(Activity activity)
+	public static Bundle getInstance(Activity activity)
 	{
-		this.activity = activity;
-	}
-
-	/**
-	 * run
-	 */
-	public void run() 
-	{
-		activity.startActivity(new Intent(activity, MainTabbedContainer.class));
+		if (null == meta_data || !good_bundle)
+		{
+			try
+			{
+				ApplicationInfo app_info = activity.getPackageManager().getApplicationInfo(
+					activity.getPackageName(), PackageManager.GET_META_DATA);
+				
+				meta_data   = app_info.metaData;
+				good_bundle = true;
+			}
+			catch(Exception e)
+			{
+				meta_data   = new Bundle();
+				good_bundle = false;
+				
+				Log.e(TAG, "Failed to get app info. Returning empty bundle.");
+			}
+		}
+		
+		return meta_data;
 	}
 }

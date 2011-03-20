@@ -69,12 +69,12 @@ public class FacebookAPI implements APIInterface
 	 * 
 	 * @param longitude
 	 * @param latitude
-	 * @param settings
+	 * @param persistent_storage
 	 * @return LocationThread
 	 */
-	public Runnable getLocationThread(String query,String longitude, String latitude, SharedPreferences settings)
+	public Runnable getLocationThread(String query,String longitude, String latitude, SharedPreferences persistent_storage)
 	{
-		return new LocationThread(query, longitude, latitude, settings);
+		return new LocationThread(query, longitude, latitude, persistent_storage);
 	}
 	
 	/**
@@ -92,13 +92,13 @@ public class FacebookAPI implements APIInterface
 	 * getCheckInThread
 	 * 
 	 * @param location
-	 * @param settings
+	 * @param persistent_storage
 	 * @return CheckInThread
 	 */
-	public Runnable getCheckInThread(Locale location, String message, SharedPreferences settings)
+	public Runnable getCheckInThread(Locale location, String message, SharedPreferences persistent_storage)
 	{
 		latest_checkin_status = false;
-		return new CheckInThread(location, message, settings);
+		return new CheckInThread(location, message, persistent_storage);
 	}
 	
 	/**
@@ -121,7 +121,7 @@ public class FacebookAPI implements APIInterface
 		private String query;
 		private String longitude;
 		private String latitude;
-		private SharedPreferences settings;
+		private SharedPreferences persistent_storage;
 		
 		/**
 		 * LocationThread
@@ -130,12 +130,12 @@ public class FacebookAPI implements APIInterface
 		 * @param longitude
 		 * @param latitude
 		 */
-		LocationThread(String query, String longitude, String latitude, SharedPreferences settings)
+		LocationThread(String query, String longitude, String latitude, SharedPreferences persistent_storage)
 		{
 			this.query = query;
 			this.longitude = longitude;
 			this.latitude = latitude;
-			this.settings = settings;
+			this.persistent_storage = persistent_storage;
 		}
 
 		/**
@@ -151,7 +151,7 @@ public class FacebookAPI implements APIInterface
 				config.getProperty("api_locations_endpoint"));
 			
 			// set query parameters
-			request.addQueryParameter("access_token", settings.getString("facebook_access_token", "FACEBOOK_ACCESS_TOKEN_HERE"));
+			request.addQueryParameter("access_token", persistent_storage.getString("facebook_access_token", "FACEBOOK_ACCESS_TOKEN_HERE"));
 			if (query != null)
 				request.addQueryParameterAndEncode("q", query);
 			request.addQueryParameter("type", "place");
@@ -178,8 +178,8 @@ public class FacebookAPI implements APIInterface
 			latest_locations.clear();
 			
 			// get user's current location as doubles
-			double user_longitude = Double.valueOf(settings.getString("current_longitude", "0.0"));
-			double user_latitude  = Double.valueOf(settings.getString("current_latitude", "0.0"));
+			double user_longitude = Double.valueOf(persistent_storage.getString("current_longitude", "0.0"));
+			double user_latitude  = Double.valueOf(persistent_storage.getString("current_latitude", "0.0"));
 			
 			try 
 			{
@@ -231,18 +231,18 @@ public class FacebookAPI implements APIInterface
 	{
 		private Locale location;
 		private String message;
-		private SharedPreferences settings;
+		private SharedPreferences persistent_storage;
 		
 		/**
 		 * CheckInThread
 		 * 
 		 * @param location
-		 * @param settings
+		 * @param persistent_storage
 		 */
-		CheckInThread(Locale location, String message, SharedPreferences settings)
+		CheckInThread(Locale location, String message, SharedPreferences persistent_storage)
 		{
 			this.location = location;
-			this.settings = settings;
+			this.persistent_storage = persistent_storage;
 			this.message = message;
 		}
 
@@ -254,9 +254,9 @@ public class FacebookAPI implements APIInterface
 			Log.i(TAG, "Checking in with Facebook");
 
 			String coordinates = "{\"latitude\":\"" 
-				+ settings.getString("current_latitude", "CURRENT_LATITUDE_HERE")
+				+ persistent_storage.getString("current_latitude", "CURRENT_LATITUDE_HERE")
 				+ "\",\"longitude\":\"" 
-				+ settings.getString("current_longitude", "CURRENT_LONGITUDE_HERE") 
+				+ persistent_storage.getString("current_longitude", "CURRENT_LONGITUDE_HERE") 
 				+ "\"}";
 			
 			// build new http request
@@ -269,7 +269,7 @@ public class FacebookAPI implements APIInterface
 			
 			// set query parameters
 			request.addQueryParameter("access_token", 
-					settings.getString("facebook_access_token", "FACEBOOK_ACCESS_TOKEN_HERE"));
+					persistent_storage.getString("facebook_access_token", "FACEBOOK_ACCESS_TOKEN_HERE"));
 			
 			if (!message.equals(""))
 				request.addQueryParameterAndEncode("message", message);

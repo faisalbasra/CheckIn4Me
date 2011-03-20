@@ -15,16 +15,20 @@
       You should have received a copy of the GNU General Public License
       along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
      ***************************************************************************** -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:background="@color/white">
-    
-	<TextView  
-		android:layout_width="fill_parent" 
-		android:layout_height="fill_parent"
-		android:gravity="center" 
-		android:text="@string/authorizing_msg"
-		android:textColor="@color/black" />
-</LinearLayout>
+<settings>
+	<setting>
+		<display_name>Check-In Checkbox Default</display_name>
+		<pref_name>foursquare_check_in_default</pref_name>
+	</setting>
+	
+	<setting>
+		<display_name>Post to Facebook</display_name>
+		<pref_name>foursquare_post_to_facebook</pref_name>
+	</setting>
+	
+	<setting>
+		<display_name>Post to Twitter</display_name>
+		<pref_name>foursquare_post_to_twitter</pref_name>
+	</setting>
+
+</settings>

@@ -124,6 +124,7 @@ public class Ad
 				ad.setVisibility(View.VISIBLE);
 				ad.setAdListener(new AdListener());
 				ad.requestFreshAd();
+				ad.setRequestInterval(30);  // refresh ad every 30 seconds
 			}
 		}
 		else

@@ -16,15 +16,27 @@
       along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
      ***************************************************************************** -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/main_layout"
 	android:orientation="vertical"
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:background="@color/white">
-    
-	<TextView  
-		android:layout_width="fill_parent" 
-		android:layout_height="fill_parent"
-		android:gravity="center" 
-		android:text="@string/authorizing_msg"
-		android:textColor="@color/black" />
+	android:layout_height="fill_parent">
+	
+	<TabHost android:id="@android:id/tabhost"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent" >
+			<TabWidget
+				android:id="@android:id/tabs"
+				android:layout_width="fill_parent"
+				android:layout_height="wrap_content" />
+			<FrameLayout
+				android:id="@android:id/tabcontent"
+				android:layout_width="fill_parent"
+				android:layout_height="fill_parent" />
+		</LinearLayout>
+	</TabHost>
+	
 </LinearLayout>

@@ -17,7 +17,6 @@
 package com.davidivins.checkin4me.activities;
 
 import com.davidivins.checkin4me.adapters.ServiceConnectionAdapter;
-import com.davidivins.checkin4me.core.Ad;
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.core.Services;
 
@@ -25,18 +24,13 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 /**
  * ServiceConnection
@@ -62,10 +56,6 @@ public class ServiceConnection extends ListActivity implements OnItemClickListen
 		// set the current layout for the activity
 		setContentView(GeneratedResources.getLayout("service_connection"));
 		
-		// display ad if this is not the pro version
-		Ad ad = new Ad(this);
-		ad.refreshAd();
-		
 		// display list of services
 		ServiceConnectionAdapter adapter = new ServiceConnectionAdapter(this, GeneratedResources.getLayout("service_connection_row"), Services.getInstance(this).getLogoDrawables());
 		setListAdapter(adapter);
@@ -89,13 +79,12 @@ public class ServiceConnection extends ListActivity implements OnItemClickListen
 	{
 		// save position as service id for service connection activity
 		Log.i(TAG, "clicked service id = " + position);
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 
 		latest_service_id_selected = position;
 		
 		if (Services.getInstance(this).getServiceById(position).getOAuthConnector() != null)
 		{
-			if (Services.getInstance(this).getServiceById(position).connected(settings))
+			if (Services.getInstance(this).getServiceById(position).connected())
 			{
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				builder.setMessage(Services.getInstance(this).getServiceById(position).getName() + 
@@ -103,7 +92,7 @@ public class ServiceConnection extends ListActivity implements OnItemClickListen
 					.setCancelable(false)
 					.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int id) {
-							loadAuthorizationActivity();
+							beginAuthorization();
 						}
 					})
 					.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -117,7 +106,7 @@ public class ServiceConnection extends ListActivity implements OnItemClickListen
 			}
 			else
 			{
-				loadAuthorizationActivity();
+				beginAuthorization();
 			}
 		}
 		else
@@ -130,9 +119,9 @@ public class ServiceConnection extends ListActivity implements OnItemClickListen
 	}
 	
 	/**
-	 * loadAuthorizationActivity
+	 * beginAuthorization
 	 */
-	public void loadAuthorizationActivity()
+	private void beginAuthorization()
 	{
 		Intent i = new Intent(this, Authorization.class);
 		i.putExtra("service_id", latest_service_id_selected);
@@ -140,48 +129,11 @@ public class ServiceConnection extends ListActivity implements OnItemClickListen
 	}
 	
 	/**
-	 * onCreateOptionsMenu
+	 * onClick
 	 * 
-	 * @param Menu menu
-	 * @return boolean
+	 * @param dialog
+	 * @param which
 	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) 
-	{
-		boolean result = false;
-		
-		if (Services.getInstance(this).atLeastOneConnected(PreferenceManager.getDefaultSharedPreferences(this)))
-		{
-			MenuInflater inflater = getMenuInflater();
-			inflater.inflate(GeneratedResources.getMenu("service_connection"), menu);
-			result = true;
-		}
-		
-		return result;
-	}
-	
-	/**
-	 * onOptionsItemSelected
-	 * 
-	 * @param MenuItem item
-	 * @return boolean
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) 
-	{
-		boolean result = false;
-		
-		// Handle item selection
-		if (item.getItemId() == GeneratedResources.getId("nearby_places"))
-		{
-				Intent i = new Intent(this, NearbyPlaces.class);
-				startActivity(i);
-				result = true;
-		}
-		
-		return result;
-	}
-
 	public void onClick(DialogInterface dialog, int which) 
 	{
 		// TODO Auto-generated method stub

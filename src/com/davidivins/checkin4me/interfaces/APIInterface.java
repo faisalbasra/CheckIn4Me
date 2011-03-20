@@ -1,5 +1,4 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -29,8 +28,8 @@ import android.content.SharedPreferences;
  */
 public interface APIInterface 
 {
-	abstract public Runnable getLocationThread(String query, String longitude, String latitude, SharedPreferences settings);
+	abstract public Runnable getLocationThread(String query, String longitude, String latitude, SharedPreferences persistent_storage);
 	abstract public ArrayList<Locale> getLatestLocations();
-	abstract public Runnable getCheckInThread(Locale location, String message, SharedPreferences settings);
+	abstract public Runnable getCheckInThread(Locale location, String message, SharedPreferences persistent_storage);
 	abstract public boolean getLatestCheckInStatus();
 }

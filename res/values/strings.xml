@@ -27,16 +27,22 @@
 	<string name="nearby_places_title">Nearby Places</string>
 	<string name="location_details_title">Location Details</string>
 	<string name="feedback_title">Feedback</string>
+	<string name="settings_title">Settings</string>
+	<string name="facebook_settings_title">Facebook Settings</string>
+	<string name="foursquare_settings_title">Foursquare Settings</string>
+	<string name="gowalla_settings_title">Gowalla Settings</string>
     
 	<string name="menu_option_nearby">Nearby Places</string>
 	<string name="menu_option_refresh">Refresh</string>
 	<string name="menu_option_search">Search</string>
 	<string name="menu_option_connect">Connect More Services</string>
+	<string name="menu_option_settings">Settings</string>
 	<string name="menu_option_feedback">Feedback</string>
 	
 	
 	<string name="authorizing_msg">Authorizing...</string>
 	<string name="no_nearby_places_msg">There are not any places nearby!</string>
+	<string name="no_settings_msg">There are not any settings available!</string>
 	
 	<string name="search_hint">Search for a place...</string>
 	

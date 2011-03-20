@@ -14,37 +14,28 @@
 //    You should have received a copy of the GNU General Public License
 //    along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
 //*****************************************************************************
-package com.davidivins.checkin4me.core;
+package com.davidivins.checkin4me.comparators;
 
-import com.davidivins.checkin4me.activities.MainTabbedContainer;
+import java.util.Comparator;
 
-import android.app.Activity;
-import android.content.Intent;
+import com.davidivins.checkin4me.core.ServiceSetting;
 
 /**
- * StartProgram
- * 
- * @author david
- */
-public class StartProgramDelayer implements Runnable
+* ServiceSettingComparator
+* 
+* @author david ivins
+*/
+public class ServiceSettingComparator implements Comparator<ServiceSetting> 
 {
-	private Activity activity;
-	
 	/**
-	 * StartProgramDelayer
-	 * 
-	 * @param activity
-	 */
-	public StartProgramDelayer(Activity activity)
+	* compare
+	* 
+	* @param ServiceSetting location_1
+	* @param ServiceSetting location_2
+	* @return int
+	*/
+	public int compare(ServiceSetting setting_1, ServiceSetting setting_2)
 	{
-		this.activity = activity;
-	}
-
-	/**
-	 * run
-	 */
-	public void run() 
-	{
-		activity.startActivity(new Intent(activity, MainTabbedContainer.class));
+		return setting_1.getDisplayName().compareToIgnoreCase(setting_2.getDisplayName());
 	}
 }

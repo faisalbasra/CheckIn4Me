@@ -27,6 +27,7 @@ import com.davidivins.checkin4me.interfaces.ServiceInterface;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
@@ -45,14 +46,14 @@ public class Services
 	 * 
 	 * @param resources
 	 */
-	private Services(Resources resources)
+	private Services(SharedPreferences persistent_storage, Resources resources)
 	{
 		int service_count = 0;
 		
 		services = new ArrayList<ServiceInterface>();
-		services.add(new FacebookService(resources, service_count++));
-		services.add(new FoursquareService(resources, service_count++));
-		services.add(new GowallaService(resources, service_count++));
+		services.add(new FacebookService(service_count++, persistent_storage, resources));
+		services.add(new FoursquareService(service_count++, persistent_storage, resources));
+		services.add(new GowallaService(service_count++, persistent_storage, resources));
 	}
 	
 	/**
@@ -64,7 +65,8 @@ public class Services
 	static public Services getInstance(Activity activity)
 	{
 		if (null == instance)
-			instance = new Services(activity.getResources());
+			instance = new Services(
+					PreferenceManager.getDefaultSharedPreferences(activity), activity.getResources());
 		
 		return instance;
 	}
@@ -91,18 +93,34 @@ public class Services
 	}
 	
 	/**
+	 * getServicesWithSettingsAsArrayList
+	 */
+	public ArrayList<ServiceInterface> getConnectedServicesWithSettingsAsArrayList()
+	{
+		ArrayList<ServiceInterface> services_with_settings = new ArrayList<ServiceInterface>();
+		
+		for (ServiceInterface service : services)
+		{
+			if (service.hasSettings() && service.connected())
+				services_with_settings.add(service);
+		}
+		
+		return services_with_settings;
+	}
+	
+	/**
 	 * getConnectedServicesAsArrayList
 	 * 
-	 * @param SharedPreferences settings
+	 * @param SharedPreferences persistent_storage
 	 * @return ArrayList<Service>
 	 */
-	public ArrayList<ServiceInterface> getConnectedServicesAsArrayList(SharedPreferences settings)
+	public ArrayList<ServiceInterface> getConnectedServicesAsArrayList()
 	{
 		ArrayList<ServiceInterface> connected_services = new ArrayList<ServiceInterface>();
 		
 		for (ServiceInterface service : services)
 		{
-			if (service.connected(settings))
+			if (service.connected())
 				connected_services.add(service);
 		}
 		return connected_services;
@@ -131,13 +149,13 @@ public class Services
 	 * @param prefs
 	 * @return boolean
 	 */
-	public boolean atLeastOneConnected(SharedPreferences prefs)
+	public boolean atLeastOneConnected()
 	{
 		boolean result = false;
 		
 		for (ServiceInterface service : services)
 		{
-			if (service.connected(prefs))
+			if (service.connected())
 			{
 				result = true;
 				break;
@@ -153,10 +171,10 @@ public class Services
 	 * @param String query
 	 * @param String longitude
 	 * @param String latutude
-	 * @param SharedParameters settings
+	 * @param SharedParameters persistent_storage
 	 * @return ArrayList<Locale>
 	 */
-	public ArrayList<Locale> getAllLocations(String query, String longitude, String latitude, SharedPreferences settings)
+	public ArrayList<Locale> getAllLocations(String query, String longitude, String latitude, SharedPreferences persistent_storage)
 	{
 		ArrayList<Thread> threads = new ArrayList<Thread>();
 		ArrayList<ArrayList<Locale>> location_lists = new ArrayList<ArrayList<Locale>>();
@@ -164,10 +182,10 @@ public class Services
 		// get location request threads
 		for (ServiceInterface service : services)
 		{
-			if (service.connected(settings))
+			if (service.connected())
 			{
 				Log.i(TAG, "Creating thread for service " + service.getName());
-				threads.add(new Thread(service.getAPIInterface().getLocationThread(query, longitude, latitude, settings), service.getName()));
+				threads.add(new Thread(service.getAPIInterface().getLocationThread(query, longitude, latitude, persistent_storage), service.getName()));
 			}
 		}
 		
@@ -193,7 +211,7 @@ public class Services
 		// get latest locations
 		for (ServiceInterface service : services)
 		{
-			if (service.connected(settings))
+			if (service.connected())
 				location_lists.add(service.getAPIInterface().getLatestLocations());
 		}
 		
@@ -206,9 +224,9 @@ public class Services
 	 * 
 	 * @param service_ids
 	 * @param location
-	 * @param settings
+	 * @param persistent_storage
 	 */
-	public HashMap<Integer, Boolean> checkIn(ArrayList<Integer> service_ids, Locale location, String message, SharedPreferences settings)
+	public HashMap<Integer, Boolean> checkIn(ArrayList<Integer> service_ids, Locale location, String message, SharedPreferences persistent_storage)
 	{
 		ArrayList<Thread> threads = new ArrayList<Thread>();
 		HashMap<Integer, Boolean> checkin_statuses = new HashMap<Integer, Boolean>();
@@ -217,8 +235,8 @@ public class Services
 		for (int service_id : service_ids)
 		{
 			ServiceInterface service = getServiceById(service_id);
-			if (service.connected(settings))
-				threads.add(new Thread(service.getAPIInterface().getCheckInThread(location, message, settings), service.getName()));			
+			if (service.connected())
+				threads.add(new Thread(service.getAPIInterface().getCheckInThread(location, message, persistent_storage), service.getName()));			
 		}
 		
 		// start threads
@@ -244,7 +262,8 @@ public class Services
 		for (int service_id : service_ids)
 		{
 			ServiceInterface service = getServiceById(service_id);
-			if (service.connected(settings))
+			
+			if (service.connected())
 				checkin_statuses.put(service.getId(), service.getAPIInterface().getLatestCheckInStatus());
 		}
 		

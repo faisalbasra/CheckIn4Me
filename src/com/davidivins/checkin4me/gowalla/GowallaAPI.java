@@ -71,12 +71,12 @@ public class GowallaAPI implements APIInterface
 	 * 
 	 * @param longitude
 	 * @param latitude
-	 * @param settings
+	 * @param persistent_storage
 	 * @return LocationThread
 	 */
-	public Runnable getLocationThread(String query,String longitude, String latitude, SharedPreferences settings)
+	public Runnable getLocationThread(String query,String longitude, String latitude, SharedPreferences persistent_storage)
 	{
-		return new LocationThread(query, longitude, latitude, settings);
+		return new LocationThread(query, longitude, latitude, persistent_storage);
 	}
 	
 	/**
@@ -94,13 +94,13 @@ public class GowallaAPI implements APIInterface
 	 * getCheckInThread
 	 * 
 	 * @param location
-	 * @param settings
+	 * @param persistent_storage
 	 * @return CheckInThread
 	 */
-	public Runnable getCheckInThread(Locale location, String message, SharedPreferences settings)
+	public Runnable getCheckInThread(Locale location, String message, SharedPreferences persistent_storage)
 	{
 		latest_checkin_status = false;
-		return new CheckInThread(location, message, settings);
+		return new CheckInThread(location, message, persistent_storage);
 	}
 	
 	/**
@@ -123,7 +123,7 @@ public class GowallaAPI implements APIInterface
 		private String query;
 		private String longitude;
 		private String latitude;
-		private SharedPreferences settings;
+		private SharedPreferences persistent_storage;
 		
 		/**
 		 * LocationThread
@@ -131,13 +131,14 @@ public class GowallaAPI implements APIInterface
 		 * @param query
 		 * @param longitude
 		 * @param latitude
+		 * @param persistent_storage
 		 */
-		LocationThread(String query, String longitude, String latitude, SharedPreferences settings)
+		LocationThread(String query, String longitude, String latitude, SharedPreferences persistent_storage)
 		{
-			this.query = query;
-			this.longitude = longitude;
-			this.latitude = latitude;
-			this.settings = settings;
+			this.query               = query;
+			this.longitude           = longitude;
+			this.latitude            = latitude;
+			this.persistent_storage  = persistent_storage;
 		}
 
 		/**
@@ -162,7 +163,7 @@ public class GowallaAPI implements APIInterface
 			request.addQueryParameter("lat", latitude);
 			request.addQueryParameter("lng", longitude);
 			request.addQueryParameter("radius", "50");
-			
+
 			// execute http request
 			OAuthResponse response = (OAuthResponse)request.execute();
 			
@@ -183,8 +184,8 @@ public class GowallaAPI implements APIInterface
 			latest_locations.clear();
 			
 			// get user's current location as doubles
-			double user_longitude = Double.valueOf(settings.getString("current_longitude", "0.0"));
-			double user_latitude  = Double.valueOf(settings.getString("current_latitude", "0.0"));
+			double user_longitude = Double.valueOf(persistent_storage.getString("current_longitude", "0.0"));
+			double user_latitude  = Double.valueOf(persistent_storage.getString("current_latitude", "0.0"));
 			
 			try 
 			{
@@ -236,20 +237,20 @@ public class GowallaAPI implements APIInterface
 	{
 		private Locale location;
 		private String message;
-		private SharedPreferences settings;
+		private SharedPreferences persistent_storage;
 		private boolean token_refresh_attempted;
 		
 		/**
 		 * CheckInThread
 		 * 
 		 * @param location
-		 * @param settings
+		 * @param persistent_storage
 		 */
-		CheckInThread(Locale location, String message, SharedPreferences settings)
+		CheckInThread(Locale location, String message, SharedPreferences persistent_storage)
 		{
 			this.location = location;
 			this.message = message;
-			this.settings = settings;
+			this.persistent_storage = persistent_storage;
 			this.token_refresh_attempted = false;
 		}
 
@@ -274,13 +275,27 @@ public class GowallaAPI implements APIInterface
 			String spot_id = service_id_location_id_xref.get(service_id);
 			
 			// set query parameters
-			request.addQueryParameter("oauth_token", settings.getString("gowalla_access_token", "-1"));
+			request.addQueryParameter("oauth_token", persistent_storage.getString("gowalla_access_token", "-1"));
 			request.addQueryParameter("spot_id", spot_id);
-			request.addQueryParameterAndEncode("comment", message); // gowalla wants comment, doesn't care if empty
-			request.addQueryParameter("lat", settings.getString("current_latitude", "-1"));
-			request.addQueryParameter("lng", settings.getString("current_longitude", "-1"));
-			request.addQueryParameter("post_to_twitter", "0");
-			request.addQueryParameter("post_to_facebook", "0");					
+
+			request.addQueryParameter("comment", "");
+			request.addQueryParameter("lat", persistent_storage.getString("current_latitude", "-1"));
+			request.addQueryParameter("lng", persistent_storage.getString("current_longitude", "-1"));
+
+			// if post to twitter is enabled, post it
+			if (persistent_storage.getBoolean("gowalla_post_to_twitter", false))
+				request.addQueryParameter("post_to_twitter", "1");
+			else
+				request.addQueryParameter("post_to_twitter", "0");
+			
+			// if post to facebook is enabled, post it
+			if (persistent_storage.getBoolean("gowalla_post_to_facebook", false))
+				request.addQueryParameter("post_to_facebook", "1");
+			else
+				request.addQueryParameter("post_to_facebook", "0");
+					
+			if (!message.equals(""))
+				request.addQueryParameterAndEncode("comment", message);
 				
 			// execute http request
 			OAuthResponse response = (OAuthResponse)request.execute();
@@ -338,9 +353,9 @@ public class GowallaAPI implements APIInterface
 			Log.i(TAG, "Attempting to refresh Gowalla OAuth token");
 			 
 			OAuthResponse response = new OAuthResponse();
-			Log.i(TAG, "refresh_token in settings = " + settings.getString("gowalla_refresh_token", "-1"));
+			Log.i(TAG, "refresh_token in persistent_storage = " + persistent_storage.getString("gowalla_refresh_token", "-1"));
 			
-			if (settings.getString("gowalla_refresh_token", "-1") != "-1")
+			if (persistent_storage.getString("gowalla_refresh_token", "-1") != "-1")
 			{
 				OAuth2Request request = new OAuth2Request(
 						config.getProperty("oauth_http_method"), config.getProperty("oauth_host"), 
@@ -349,7 +364,7 @@ public class GowallaAPI implements APIInterface
 				request.addQueryParameter("grant_type", "refresh_token");
 				request.addQueryParameter("client_id", config.getProperty("oauth_client_id"));
 				request.addQueryParameter("client_secret", config.getProperty("oauth_client_secret"));
-				request.addQueryParameter("refresh_token", settings.getString("gowalla_refresh_token", "-1"));
+				request.addQueryParameter("refresh_token", persistent_storage.getString("gowalla_refresh_token", "-1"));
 				
 				response = (OAuthResponse)request.execute();
 			}
@@ -366,7 +381,7 @@ public class GowallaAPI implements APIInterface
 		 */
 		private boolean setTokenFromJson(String json_string)
 		{
-			Editor settings_editor = settings.edit();
+			Editor persistent_storage_editor = persistent_storage.edit();
 			boolean status = false;
 			
 			try
@@ -379,9 +394,9 @@ public class GowallaAPI implements APIInterface
 				Log.i(TAG, "New Access Token = " + access_token);
 				Log.i(TAG, "New Refresh Token = " + refresh_token);
 				
-				settings_editor.putString("gowalla_access_token", access_token);
-				settings_editor.putString("gowalla_refresh_token", refresh_token);
-				settings_editor.commit();
+				persistent_storage_editor.putString("gowalla_access_token", access_token);
+				persistent_storage_editor.putString("gowalla_refresh_token", refresh_token);
+				persistent_storage_editor.commit();
 
 				status = true;
 			}

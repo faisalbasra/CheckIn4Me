@@ -16,11 +16,4 @@
       along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
      ***************************************************************************** -->
 <resources>
-	<declare-styleable name="com.admob.android.ads.AdView">
-		<attr name="backgroundColor" format="color" />
-		<attr name="primaryTextColor" format="color" />
-		<attr name="secondaryTextColor" format="color" />
-		<attr name="keywords" format="string" />
-		<attr name="refreshInterval" format="integer" />
-	</declare-styleable>
 </resources>

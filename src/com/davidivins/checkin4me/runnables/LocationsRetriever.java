@@ -39,7 +39,7 @@ public class LocationsRetriever implements Runnable
 	private String query;
 	private String longitude;
 	private String latitude;
-	private SharedPreferences settings;
+	private SharedPreferences persistent_storage;
 	private ArrayList<Locale> locations_retrieved;
 	
 	/**
@@ -49,9 +49,9 @@ public class LocationsRetriever implements Runnable
 	 * @param query
 	 * @param longitude
 	 * @param latitude
-	 * @param settings
+	 * @param persistent_storage
 	 */
-	public LocationsRetriever(Activity activity, LocationsRetrieverListener listener, Handler handler, String query, String longitude, String latitude, SharedPreferences settings)
+	public LocationsRetriever(Activity activity, LocationsRetrieverListener listener, Handler handler, String query, String longitude, String latitude, SharedPreferences persistent_storage)
 	{
 		this.activity = activity;
 		this.listener = listener;
@@ -59,7 +59,7 @@ public class LocationsRetriever implements Runnable
 		this.query = query;
 		this.longitude = longitude;
 		this.latitude = latitude;
-		this.settings = settings;
+		this.persistent_storage = persistent_storage;
 		
 		this.locations_retrieved = new ArrayList<Locale>();
 	}
@@ -69,7 +69,7 @@ public class LocationsRetriever implements Runnable
 	 */
 	public void run() 
 	{
-		locations_retrieved = Services.getInstance(activity).getAllLocations(query, longitude, latitude, settings);
+		locations_retrieved = Services.getInstance(activity).getAllLocations(query, longitude, latitude, persistent_storage);
 		
 		if (null != handler)
 			handler.post(listener.getLocationsRetrievedCallback());

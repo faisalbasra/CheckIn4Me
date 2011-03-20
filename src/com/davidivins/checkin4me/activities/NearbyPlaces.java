@@ -16,10 +16,12 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.activities;
 
+import java.util.ArrayList;
+
 import com.davidivins.checkin4me.adapters.LocaleAdapter;
-import com.davidivins.checkin4me.core.Ad;
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.core.Locale;
+import com.davidivins.checkin4me.core.Services;
 import com.davidivins.checkin4me.listeners.CleanableProgressDialogListener;
 import com.davidivins.checkin4me.listeners.GPSTimeoutListener;
 import com.davidivins.checkin4me.listeners.LocationsRetrieverListener;
@@ -32,13 +34,11 @@ import com.davidivins.checkin4me.util.CleanableProgressDialog;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -53,6 +53,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -62,26 +63,31 @@ import android.widget.AdapterView.OnItemClickListener;
  * @author david ivins
  */
 public class NearbyPlaces extends ListActivity 
-	implements LocationListener, OnItemClickListener, LocationsRetrieverListener, GPSTimeoutListener, NetworkTimeoutListener, CleanableProgressDialogListener
+	implements LocationListener, OnItemClickListener, LocationsRetrieverListener, GPSTimeoutListener, 
+		NetworkTimeoutListener, CleanableProgressDialogListener
 {
 	private static final String TAG = "NearbyPlaces";
 	
 	private static LocationManager location_manager        = null;
-	private static ProgressDialog loading_dialog           = null;
-	private String current_query                           = null;
+	private static ProgressDialog progress_dialog          = null;
 	private Thread locations_thread                        = null;
 	private Thread gps_timeout_thread                      = null;
 	private Thread network_timeout_thread                  = null;
 	private LocationsRetriever locations_runnable          = null;
 	private GPSTimeoutMonitor gps_timeout_runnable         = null;
 	private NetworkTimeoutMonitor network_timeout_runnable = null;
+	private boolean timeouts_cancelled                     = false;
+	
 	private Runnable locations_retrieved_callback          = null;
 	private Runnable gps_timeout_callback                  = null;
 	private Runnable network_timeout_callback              = null;
+	private Runnable keyboard_gone_callback                = null;
 	private Handler handler                                = null;
-	private boolean timeouts_cancelled                     = false;
-	private String current_longitude;
-	private String current_latitude;
+
+	private static ArrayList<Locale> current_locations     = null;
+	private static String current_longitude                = null;
+	private static String current_latitude                 = null;
+	private static String current_query                    = null;
 	
 	/**
 	 * onCreate
@@ -94,12 +100,40 @@ public class NearbyPlaces extends ListActivity
 		super.onCreate(saved_instance_state);
 		GeneratedResources.generate(this);
 		
-		// handle the current intent of this activity
-		handleIntent(getIntent());
+		// if no services are connected, display error message, otherwise, process intent
+		if (Services.getInstance(this).atLeastOneConnected())
+		{
+			// check if latest query is a change from the previous query
+			String pending_query = getParent().getIntent().getStringExtra("query");
+			boolean query_changed = !queriesAreTheSame(current_query, pending_query);
+			
+			// store pending query as current query
+			if (null != pending_query)
+				current_query = pending_query.trim();
+			
+			Log.i(TAG, "current_query = " + current_query);
+			
+			// if a list doesn't exist yet
+			if (null == getListAdapter() || query_changed)
+			{
+				// if we don't have coordinates, request them. otherwise, just build the location list
+				if (null == current_locations || null == current_longitude || null == current_latitude || query_changed)
+					requestCoordinates(query_changed);
+				else
+					setLocationsList();
 		
-		// display the add if this is not the pro version
-		Ad ad = new Ad(this);
-		ad.refreshAd();
+				// set up gui
+				setContentView(GeneratedResources.getLayout("nearby_places"));
+				getListView().setTextFilterEnabled(true);
+				getListView().setOnItemClickListener(this);
+			}
+		}
+		else
+		{
+			setContentView(GeneratedResources.getLayout("nearby_places"));
+			TextView empty_list = (TextView)findViewById(android.R.id.empty);
+			empty_list.setText("No services connected!");
+		}
 	}
 	
 	/**
@@ -108,6 +142,15 @@ public class NearbyPlaces extends ListActivity
 	public void onStop()
 	{
 		super.onStop();
+		cleanUp();
+	}
+	
+	/**
+	 * onPause
+	 */
+	public void onPause()
+	{
+		super.onPause();
 		cleanUp();
 	}
 	
@@ -156,6 +199,18 @@ public class NearbyPlaces extends ListActivity
 				}
 			};
 		}
+		
+		// acts as callback from keyboard gone event
+		if (null == keyboard_gone_callback)
+		{
+			keyboard_gone_callback = new Runnable()
+			{
+				public void run()
+				{
+					NetworkTimeout();
+				}
+			};
+		}
 	}
 	
 	/**
@@ -167,8 +222,9 @@ public class NearbyPlaces extends ListActivity
 		if (location_manager == null)
 			location_manager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
 		location_manager.removeUpdates(this);
+		location_manager = null;
 		
-		// cancel threads		
+		// cancel location thread		
 		if (null != locations_thread)
 		{
 			if (null != handler)
@@ -180,6 +236,21 @@ public class NearbyPlaces extends ListActivity
 			locations_retrieved_callback = null;
 		}
 		
+		// cleanup timeout threads
+		killTimeouts();
+		
+		if (null != handler)
+			handler = null;
+		
+		// cancel any dialogs showing
+		cancelProgressDialog();
+	}
+	
+	/**
+	 * killTimeouts
+	 */
+	private void killTimeouts()
+	{
 		if (null != gps_timeout_thread)
 		{
 			if (null != handler)
@@ -200,66 +271,14 @@ public class NearbyPlaces extends ListActivity
 			
 			network_timeout_callback = null;
 		}
-		
-		if (null != handler)
-			handler = null;
-		
-		// cancel any dialogs showing
-		if (loading_dialog != null && loading_dialog.isShowing())
-			loading_dialog.cancel();
 	}
 	
 	/**
-	 * onSearchRequested
-	 * 
-	 * @return boolean
+	 * clearCurrentLocations
 	 */
-	@Override
-	public boolean onSearchRequested() 
+	public static void clearCurrentLocations()
 	{
-		return super.onSearchRequested();
-	}
-	
-	/**
-	 * onNewIntent
-	 * 
-	 * @param Intent intent
-	 */
-	@Override
-	protected void onNewIntent(Intent intent) 
-	{
-		setIntent(intent);
-		handleIntent(intent);
-	}
-	
-	/**
-	 * handleIntent
-	 * 
-	 * @param intent
-	 */
-	private void handleIntent(Intent intent) 
-	{
-		if (Intent.ACTION_SEARCH.equals(intent.getAction())) 
-		{
-			current_query = intent.getStringExtra(SearchManager.QUERY);
-			this.setTitle("Results");
-		}
-		else
-		{
-			current_query = null;
-			this.setTitle("Nearby Places");
-		}
-		
-		Log.i(TAG, "current_query = " + current_query);
-		
-		requestCoordinates();
-
-		setContentView(GeneratedResources.getLayout("nearby_places"));
-		
-		getListView().setTextFilterEnabled(true);
-		getListView().setOnItemClickListener(this);
-		getListView().setBackgroundColor(Color.WHITE);
-		getListView().setCacheColorHint(Color.WHITE);
+		current_locations = null;
 	}
 
 	/**
@@ -270,54 +289,45 @@ public class NearbyPlaces extends ListActivity
 	public void onLocationChanged(Location location) 
 	{
 		timeouts_cancelled = true;
+		killTimeouts();
 		
 		// cancel further updates
+		if (location_manager == null)
+			location_manager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
 		location_manager.removeUpdates(this);
+		location_manager = null;
     	
-		// cancel acquiring location dialog
-		if (loading_dialog.isShowing())
-			loading_dialog.cancel();
-
-		// start retrieving locations dialog
-		loading_dialog = new CleanableProgressDialog(this, this, "", "Retrieving Locations...", true);
-		loading_dialog.show();
+		// cancel acquiring location dialog and start retrieving locations dialog
+		startProgressDialog("Retrieving Locations...");
 		
 		// get longitude and latitude
 		current_longitude = Double.toString(location.getLongitude());
 		current_latitude = Double.toString(location.getLatitude());
 		
 		// get preferences for retrieving locations
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-		Editor settings_editor = settings.edit();
+		SharedPreferences persistent_storage = PreferenceManager.getDefaultSharedPreferences(this);
+		Editor persistent_storage_editor = persistent_storage.edit();
 		
 		// store user's current longitude and latitude
-		settings_editor.putString("current_longitude", current_longitude);
-		settings_editor.putString("current_latitude", current_latitude);
-		settings_editor.commit();
-		
-		locations_runnable = new LocationsRetriever(this, this, handler, current_query, current_longitude, current_latitude, settings);
+		persistent_storage_editor.putString("current_longitude", current_longitude);
+		persistent_storage_editor.putString("current_latitude", current_latitude);
+		persistent_storage_editor.commit();
+
+		locations_runnable = new LocationsRetriever(this, this, handler, current_query, current_longitude, current_latitude, persistent_storage);
 		locations_thread = new Thread(locations_runnable, "LocationThread");
 		locations_thread.start();
 	}
-
-	/**
-	 * unused methods of GPS
-	 */
-	public void onStatusChanged(String provider, int status, Bundle extras) {}
-	public void onProviderEnabled(String provider) {}
-	public void onProviderDisabled(String provider) {}
     
 	/**
 	 * requestCoordinates
 	 */
-	public void requestCoordinates()
+	public void requestCoordinates(boolean query_changed)
 	{
 		setup();
 		timeouts_cancelled = false;
 		
 		// cancel acquiring location dialog
-		if (loading_dialog != null && loading_dialog.isShowing())
-			loading_dialog.cancel();
+		cancelProgressDialog();
 		
 		// Acquire a reference to the system Location Manager
 		if (null == location_manager)
@@ -332,9 +342,29 @@ public class NearbyPlaces extends ListActivity
 			gps_timeout_thread.start();
 				
 			// Register the listener with the Location Manager to receive location updates
-			location_manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener)this);
-			loading_dialog = new CleanableProgressDialog(this, this, "", "Acquiring GPS Location...", true);
-			loading_dialog.show();
+			location_manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+			
+			// display acquiring gps progress dialog
+			if (current_query == null || !query_changed)
+			{
+				startProgressDialog("Acquiring GPS Location...");
+			}
+			else
+			{
+				// delay displaying the progress dialog by 1 second to allow for a soft
+				// keyboard (from a possible search) to be hidden first. if the progress
+				// dialog shows up before the keyboard is hidden, the dialog will be killed
+				// upon hiding the keyboard.
+				Runnable display_progress_dialog = new Runnable() 
+				{ 
+					public void run()
+					{
+						startProgressDialog("Acquiring GPS Location...");	
+					}
+				};
+				
+				handler.postDelayed(display_progress_dialog, 700);//1000);
+			}
 		}
 		else
 		{
@@ -342,7 +372,6 @@ public class NearbyPlaces extends ListActivity
 		}
 	}
 
-	
 	/**
 	 * GPSTimeout
 	 */
@@ -351,15 +380,14 @@ public class NearbyPlaces extends ListActivity
 		Log.i(TAG, "GPSTimeout");
 		
 		// cancel acquiring location dialog
-		if (loading_dialog != null && loading_dialog.isShowing())
-		{
-			loading_dialog.cancel();
-			loading_dialog = null;
-		}
+		cancelProgressDialog();
 		
 		// Acquire a reference to the system Location Manager
 		if (null == location_manager)
 			location_manager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+
+		// cancel updates for gps
+		location_manager.removeUpdates(this);
 		
 		// get network info
 		NetworkInfo mobile_network_info = 
@@ -377,12 +405,10 @@ public class NearbyPlaces extends ListActivity
 			network_timeout_thread.start();
 		
 			// Register the listener with the Location Manager to receive location updates
-			location_manager.removeUpdates(this);
 			location_manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener)this);
-		
-			// show loading dialog
-			loading_dialog = new CleanableProgressDialog(this, this, "", "Acquiring Network Location...", true);
-			loading_dialog.show();
+			
+			// show acquiring network dialog
+			startProgressDialog("Acquiring Network Location...");
 		}
 		else
 		{
@@ -398,11 +424,13 @@ public class NearbyPlaces extends ListActivity
 		Log.i(TAG, "NetworkTimeout");
 		
 		// cancel acquiring location dialog
-		if (loading_dialog != null && loading_dialog.isShowing())
-			loading_dialog.cancel();
+		cancelProgressDialog();
 		
 		// remove location updates
+		if (location_manager == null)
+			location_manager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
 		location_manager.removeUpdates(this);
+		location_manager = null;
 		
 		// show error
 		Toast.makeText(this, "GPS and Network Connection Unavailable.", Toast.LENGTH_SHORT).show();
@@ -416,12 +444,56 @@ public class NearbyPlaces extends ListActivity
 		Log.i(TAG, "received new location data.");
 		
 		// setup list for retrieved locations
-		LocaleAdapter adapter = new LocaleAdapter(
-				this, GeneratedResources.getLayout("nearby_place_row"), locations_runnable.getLocationsRetrieved());
-		setListAdapter(adapter);
+		current_locations = locations_runnable.getLocationsRetrieved();
 		
+		// set locations list
+		setLocationsList();
+				
 		// cancel loading dialog
-		loading_dialog.cancel();
+		cancelProgressDialog();
+	}
+	
+
+	/**
+	 * displayProgressDialog
+	 */
+	public void startProgressDialog(String text)
+	{
+		// cancel any existing dialog
+		cancelProgressDialog();
+		
+		// create new dialog and display
+		progress_dialog = new CleanableProgressDialog(this, this, "", text, true);
+		progress_dialog.show();
+	}
+	
+	/**
+	 * cancelProgressDialog
+	 */
+	public void cancelProgressDialog()
+	{
+		// check if a progress dialog exists
+		if (null != progress_dialog)
+		{
+			// cancel the dialog if it is showing
+			if (progress_dialog.isShowing())
+				progress_dialog.cancel();
+			
+			progress_dialog = null;
+		}		
+	}
+	
+	/**
+	 * setLocationsList
+	 */
+	private void setLocationsList()
+	{
+		if (0 < current_locations.size())
+		{
+			LocaleAdapter adapter = new LocaleAdapter(
+				this, GeneratedResources.getLayout("nearby_place_row"), current_locations);
+			setListAdapter(adapter);
+		}
 	}
 	
 	/**
@@ -447,7 +519,15 @@ public class NearbyPlaces extends ListActivity
 	{
 		return network_timeout_callback;
 	}
-    
+	
+	/**
+	 * getKeyboardGoneCallback
+	 */
+	public Runnable getKeyboardGoneCallback()
+	{
+		return keyboard_gone_callback;
+	}
+	
 	/**
 	 * onCreateOptionsMenu
 	 * 
@@ -456,8 +536,13 @@ public class NearbyPlaces extends ListActivity
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
 	{
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(GeneratedResources.getMenu("nearby_places"), menu);
+		// if no services are connected, don't display menu options
+		if (Services.getInstance(this).atLeastOneConnected())
+		{
+			MenuInflater inflater = getMenuInflater();
+			inflater.inflate(GeneratedResources.getMenu("nearby_places"), menu);
+		}
+		
 		return true;
 	}
 	
@@ -472,29 +557,20 @@ public class NearbyPlaces extends ListActivity
 		boolean result = false;		
 		int id = item.getItemId();
 		
-		if (GeneratedResources.getId("connect_services") == id)
-		{
-			startActivity(new Intent(this, ServiceConnection.class));
-			result = true;
-		}
-		else if (GeneratedResources.getId("refresh") == id)
+		if (GeneratedResources.getId("refresh") == id)
 		{
 			// check if a query already exists and prompt user to clear it
 			if (current_query != null)
 				displayClearQueryAlert();
 			else
-				requestCoordinates();
-			
+				requestCoordinates(false);
+
 			result = true;
 		}
 		else if (GeneratedResources.getId("search") == id)
 		{
-			onSearchRequested();
+			getParent().onSearchRequested(); // this has to go through the tabbed container
 			result = true;
-		}
-		else if (GeneratedResources.getId("feedback") == id)
-		{
-			startActivity(new Intent(this, Feedback.class));
 		}
 		else
 		{
@@ -515,11 +591,11 @@ public class NearbyPlaces extends ListActivity
 	public void onItemClick(AdapterView<?> adapter_view, View view, int position, long arg3) 
 	{
 		// get the settings and editor
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences persistent_storage = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		// store selected location
-		Locale location = locations_runnable.getLocationsRetrieved().get(position);
-		location.store(settings);
+		Locale location = current_locations.get(position);
+		location.store(persistent_storage);
 		
 		// load location details activity
 		startActivity(new Intent(this, LocationDetails.class));
@@ -552,15 +628,36 @@ public class NearbyPlaces extends ListActivity
 		alert.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int button) {
 				current_query = null;
-				requestCoordinates();
+				requestCoordinates(false);
 			}
 		}); 
 		alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int button) {
-				requestCoordinates();
+				requestCoordinates(false);
 			}
 		});
 		
 		alert.show();
 	}
+	
+	/**
+	 * queriesAreTheSame
+	 */
+	private boolean queriesAreTheSame(String query1, String query2)
+	{
+		boolean result = false;
+		
+		if ((null == query1 && null == query2) ||
+			(null != query1 && null != query2 && query1.equals(query2.trim())))
+			result = true;
+		
+		return result;
+	}
+
+	/**
+	 * unused interface methods of GPS
+	 */
+	public void onStatusChanged(String provider, int status, Bundle extras) {}
+	public void onProviderEnabled(String provider) {}
+	public void onProviderDisabled(String provider) {}
 }
