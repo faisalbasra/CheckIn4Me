@@ -151,7 +151,7 @@ public class FoursquareAPI implements APIInterface
 					config.getProperty("api_version") + config.getProperty("api_locations_endpoint"));
 			
 			// set request headers
-			request.addHeader("User-Agent", "CheckIn4Me:1.0");  // TODO: set this from meta-data
+			request.addHeader("User-Agent", "CheckIn4Me:2.0");  // TODO: set this from meta-data
 			
 			// set query parameters
 			if (query != null)
