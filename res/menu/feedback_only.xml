@@ -16,12 +16,6 @@
       along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
      ***************************************************************************** -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:id="@+id/refresh"
-		android:icon="@drawable/ic_menu_refresh"
-		android:title="@string/menu_option_refresh" />
-	<item android:id="@+id/search"
-		android:icon="@android:drawable/ic_menu_search"
-		android:title="@string/menu_option_search" />
 	<item android:id="@+id/feedback"
 		android:icon="@drawable/ic_menu_emoticons"
 		android:title="@string/menu_option_feedback" />

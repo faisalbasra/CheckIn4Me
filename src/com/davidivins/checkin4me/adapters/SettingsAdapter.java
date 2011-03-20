@@ -57,16 +57,8 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 
 		for (ServiceInterface service : services)
 		{
-			groups.add(service.getName() + " Settings");
-			
-			//HashMap<String, ServiceSetting> settings = service.getSettings();
+			groups.add(service.getName() + " Settings");			
 			ArrayList<ServiceSetting> settings = service.getSettingsAsArrayList();
-			
-//			for (String key : settings.keySet())
-//			{
-//				setting_names.add(settings.get(key).getDisplayName());
-//			}
-			
 			children.add(settings);			
 		}
 	}
@@ -180,16 +172,8 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 		main_layout.setLayoutParams(main_layout_params);
 		main_layout.setOrientation(LinearLayout.HORIZONTAL);
 		main_layout.addView(text_layout);
-		
-//		if (3 != group_position)
-//		{
-			main_layout.setGravity(Gravity.CENTER);
-			main_layout.addView(check_box_layout);
-//		}
-//		else
-//		{
-//			main_layout.setGravity(Gravity.CENTER_VERTICAL); 
-//		}
+		main_layout.setGravity(Gravity.CENTER);
+		main_layout.addView(check_box_layout);
 		
 		return main_layout;
 	}

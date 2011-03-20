@@ -26,6 +26,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -129,13 +132,36 @@ public class ServiceConnection extends ListActivity implements OnItemClickListen
 	}
 	
 	/**
-	 * onClick
+	 * onCreateOptionsMenu
 	 * 
-	 * @param dialog
-	 * @param which
+	 * @param Menu menu
 	 */
-	public void onClick(DialogInterface dialog, int which) 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) 
 	{
-		// TODO Auto-generated method stub
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(GeneratedResources.getMenu("feedback_only"), menu);
+		return true;
+	}
+	
+	/**
+	 * onOptionsItemSelected
+	 * 
+	 * @param MenuItem item
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{
+		boolean result = false;		
+		int id = item.getItemId();
+		
+		if (GeneratedResources.getId("feedback") == id)
+		{
+			startActivity(new Intent(this, Feedback.class));
+			result = true;
+		}
+
+		
+		return result;
 	}
 }

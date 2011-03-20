@@ -29,6 +29,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 /**
@@ -155,5 +158,39 @@ public class Authorization extends Activity
 		
 		persistent_storage_editor.commit();
 		startActivity(i);
+	}
+	
+	/**
+	 * onCreateOptionsMenu
+	 * 
+	 * @param Menu menu
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) 
+	{
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(GeneratedResources.getMenu("feedback_only"), menu);
+		return true;
+	}
+	
+	/**
+	 * onOptionsItemSelected
+	 * 
+	 * @param MenuItem item
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{
+		boolean result = false;		
+		int id = item.getItemId();
+		
+		if (GeneratedResources.getId("feedback") == id)
+		{
+			startActivity(new Intent(this, Feedback.class));
+			result = true;
+		}
+
+		
+		return result;
 	}
 }

@@ -45,6 +45,7 @@ import com.google.android.maps.OverlayItem;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -53,6 +54,9 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -505,5 +509,39 @@ public class LocationDetails extends MapActivity
 			Log.i(TAG,"message = *" + message + "*");
 			checkIn(message);
 		}
+	}
+	
+	/**
+	 * onCreateOptionsMenu
+	 * 
+	 * @param Menu menu
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) 
+	{
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(GeneratedResources.getMenu("feedback_only"), menu);
+		return true;
+	}
+	
+	/**
+	 * onOptionsItemSelected
+	 * 
+	 * @param MenuItem item
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{
+		boolean result = false;		
+		int id = item.getItemId();
+		
+		if (GeneratedResources.getId("feedback") == id)
+		{
+			startActivity(new Intent(this, Feedback.class));
+			result = true;
+		}
+
+		
+		return result;
 	}
 }

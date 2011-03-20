@@ -21,7 +21,11 @@ import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.core.Services;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
@@ -59,5 +63,39 @@ public class Settings extends Activity
 			// Set up our adapter and listener
 			list.setAdapter(new SettingsAdapter(this));
 		}
+	}
+	
+	/**
+	 * onCreateOptionsMenu
+	 * 
+	 * @param Menu menu
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) 
+	{
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(GeneratedResources.getMenu("feedback_only"), menu);	
+		return true;
+	}
+	
+	/**
+	 * onOptionsItemSelected
+	 * 
+	 * @param MenuItem item
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{
+		boolean result = false;		
+		int id = item.getItemId();
+		
+		if (GeneratedResources.getId("feedback") == id)
+		{
+			startActivity(new Intent(this, Feedback.class));
+			result = true;
+		}
+
+		
+		return result;
 	}
 }

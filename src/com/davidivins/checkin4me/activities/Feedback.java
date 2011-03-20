@@ -44,7 +44,6 @@ public class Feedback extends Activity
 
 	    WebView view = (WebView)findViewById(GeneratedResources.getId("feedback"));
 	    view.getSettings().setJavaScriptEnabled(true);
-	    //view.loadUrl("https://checkin4me.uservoice.com/");
 	    view.loadUrl("https://getsatisfaction.com/checkin4me/");
 	}
 }

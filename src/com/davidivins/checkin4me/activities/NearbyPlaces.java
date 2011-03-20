@@ -542,6 +542,11 @@ public class NearbyPlaces extends ListActivity
 			MenuInflater inflater = getMenuInflater();
 			inflater.inflate(GeneratedResources.getMenu("nearby_places"), menu);
 		}
+		else
+		{
+			MenuInflater inflater = getMenuInflater();
+			inflater.inflate(GeneratedResources.getMenu("feedback_only"), menu);
+		}
 		
 		return true;
 	}
@@ -570,6 +575,11 @@ public class NearbyPlaces extends ListActivity
 		else if (GeneratedResources.getId("search") == id)
 		{
 			getParent().onSearchRequested(); // this has to go through the tabbed container
+			result = true;
+		}
+		else if (GeneratedResources.getId("feedback") == id)
+		{
+			startActivity(new Intent(this, Feedback.class));
 			result = true;
 		}
 		else
