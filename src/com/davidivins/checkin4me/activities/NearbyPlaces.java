@@ -48,6 +48,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -452,7 +453,6 @@ public class NearbyPlaces extends ListActivity
 		// cancel loading dialog
 		cancelProgressDialog();
 	}
-	
 
 	/**
 	 * displayProgressDialog
@@ -599,6 +599,29 @@ public class NearbyPlaces extends ListActivity
 		
 		// load location details activity
 		startActivity(new Intent(this, LocationDetails.class));
+	}
+	
+	/**
+	 * onKeyDown
+	 * 
+	 * @param key_code
+	 * @param event
+	 * @return boolean
+	 */
+	@Override
+	public boolean onKeyDown(int key_code, KeyEvent event) 
+	{
+		// kill threads, timeouts, and location services on home button
+		if (event.getAction() == KeyEvent.ACTION_DOWN) 
+		{
+			switch (key_code) 
+			{
+				case KeyEvent.KEYCODE_HOME:
+					cleanUp();
+			}
+		}
+		
+		return super.onKeyDown(key_code, event);
 	}
 
 	/**
