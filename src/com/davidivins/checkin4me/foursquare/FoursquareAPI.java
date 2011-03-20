@@ -317,11 +317,11 @@ public class FoursquareAPI implements APIInterface
 			String broadcast = "public";
 			
 			// if post to facebook is enabled, post it
-			if (persistent_storage.getBoolean("foursquare_post_to_facebook", false))
+			if (persistent_storage.getBoolean("foursquare_post_to_facebook_default", false))
 				broadcast += ",facebook";
 			
 			// if post to twitter is enabled, add it to broadcast
-			if (persistent_storage.getBoolean("foursquare_post_to_twitter", false))
+			if (persistent_storage.getBoolean("foursquare_post_to_twitter_default", false))
 				broadcast += ",twitter";
 
 			// add broadcast preferences to request

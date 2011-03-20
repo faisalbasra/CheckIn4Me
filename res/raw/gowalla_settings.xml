@@ -23,12 +23,12 @@
 	
 	<setting>
 		<display_name>Post to Facebook</display_name>
-		<pref_name>gowalla_post_to_facebook</pref_name>
+		<pref_name>gowalla_post_to_facebook_default</pref_name>
 	</setting>
 	
 	<setting>
 		<display_name>Post to Twitter</display_name>
-		<pref_name>gowalla_post_to_twitter</pref_name>
+		<pref_name>gowalla_post_to_twitter_default</pref_name>
 	</setting>
 
 </settings>

@@ -283,13 +283,13 @@ public class GowallaAPI implements APIInterface
 			request.addQueryParameter("lng", persistent_storage.getString("current_longitude", "-1"));
 
 			// if post to twitter is enabled, post it
-			if (persistent_storage.getBoolean("gowalla_post_to_twitter", false))
+			if (persistent_storage.getBoolean("gowalla_post_to_twitter_default", false))
 				request.addQueryParameter("post_to_twitter", "1");
 			else
 				request.addQueryParameter("post_to_twitter", "0");
 			
 			// if post to facebook is enabled, post it
-			if (persistent_storage.getBoolean("gowalla_post_to_facebook", false))
+			if (persistent_storage.getBoolean("gowalla_post_to_facebook_default", false))
 				request.addQueryParameter("post_to_facebook", "1");
 			else
 				request.addQueryParameter("post_to_facebook", "0");

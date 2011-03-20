@@ -19,6 +19,7 @@ package com.davidivins.checkin4me.debug;
 import com.davidivins.checkin4me.core.Analytics;
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.core.StartProgramDelayer;
+import com.davidivins.checkin4me.core.UpdateManager;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
@@ -46,27 +47,18 @@ public class CheckIn4Me extends Activity
 	{
 		super.onCreate(saved_instance_state);
 		GeneratedResources.generate(this);
-		
 		setContentView(GeneratedResources.getLayout("checkin4me"));
-				
+		
+		// tracker
 		Analytics analytics = new Analytics(this);
 		GoogleAnalyticsTracker tracker = analytics.getTracker();
-        tracker.trackPageView("/checkin4me_debug");
-        tracker.dispatch();
-        tracker.stop();
+		tracker.trackPageView("/checkin4me_debug");
+		tracker.dispatch();
+		tracker.stop();
 		
-        // clear persistent_storage for this version
-//        SharedPreferences persistent_storage = PreferenceManager.getDefaultSharedPreferences(this);
-//        String clear_persistent_storage_tag = "VERSION_1.6_HAS_CLEARED_SETTINGS";
-//        
-//        if (persistent_storage.getBoolean(clear_persistent_storage_tag, false) == false)
-//        {
-//        	Editor persistent_storage_editor = persistent_storage.edit();
-//        	persistent_storage_editor.clear();
-//        	persistent_storage_editor.putBoolean(clear_persistent_storage_tag, true);
-//        	persistent_storage_editor.commit();
-//        }
-        
+		// stuff to do on first run of updated version
+		UpdateManager.performCleanInstallDefaultsIfNecessary(this);
+		UpdateManager.performUpdateIfNecessary(this);
 		runProgram();
 	}
 	
