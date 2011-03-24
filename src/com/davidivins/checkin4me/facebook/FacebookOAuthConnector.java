@@ -155,15 +155,7 @@ public class FacebookOAuthConnector implements OAuthConnector
 			request.addQueryParameter("client_id", config.getProperty("oauth_client_id", "OAUTH_CLIENT_ID_HERE"));
 			request.addQueryParameter("redirect_uri", oauth_redirect_uri);
 			request.addQueryParameter("client_secret", config.getProperty("oauth_client_secret", "OAUTH_CLIENT_SECRET_HERE"));
-			
-			try 
-			{
-				request.addQueryParameter("code", URLEncoder.encode(persistent_storage.getString("facebook_code", "FACEBOOK_CODE_HERE"), ENCODING));
-			} 
-			catch (UnsupportedEncodingException e) 
-			{
-				Log.e(TAG, ENCODING + " isn't a valid encoding!?");
-			}
+			request.addQueryParameterAndEncode("code", persistent_storage.getString("facebook_code", "CODE_HERE"));
 			
 			response = (OAuthResponse)request.execute();
 		}

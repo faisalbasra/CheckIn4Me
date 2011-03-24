@@ -154,7 +154,7 @@ public class GowallaOAuthConnector implements OAuthConnector
 			request.addQueryParameter("grant_type", "authorization_code");
 			request.addQueryParameter("client_id", config.getProperty("oauth_client_id"));
 			request.addQueryParameter("client_secret", config.getProperty("oauth_client_secret"));
-			request.addQueryParameter("code", persistent_storage.getString("gowalla_code", "-1"));
+			request.addQueryParameterAndEncode("code", persistent_storage.getString("gowalla_code", "CODE_HERE"));
 			request.addQueryParameter("redirect_uri", oauth_redirect_uri);
 			request.addQueryParameter("scope", config.getProperty("oauth_api_scope"));
 			
