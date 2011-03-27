@@ -179,6 +179,8 @@ public class Algorithms
 		name_variations.add(name.replace("'", ""));
 		name_variations.add(name.replace("-", " "));
 		name_variations.add(name.replace("-", ""));
+		name_variations.add(name.replace(".", ""));
+		name_variations.add(name.replace("'", ""));
 		name_variations.add(name.replaceAll("[^A-Za-z0-9]", ""));
 		
 		return name_variations;
