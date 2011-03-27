@@ -28,7 +28,7 @@ import android.os.SystemClock;
  */
 public class GPSTimeoutMonitor implements Runnable
 {
-	private static final int FIFTHTEEN_SECONDS = 15000;
+	private static final int TEN_SECONDS = 10000;
 	private GPSTimeoutListener activity;
 	private Handler handler;
 	 
@@ -48,7 +48,7 @@ public class GPSTimeoutMonitor implements Runnable
 	 */
 	public void run()
 	{
-		SystemClock.sleep(FIFTHTEEN_SECONDS);
+		SystemClock.sleep(TEN_SECONDS);
 		
 		if (null != handler)
 			handler.post(activity.getGPSTimeoutCallback());

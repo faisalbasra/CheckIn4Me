@@ -29,6 +29,7 @@ import com.davidivins.checkin4me.listeners.NetworkTimeoutListener;
 import com.davidivins.checkin4me.monitors.GPSTimeoutMonitor;
 import com.davidivins.checkin4me.monitors.NetworkTimeoutMonitor;
 import com.davidivins.checkin4me.runnables.LocationsRetriever;
+import com.davidivins.checkin4me.runnables.Toaster;
 import com.davidivins.checkin4me.util.CleanableProgressDialog;
 
 import android.app.AlertDialog;
@@ -83,6 +84,7 @@ public class NearbyPlaces extends ListActivity
 	private Runnable gps_timeout_callback                  = null;
 	private Runnable network_timeout_callback              = null;
 	private Runnable keyboard_gone_callback                = null;
+	private Runnable display_progress_dialog               = null;
 	private Handler handler                                = null;
 
 	private static ArrayList<Locale> current_locations     = null;
@@ -237,6 +239,14 @@ public class NearbyPlaces extends ListActivity
 			locations_retrieved_callback = null;
 		}
 		
+		if (null != display_progress_dialog)
+		{
+			if (null != handler)
+				handler.removeCallbacks(display_progress_dialog);
+			
+			display_progress_dialog = null;
+		}
+		
 		// cleanup timeout threads
 		killTimeouts();
 		
@@ -356,7 +366,7 @@ public class NearbyPlaces extends ListActivity
 				// keyboard (from a possible search) to be hidden first. if the progress
 				// dialog shows up before the keyboard is hidden, the dialog will be killed
 				// upon hiding the keyboard.
-				Runnable display_progress_dialog = new Runnable() 
+				display_progress_dialog = new Runnable() 
 				{ 
 					public void run()
 					{
@@ -364,7 +374,7 @@ public class NearbyPlaces extends ListActivity
 					}
 				};
 				
-				handler.postDelayed(display_progress_dialog, 700);//1000);
+				handler.postDelayed(display_progress_dialog, 700);
 			}
 		}
 		else
@@ -488,11 +498,22 @@ public class NearbyPlaces extends ListActivity
 	 */
 	private void setLocationsList()
 	{
-		if (0 < current_locations.size())
+		if (1 == current_locations.size())
+		{
+			LocaleAdapter adapter = new LocaleAdapter(
+					this, GeneratedResources.getLayout("nearby_place_row"), current_locations);
+			setListAdapter(adapter);
+			storeLocationAndViewDetails(0);
+		}
+		else if (0 < current_locations.size())
 		{
 			LocaleAdapter adapter = new LocaleAdapter(
 				this, GeneratedResources.getLayout("nearby_place_row"), current_locations);
 			setListAdapter(adapter);
+		}
+		else
+		{
+			this.setListAdapter(null);
 		}
 	}
 	
@@ -536,15 +557,29 @@ public class NearbyPlaces extends ListActivity
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
 	{
+		MenuInflater inflater = getMenuInflater();
+		boolean qr_scanner_installed = false;
+		
+		try 
+		{
+			getPackageManager().getPackageInfo("com.google.zxing.client.android", 0);
+			qr_scanner_installed = true;
+		} 
+		catch (Exception e) 
+		{
+			Log.d(TAG, "QR scanner not installed");
+		}
+		
 		// if no services are connected, don't display menu options
 		if (Services.getInstance(this).atLeastOneConnected())
 		{
-			MenuInflater inflater = getMenuInflater();
-			inflater.inflate(GeneratedResources.getMenu("nearby_places"), menu);
+			if (qr_scanner_installed)
+				inflater.inflate(GeneratedResources.getMenu("nearby_places_with_qr_scanner"), menu);
+			else
+				inflater.inflate(GeneratedResources.getMenu("nearby_places"), menu);
 		}
 		else
 		{
-			MenuInflater inflater = getMenuInflater();
 			inflater.inflate(GeneratedResources.getMenu("feedback_only"), menu);
 		}
 		
@@ -574,12 +609,21 @@ public class NearbyPlaces extends ListActivity
 		}
 		else if (GeneratedResources.getId("search") == id)
 		{
-			getParent().onSearchRequested(); // this has to go through the tabbed container
+			// this has to go through the tabbed container
+			getParent().onSearchRequested(); 
 			result = true;
 		}
 		else if (GeneratedResources.getId("feedback") == id)
 		{
 			startActivity(new Intent(this, Feedback.class));
+			result = true;
+		}
+		else if (GeneratedResources.getId("qr_code") == id)
+		{
+	        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+	        intent.setPackage("com.google.zxing.client.android");
+	        intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+	        startActivityForResult(intent, 0);
 			result = true;
 		}
 		else
@@ -588,6 +632,50 @@ public class NearbyPlaces extends ListActivity
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * onActivityResult
+	 * 
+	 * @param request_code
+	 * @param result_code
+	 * @param intent
+	 */
+	@Override
+	public void onActivityResult(int request_code, int result_code, Intent intent) 
+	{
+		super.onActivityResult(request_code, result_code, intent);
+		Log.i(TAG, "request_code = " + request_code);
+		Log.i(TAG, "result_code = " + result_code);
+
+		if (request_code == 0) 
+		{
+			if (result_code == RESULT_OK) 
+			{
+				String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+				Log.i(TAG, "format = " + format);
+				
+				if (format.equals("QR_CODE"))
+				{
+					current_query = intent.getStringExtra("SCAN_RESULT");
+					requestCoordinates(true);
+				}
+				else
+				{
+					Log.i(TAG, "not a QR_CODE");
+					Toaster toaster = new Toaster(this, "Not a QR Code");
+					handler.postDelayed(toaster, 500);
+				}
+			} 
+			else if (result_code == RESULT_CANCELED) 
+			{
+				Log.i(TAG, "cancelled");
+			}
+		}
+		else
+		{
+			Log.i(TAG, "something strange happened");
+		}
 	}
 
 	/**
@@ -600,11 +688,20 @@ public class NearbyPlaces extends ListActivity
 	 */
 	public void onItemClick(AdapterView<?> adapter_view, View view, int position, long arg3) 
 	{
+		storeLocationAndViewDetails(position);
+	}
+	
+	/**
+	 * storeLocationAndViewDetails
+	 * @param location_index
+	 */
+	public void storeLocationAndViewDetails(int location_index)
+	{
 		// get the settings and editor
 		SharedPreferences persistent_storage = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		// store selected location
-		Locale location = current_locations.get(position);
+		Locale location = current_locations.get(location_index);
 		location.store(persistent_storage);
 		
 		// load location details activity

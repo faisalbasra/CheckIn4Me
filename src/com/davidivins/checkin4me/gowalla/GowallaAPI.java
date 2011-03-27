@@ -323,6 +323,8 @@ public class GowallaAPI implements APIInterface
 		 */
 		synchronized private boolean setStatusFromJson(String json_string)
 		{
+			Log.i(TAG, "json_string = " + json_string);
+
 			// clear latest status
 			latest_checkin_status = false;
 			
@@ -365,7 +367,7 @@ public class GowallaAPI implements APIInterface
 				request.addQueryParameter("client_id", config.getProperty("oauth_client_id"));
 				request.addQueryParameter("client_secret", config.getProperty("oauth_client_secret"));
 				request.addQueryParameter("refresh_token", persistent_storage.getString("gowalla_refresh_token", "-1"));
-				
+
 				response = (OAuthResponse)request.execute();
 			}
 			else
@@ -381,6 +383,7 @@ public class GowallaAPI implements APIInterface
 		 */
 		private boolean setTokenFromJson(String json_string)
 		{
+			Log.i(TAG, "json_string = " + json_string);
 			Editor persistent_storage_editor = persistent_storage.edit();
 			boolean status = false;
 			
