@@ -19,13 +19,16 @@ package com.davidivins.checkin4me.core;
 import java.io.InputStream;
 import java.util.Properties;
 
-import com.admob.android.ads.AdManager;
-import com.admob.android.ads.AdView;
-import com.davidivins.checkin4me.listeners.AdListener;
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
+
+import com.davidivins.checkin4me.listeners.AdmobListener;
 
 import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,10 +36,15 @@ import android.widget.LinearLayout;
 
 public class Ad 
 {
-	private static final String TAG = "Ad";
-	private Activity activity;
-	private Bundle meta_data;
-	private static Properties config = null;
+	private static final String TAG          = "Ad";
+		
+	private Activity activity                = null;
+	private Bundle meta_data                 = null;
+	private Properties config                = null;
+	
+	private static Ad latest_instance        = null;
+	private AdView ad                        = null;
+	private static Location current_location = null;
 	
 	/**
 	 * Ad
@@ -45,6 +53,7 @@ public class Ad
 	 */
 	public Ad(Activity activity)
 	{
+		latest_instance = null;
 		this.activity = activity;
 		
 		try
@@ -62,28 +71,13 @@ public class Ad
 		if (null == meta_data || !meta_data.getBoolean("IS_PRO_VERSION", false))
 		{
 			initializeConfig();
-		
-			if (meta_data.getString("VERSION").equals("debug"))
-			{
-				AdManager.setTestDevices(new String[] { 
-						AdManager.TEST_EMULATOR,
-						config.getProperty("test_phone_id", "")
-					});
-			}
-			else
-			{
-				AdManager.setTestDevices(new String[] { 
-						AdManager.TEST_EMULATOR
-						//,config.getProperty("test_phone_id", "")
-					});
-			}
-		
-			AdManager.setPublisherId(config.getProperty("publisher_id", "-1"));
 		}
 		else
 		{
 			Log.i(TAG, "No ADMOB config file read. This is CheckIn4Me pro");
 		}
+		
+		latest_instance = this;
 	}
 	
 	/**
@@ -108,23 +102,54 @@ public class Ad
 	}
 	
 	/**
+	 * setLocation
+	 */
+	public static void setLocation(Location location)
+	{
+		current_location = location;
+		
+		// refresh the latest instance with new location
+		if (latest_instance != null)
+			latest_instance.refreshAd();
+	}
+	
+	/**
 	 * refreshAd
 	 */
 	public void refreshAd()
 	{
 		if (null == meta_data || !meta_data.getBoolean("IS_PRO_VERSION", false))
 		{
-			AdView ad = new AdView(activity);
-			
+			// get the main content view
 			LinearLayout main_layout = (LinearLayout)activity.findViewById(GeneratedResources.getId("main_layout"));
 			
 			if (null != main_layout)
 			{
-				main_layout.addView(ad, 0);
+				// if an ad doesn't exist yet, create it
+				if (null == ad)
+				{			
+					// create a new 
+					ad = new AdView(activity, AdSize.BANNER, config.getProperty("publisher_id", "-1"));
+					main_layout.addView(ad, 0);
+				}
+				
+				// create a new request
+				AdRequest request = new AdRequest();
+				
+				// put in testing mode if this is the debug version of the app
+				if (meta_data.getString("VERSION").equals("debug"))
+					request.setTesting(true);
+				
+				// set the user's current location
+				if (null != current_location)
+					request.setLocation(current_location);
+				
+				// set the ad visibility and listener
 				ad.setVisibility(View.VISIBLE);
-				ad.setAdListener(new AdListener());
-				ad.requestFreshAd();
-				ad.setRequestInterval(30);  // refresh ad every 30 seconds
+				ad.setAdListener(new AdmobListener());
+				
+				// load the ad
+				ad.loadAd(request);
 			}
 		}
 		else

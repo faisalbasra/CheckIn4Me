@@ -72,7 +72,7 @@ public class LocationsRetriever implements Runnable
 		locations_retrieved = Services.getInstance(activity).getAllLocations(query, longitude, latitude, persistent_storage);
 		
 		if (null != handler)
-			handler.post(listener.getLocationsRetrievedCallback());
+			handler.post(listener.getLocationsRetrievedCallback());		
 	}
 	
 	/**

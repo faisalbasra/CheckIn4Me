@@ -36,7 +36,7 @@ public class MainTabbedContainer extends TabActivity
 	public static final int SERVICE_CONNECTION_TAB   = 0;
 	public static final int NEARBY_PLACES_TAB        = 1;
 	public static final int SETTINGS_TAB             = 2;
-	
+		
 	public void onCreate(Bundle saved_instance_state) 
 	{
 		super.onCreate(saved_instance_state);

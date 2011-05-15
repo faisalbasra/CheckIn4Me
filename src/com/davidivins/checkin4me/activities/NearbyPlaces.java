@@ -19,6 +19,7 @@ package com.davidivins.checkin4me.activities;
 import java.util.ArrayList;
 
 import com.davidivins.checkin4me.adapters.LocaleAdapter;
+import com.davidivins.checkin4me.core.Ad;
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.core.Locale;
 import com.davidivins.checkin4me.core.Services;
@@ -64,12 +65,11 @@ import android.widget.AdapterView.OnItemClickListener;
  * @author david ivins
  */
 public class NearbyPlaces extends ListActivity 
-	implements LocationListener, OnItemClickListener, LocationsRetrieverListener, GPSTimeoutListener, 
-		NetworkTimeoutListener, CleanableProgressDialogListener
+	implements OnItemClickListener, LocationsRetrieverListener, GPSTimeoutListener, 
+		NetworkTimeoutListener, CleanableProgressDialogListener, LocationListener
 {
 	private static final String TAG = "NearbyPlaces";
 	
-	private static LocationManager location_manager        = null;
 	private static ProgressDialog progress_dialog          = null;
 	private Thread locations_thread                        = null;
 	private Thread gps_timeout_thread                      = null;
@@ -86,11 +86,11 @@ public class NearbyPlaces extends ListActivity
 	private Runnable display_progress_dialog               = null;
 	private Handler handler                                = null;
 
-	private static ArrayList<Locale> current_locations     = null;
-	private static String current_longitude                = null;
-	private static String current_latitude                 = null;
-	private static String current_query                    = null;
-	
+	private ArrayList<Locale> current_locations            = null;
+	private String current_longitude                       = null;
+	private String current_latitude                        = null;
+	private String current_query                           = null;
+		
 	/**
 	 * onCreate
 	 * 
@@ -157,10 +157,19 @@ public class NearbyPlaces extends ListActivity
 	}
 	
 	/**
+	 * onDestroy
+	 */
+	public void onDestroy()
+	{
+		super.onDestroy();
+		cleanUp();
+	}
+	
+	/**
 	 * setup
 	 */
 	private void setup()
-	{
+	{		
 		if (null == handler)
 			handler = new Handler();
 		
@@ -220,11 +229,12 @@ public class NearbyPlaces extends ListActivity
 	 */
 	private void cleanUp()
 	{
+		// cleanup timeout threads
+		timeouts_cancelled = true;
+		killTimeouts();
+		
 		// stop the gps when pausing the activity
-		if (location_manager == null)
-			location_manager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
-		location_manager.removeUpdates(this);
-		location_manager = null;
+		stopLocationListener();
 		
 		// cancel location thread		
 		if (null != locations_thread)
@@ -245,9 +255,6 @@ public class NearbyPlaces extends ListActivity
 			
 			display_progress_dialog = null;
 		}
-		
-		// cleanup timeout threads
-		killTimeouts();
 		
 		if (null != handler)
 			handler = null;
@@ -282,51 +289,6 @@ public class NearbyPlaces extends ListActivity
 			network_timeout_callback = null;
 		}
 	}
-	
-	/**
-	 * clearCurrentLocations
-	 */
-	public static void clearCurrentLocations()
-	{
-		current_locations = null;
-	}
-
-	/**
-	 * onLocationChanged
-	 * 
-	 * @param Locale location
-	 */
-	public void onLocationChanged(Location location) 
-	{
-		timeouts_cancelled = true;
-		killTimeouts();
-		
-		// cancel further updates
-		if (location_manager == null)
-			location_manager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
-		location_manager.removeUpdates(this);
-		location_manager = null;
-    	
-		// cancel acquiring location dialog and start retrieving locations dialog
-		startProgressDialog("Retrieving Locations...");
-		
-		// get longitude and latitude
-		current_longitude = Double.toString(location.getLongitude());
-		current_latitude = Double.toString(location.getLatitude());
-		
-		// get preferences for retrieving locations
-		SharedPreferences persistent_storage = PreferenceManager.getDefaultSharedPreferences(this);
-		Editor persistent_storage_editor = persistent_storage.edit();
-		
-		// store user's current longitude and latitude
-		persistent_storage_editor.putString("current_longitude", current_longitude);
-		persistent_storage_editor.putString("current_latitude", current_latitude);
-		persistent_storage_editor.commit();
-
-		locations_runnable = new LocationsRetriever(this, this, handler, current_query, current_longitude, current_latitude, persistent_storage);
-		locations_thread = new Thread(locations_runnable, "LocationThread");
-		locations_thread.start();
-	}
     
 	/**
 	 * requestCoordinates
@@ -338,13 +300,10 @@ public class NearbyPlaces extends ListActivity
 		
 		// cancel acquiring location dialog
 		cancelProgressDialog();
-		
-		// Acquire a reference to the system Location Manager
-		if (null == location_manager)
-			location_manager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
 
 		// check that gps location is available
-		if (location_manager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+		if (((LocationManager)this.getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(
+				LocationManager.GPS_PROVIDER))
 		{
 			// start timeout thread for gps coordinates
 			gps_timeout_runnable = new GPSTimeoutMonitor(this, handler);
@@ -352,7 +311,8 @@ public class NearbyPlaces extends ListActivity
 			gps_timeout_thread.start();
 				
 			// Register the listener with the Location Manager to receive location updates
-			location_manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+			stopLocationListener();
+			startGPSLocationListener();
 			
 			// display acquiring gps progress dialog
 			if (current_query == null || !query_changed)
@@ -392,21 +352,18 @@ public class NearbyPlaces extends ListActivity
 		// cancel acquiring location dialog
 		cancelProgressDialog();
 		
-		// Acquire a reference to the system Location Manager
-		if (null == location_manager)
-			location_manager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
-
 		// cancel updates for gps
-		location_manager.removeUpdates(this);
+		stopLocationListener();
 		
 		// get network info
 		NetworkInfo mobile_network_info = 
 			((ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE)).getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 		NetworkInfo wifi_network_info = 
 			((ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE)).getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-		
+				
 		// check that network location is available
-		if (location_manager.isProviderEnabled(LocationManager.NETWORK_PROVIDER) && 
+		if (((LocationManager)this.getSystemService(Context.LOCATION_SERVICE)).isProviderEnabled(
+				LocationManager.NETWORK_PROVIDER) && 
 				(mobile_network_info.isConnectedOrConnecting() || wifi_network_info.isConnectedOrConnecting()))
 		{
 			// start network location timeout
@@ -415,7 +372,7 @@ public class NearbyPlaces extends ListActivity
 			network_timeout_thread.start();
 		
 			// Register the listener with the Location Manager to receive location updates
-			location_manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, (LocationListener)this);
+			startNetworkLocationListener();
 			
 			// show acquiring network dialog
 			startProgressDialog("Acquiring Network Location...");
@@ -436,14 +393,48 @@ public class NearbyPlaces extends ListActivity
 		// cancel acquiring location dialog
 		cancelProgressDialog();
 		
-		// remove location updates
-		if (location_manager == null)
-			location_manager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
-		location_manager.removeUpdates(this);
-		location_manager = null;
+		// remove location updates 
+		stopLocationListener();
 		
 		// show error
 		Toast.makeText(this, "GPS and Network Connection Unavailable.", Toast.LENGTH_SHORT).show();
+	}
+	
+	/**
+	 * onLocationChanged
+	 * 
+	 * @param Locale location
+	 */
+	public void onLocationChanged(Location location) 
+	{
+		timeouts_cancelled = true;
+		killTimeouts();
+		
+		// set current location in ads
+		Ad.setLocation(location);
+		
+		// cancel further updates
+		((LocationManager)getSystemService(Context.LOCATION_SERVICE)).removeUpdates(this);
+    	
+		// cancel acquiring location dialog and start retrieving locations dialog
+		startProgressDialog("Retrieving Locations...");
+		
+		// get longitude and latitude
+		current_longitude = Double.toString(location.getLongitude());
+		current_latitude = Double.toString(location.getLatitude());
+		
+		// get preferences for retrieving locations
+		SharedPreferences persistent_storage = PreferenceManager.getDefaultSharedPreferences(this);
+		Editor persistent_storage_editor = persistent_storage.edit();
+		
+		// store user's current longitude and latitude
+		persistent_storage_editor.putString("current_longitude", current_longitude);
+		persistent_storage_editor.putString("current_latitude", current_latitude);
+		persistent_storage_editor.commit();
+
+		locations_runnable = new LocationsRetriever(this, this, handler, current_query, current_longitude, current_latitude, persistent_storage);
+		locations_thread = new Thread(locations_runnable, "LocationThread");
+		locations_thread.start();
 	}
 	
 	/**
@@ -697,12 +688,22 @@ public class NearbyPlaces extends ListActivity
 		// get the settings and editor
 		SharedPreferences persistent_storage = PreferenceManager.getDefaultSharedPreferences(this);
 		
-		// store selected location
-		Locale location = current_locations.get(location_index);
-		location.store(persistent_storage);
+		if (0 != current_locations.size() && 0 <= location_index && current_locations.size() > location_index)
+		{
+			// store selected location
+			Locale location = current_locations.get(location_index);
+			location.store(persistent_storage);
 		
-		// load location details activity
-		startActivity(new Intent(this, LocationDetails.class));
+			// load location details activity
+			startActivity(new Intent(this, LocationDetails.class));
+		}
+		else
+		{
+			// weird case showing up in crash logs.  refresh current state with new list
+			// FIXED by changing current locations to not be static
+			// leaving check in for sanity's sake
+			requestCoordinates(false);
+		}
 	}
 	
 	/**
@@ -721,6 +722,8 @@ public class NearbyPlaces extends ListActivity
 			switch (key_code) 
 			{
 				case KeyEvent.KEYCODE_HOME:
+				case KeyEvent.KEYCODE_BACK:
+				case KeyEvent.KEYCODE_SEARCH:
 					cleanUp();
 			}
 		}
@@ -780,7 +783,33 @@ public class NearbyPlaces extends ListActivity
 		
 		return result;
 	}
-
+	
+	/**
+	 * startGPSLocationListener
+	 */
+	public void startGPSLocationListener()
+	{
+		((LocationManager)this.getSystemService(Context.LOCATION_SERVICE)).requestLocationUpdates(
+				LocationManager.GPS_PROVIDER, 0, 0, this);
+	}
+	
+	/**
+	 * startNetworkLocationListener
+	 */
+	public void startNetworkLocationListener()
+	{
+		((LocationManager)this.getSystemService(Context.LOCATION_SERVICE)).requestLocationUpdates(
+				LocationManager.NETWORK_PROVIDER, 0, 0, this);
+	}
+	
+	/**
+	 * stopLocationListener
+	 */
+	public void stopLocationListener()
+	{
+		((LocationManager)this.getSystemService(Context.LOCATION_SERVICE)).removeUpdates(this);
+	}
+	
 	/**
 	 * unused interface methods of GPS
 	 */

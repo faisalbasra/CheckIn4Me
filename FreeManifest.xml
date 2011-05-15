@@ -38,16 +38,9 @@
 		<meta-data android:value="true" android:name="ADMOB_ALLOW_LOCATION_FOR_ADS" />
 		
 		<!-- AdMobActivity definition -->
-		<activity android:name="com.admob.android.ads.AdMobActivity" 
+		<activity android:name="com.google.ads.AdActivity" 
 			android:theme="@android:style/Theme.NoTitleBar.Fullscreen" 
 			android:configChanges="orientation|keyboard|keyboardHidden" />
-			
-		<!-- AdMob - Track Market installs -->
-		<receiver android:name="com.admob.android.ads.analytics.InstallReceiver" android:exported="true">
-			<intent-filter>
-				<action android:name="com.android.vending.INSTALL_REFERRER" />
-			</intent-filter>
-		</receiver>
 		
 		<!-- Analytics - Used for Install Referrer Tracking -->
 		<receiver android:name="com.google.android.apps.analytics.AnalyticsReceiver" android:exported="true">

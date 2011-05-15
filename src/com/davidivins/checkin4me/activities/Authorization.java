@@ -122,7 +122,7 @@ public class Authorization extends Activity
 					oauth_connector.storeNecessaryCompletionResponseData(persistent_storage_editor, response);
 					
 					// start nearby places event
-					NearbyPlaces.clearCurrentLocations(); // force refresh of nearby places when we return from authorization
+					//NearbyPlaces.clearCurrentLocations(); // force refresh of nearby places when we return from authorization - NOT NEEDED?
 					i.putExtra("tab_to_display", MainTabbedContainer.NEARBY_PLACES_TAB);
 					i = new Intent(this, MainTabbedContainer.class);
 					

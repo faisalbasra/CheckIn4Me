@@ -18,38 +18,67 @@ package com.davidivins.checkin4me.listeners;
 
 import android.util.Log;
 
-import com.admob.android.ads.AdView;
-import com.admob.android.ads.SimpleAdListener;
+import com.google.ads.Ad;
+import com.google.ads.AdListener;
+import com.google.ads.AdRequest.ErrorCode;
 
-public class AdListener extends SimpleAdListener
+/**
+ * AdmobListener
+ * 
+ * @author david
+ */
+public class AdmobListener implements AdListener
 {
-	private static final String TAG = "AdListener";
-	
-	@Override
-	public void onFailedToReceiveAd(AdView ad) 
+	private static final String TAG = "AdmobListener";
+
+	/**
+	 * onDismissScreen
+	 * 
+	 * @param ad
+	 */
+	public void onDismissScreen(Ad ad) 
 	{
-		Log.w (TAG, "failed to receive ad");
-		super.onFailedToReceiveAd(ad);
+		Log.i(TAG, "onDismissScreen called");
 	}
 
-	@Override
-	public void onFailedToReceiveRefreshedAd(AdView ad) 
+	/**
+	 * onFailedToReceiveAd
+	 * 
+	 * @param ad
+	 * @param error
+	 */
+	public void onFailedToReceiveAd(Ad ad, ErrorCode error) 
 	{
-		Log.w (TAG, "failed to receive refreshed ad");
-		super.onFailedToReceiveRefreshedAd(ad);
+		Log.i(TAG, "onFailedToReceiveAd called");
 	}
 
-	@Override
-	public void onReceiveAd(AdView ad) 
+	/**
+	 * onLeaveApplication
+	 * 
+	 * @param ad
+	 */
+	public void onLeaveApplication(Ad ad) 
 	{
-		Log.w (TAG, "receive ad");
-		super.onReceiveAd(ad);
+		Log.i(TAG, "onLeaveApplication called");
 	}
 
-	@Override
-	public void onReceiveRefreshedAd(AdView ad) 
+	/**
+	 * onPresentScreen
+	 * 
+	 * @param ad
+	 */
+	public void onPresentScreen(Ad ad) 
 	{
-		Log.w (TAG, "receive refreshed ad");
-		super.onReceiveRefreshedAd(ad);
+		Log.i(TAG, "onPresentScreen called");
+	}
+
+	/**
+	 * onReceiveAd
+	 * 
+	 * @param ad
+	 */
+	public void onReceiveAd(Ad ad) 
+	{
+		Log.i(TAG, "onReceiveAd called");
 	}
 }
