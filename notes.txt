@@ -5,3 +5,11 @@ latitude 39.829235
 Drexel
 longitude -75.190292
 latitude 39.957113
+
+Paris Ave (used firebug to get gowalla's and facebook's)
+http://m.foursquare.com/checkin?vid=1593871
+https://m.gowalla.com/#/checkins?spot_id=7134253
+
+http://touch.facebook.com/places/checkin.php?refid=17
+in header:
+Location:	http://touch.facebook.com/profile.php?id=131842916861087&refid=17&_rdr

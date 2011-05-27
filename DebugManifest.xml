@@ -49,11 +49,24 @@
 		</receiver>
 	
 		<!-- CheckIn4Me Activity -->
-		<activity android:name=".CheckIn4Me" android:label="@string/app_name_debug" android:theme="@android:style/Theme.NoTitleBar">
+		<activity android:name=".CheckIn4Me" android:label="@string/app_name_debug" android:theme="@android:style/Theme.NoTitleBar" android:launchMode="singleTop">
+
+			<intent-filter>
+				<action android:name="com.davidivins.checkin4me.action.NFC" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+			
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+ 				<data android:scheme="http" android:host="m.foursquare.com" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
+			
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
+			
 		</activity>
 
 		<!-- MainTabbedContainer Activity -->
@@ -67,11 +80,11 @@
 		</activity>
 		
 		<!-- ServiceConnection Activity -->
-		<activity android:name="com.davidivins.checkin4me.activities.ServiceConnection" android:label="@string/service_connection_title">
+		<activity android:name="com.davidivins.checkin4me.activities.ServiceConnection" android:label="@string/service_connection_title" android:launchMode="singleTop">
 		</activity>
     
     	<!-- Authorization Activity -->
-    	<activity android:name="com.davidivins.checkin4me.activities.Authorization" android:label="@string/authorization_title">
+    	<activity android:name="com.davidivins.checkin4me.activities.Authorization" android:label="@string/authorization_title" android:launchMode="singleTop">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.DEFAULT" />
@@ -85,15 +98,15 @@
 		</activity>
 		
 		<!-- LocationDetails Activity -->
-		<activity android:name="com.davidivins.checkin4me.activities.LocationDetails" android:label="@string/location_details_title">
+		<activity android:name="com.davidivins.checkin4me.activities.LocationDetails" android:label="@string/location_details_title" android:launchMode="singleTop">
 		</activity>
 		
 		<!-- Feedback Activity -->
-		<activity android:name="com.davidivins.checkin4me.activities.Feedback" android:label="@string/feedback_title" android:theme="@android:style/Theme.NoTitleBar">
+		<activity android:name="com.davidivins.checkin4me.activities.Feedback" android:label="@string/feedback_title" android:theme="@android:style/Theme.NoTitleBar" android:launchMode="singleTop">
 		</activity>
 		
 		<!-- Settings Activity -->
-		<activity android:name="com.davidivins.checkin4me.activities.Settings" android:label="@string/settings_title">
+		<activity android:name="com.davidivins.checkin4me.activities.Settings" android:label="@string/settings_title" android:launchMode="singleTop">
 		</activity>
 
 	</application>

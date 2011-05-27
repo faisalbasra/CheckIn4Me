@@ -105,9 +105,15 @@ public class NearbyPlaces extends ListActivity
 		// if no services are connected, display error message, otherwise, process intent
 		if (Services.getInstance(this).atLeastOneConnected())
 		{
+			String pending_query = null;
+			boolean query_changed = false;
+			
 			// check if latest query is a change from the previous query
-			String pending_query = getParent().getIntent().getStringExtra("query");
-			boolean query_changed = !queriesAreTheSame(current_query, pending_query);
+			if (null != getParent())
+			{
+				pending_query = getParent().getIntent().getStringExtra("query");
+				query_changed = !queriesAreTheSame(current_query, pending_query);
+			}
 			
 			// store pending query as current query
 			if (null != pending_query)

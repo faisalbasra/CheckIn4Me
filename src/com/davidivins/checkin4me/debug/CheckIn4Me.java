@@ -24,8 +24,11 @@ import com.davidivins.checkin4me.core.UpdateManager;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.widget.Toast;
 
 /**
  * CheckIn4Me **DEBUG**
@@ -34,6 +37,7 @@ import android.os.Handler;
  */
 public class CheckIn4Me extends Activity
 {
+	private static final String TAG = "CheckIn4Me";
 	private Handler handler = new Handler();
 	private StartProgramDelayer program = null;
 	
@@ -59,7 +63,6 @@ public class CheckIn4Me extends Activity
 		// stuff to do on first run of updated version
 		UpdateManager.performCleanInstallDefaultsIfNecessary(this);
 		UpdateManager.performUpdateIfNecessary(this);
-		runProgram();
 	}
 	
 	/**
@@ -69,7 +72,36 @@ public class CheckIn4Me extends Activity
 	public void onResume()
 	{
 		super.onResume();
-		runProgram();
+		determineAction();
+	}
+	
+	/**
+	 * determineAction
+	 */
+	private void determineAction()
+	{
+		Intent starting_intent = getIntent();
+		String url_from_data   = starting_intent.getDataString().trim();
+		String url_from_extra  = starting_intent.getStringExtra("url");
+		
+		Log.i(TAG, "action = " + starting_intent.getAction());
+
+		// handle intercepted url from qr code, nfc tag, etc.
+		if (starting_intent.getAction().equals(Intent.ACTION_VIEW))
+		{
+			// verify valid mobile url with id for at least one connected service
+			Toast.makeText(this, url_from_data, Toast.LENGTH_SHORT).show();
+		}
+		// handle url from NFC add-on app
+		else if (starting_intent.getAction().equals("com.davidivins.checkin4me.action.NFC"))
+		{
+			Toast.makeText(this, url_from_extra, Toast.LENGTH_SHORT).show();
+		}
+		// run regular program if no intercepts for add-on calls
+		else
+		{
+			runProgram();
+		}
 	}
 	
 	/**
