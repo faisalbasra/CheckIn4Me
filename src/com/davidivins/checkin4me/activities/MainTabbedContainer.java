@@ -41,6 +41,7 @@ public class MainTabbedContainer extends TabActivity
 	{
 		super.onCreate(saved_instance_state);
 		GeneratedResources.generate(this);
+		Log.i(TAG, "" + GeneratedResources.getLayout("main"));
 		setContentView(GeneratedResources.getLayout("main"));
 		
 		Resources res = getResources();  // Resource object to get Drawables

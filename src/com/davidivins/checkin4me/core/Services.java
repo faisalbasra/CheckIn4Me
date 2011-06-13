@@ -21,6 +21,7 @@ import java.util.HashMap;
 
 import com.davidivins.checkin4me.facebook.FacebookService;
 import com.davidivins.checkin4me.foursquare.FoursquareService;
+//import com.davidivins.checkin4me.google.GooglePlacesService;
 import com.davidivins.checkin4me.gowalla.GowallaService;
 import com.davidivins.checkin4me.interfaces.ServiceInterface;
 
@@ -53,6 +54,7 @@ public class Services
 		services = new ArrayList<ServiceInterface>();
 		services.add(new FacebookService(service_count++, persistent_storage, resources));
 		services.add(new FoursquareService(service_count++, persistent_storage, resources));
+		//services.add(new GooglePlacesService(service_count++, persistent_storage, resources));
 		services.add(new GowallaService(service_count++, persistent_storage, resources));
 	}
 	
@@ -185,7 +187,7 @@ public class Services
 			if (service.connected())
 			{
 				Log.i(TAG, "Creating thread for service " + service.getName());
-				threads.add(new Thread(service.getAPIInterface().getLocationThread(query, longitude, latitude, persistent_storage), service.getName()));
+				threads.add(new Thread(service.getAPIInterface().getLocationsThread(query, longitude, latitude, persistent_storage), service.getName()));
 			}
 		}
 		

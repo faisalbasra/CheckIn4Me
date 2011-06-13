@@ -64,7 +64,7 @@ public class FoursquareAPI implements APIInterface
 	}
 	
 	/**
-	 * getLocationThread
+	 * getLocationsThread
 	 * 
 	 * @param query
 	 * @param longitude
@@ -72,9 +72,9 @@ public class FoursquareAPI implements APIInterface
 	 * @param persistent_storage
 	 * @return LocationThread
 	 */
-	public Runnable getLocationThread(String query, String longitude, String latitude, SharedPreferences persistent_storage)
+	public Runnable getLocationsThread(String query, String longitude, String latitude, SharedPreferences persistent_storage)
 	{
-		return new LocationThread(query, longitude, latitude, persistent_storage);
+		return new LocationsThread(query, longitude, latitude, persistent_storage);
 	}
 	
 	/**
@@ -112,11 +112,11 @@ public class FoursquareAPI implements APIInterface
 	}
 	
 	/**
-	 * LocationThread
+	 * LocationsThread
 	 * 
 	 * @author david
 	 */
-	class LocationThread implements Runnable
+	class LocationsThread implements Runnable
 	{
 		private String query;
 		private String longitude;
@@ -124,13 +124,13 @@ public class FoursquareAPI implements APIInterface
 		private SharedPreferences persistent_storage;
 		
 		/**
-		 * LocationThread
+		 * LocationsThread
 		 * 
 		 * @param query
 		 * @param longitude
 		 * @param latitude
 		 */
-		LocationThread(String query, String longitude, String latitude, SharedPreferences persistent_storage)
+		LocationsThread(String query, String longitude, String latitude, SharedPreferences persistent_storage)
 		{
 			this.query     = query;
 			this.longitude = longitude;
