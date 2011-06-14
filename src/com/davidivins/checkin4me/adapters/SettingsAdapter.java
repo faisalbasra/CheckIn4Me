@@ -107,7 +107,7 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 	{
 		// Layout parameters for the ExpandableListView
 		AbsListView.LayoutParams lp = new AbsListView.LayoutParams(
-			ViewGroup.LayoutParams.MATCH_PARENT, 64);
+			ViewGroup.LayoutParams.FILL_PARENT, 64);
 
 		TextView textView = new TextView(activity);
 		textView.setLayoutParams(lp);
