@@ -32,7 +32,7 @@ import android.view.View.OnClickListener;
  */
 public class ServiceSetting implements OnClickListener
 {
-	private static final String TAG = "ServiceSetting";
+	private static final String TAG = ServiceSetting.class.getName();
 	private SharedPreferences persistent_storage;
 	private Editor persistent_storage_editor;
 	private String display_name;

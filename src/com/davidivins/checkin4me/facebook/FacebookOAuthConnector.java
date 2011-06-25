@@ -21,8 +21,8 @@ import java.net.URLEncoder;
 import java.util.Properties;
 import java.util.TreeMap;
 
+import com.davidivins.checkin4me.interfaces.OAuthConnectorInterface;
 import com.davidivins.checkin4me.oauth.OAuth2Request;
-import com.davidivins.checkin4me.oauth.OAuthConnector;
 import com.davidivins.checkin4me.oauth.OAuthResponse;
 
 import android.content.SharedPreferences;
@@ -35,9 +35,9 @@ import android.util.Log;
  * 
  * @author david ivins
  */
-public class FacebookOAuthConnector implements OAuthConnector
+public class FacebookOAuthConnector implements OAuthConnectorInterface
 {
-	private static final String TAG = "FacebookOAuthConnector";
+	private static final String TAG      = FacebookOAuthConnector.class.getName();
 	private static final String ENCODING = "ISO-8859-1";
 
 	private Properties config;

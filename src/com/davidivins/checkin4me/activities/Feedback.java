@@ -39,9 +39,9 @@ public class Feedback extends Activity
 	{
 		super.onCreate(saved_instance_state);
 		GeneratedResources.generate(this);
-
 		setContentView(GeneratedResources.getLayout("feedback"));
 
+		// display getSatisfaction page in web view
 	    WebView view = (WebView)findViewById(GeneratedResources.getId("feedback"));
 	    view.getSettings().setJavaScriptEnabled(true);
 	    view.loadUrl("https://getsatisfaction.com/checkin4me/");

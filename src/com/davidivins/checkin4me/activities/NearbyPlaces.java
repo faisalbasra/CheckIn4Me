@@ -68,7 +68,7 @@ public class NearbyPlaces extends ListActivity
 	implements OnItemClickListener, LocationsRetrieverListener, GPSTimeoutListener, 
 		NetworkTimeoutListener, CleanableProgressDialogListener, LocationListener
 {
-	private static final String TAG = "NearbyPlaces";
+	private static final String TAG                        = NearbyPlaces.class.getName();
 	
 	private static ProgressDialog progress_dialog          = null;
 	private Thread locations_thread                        = null;

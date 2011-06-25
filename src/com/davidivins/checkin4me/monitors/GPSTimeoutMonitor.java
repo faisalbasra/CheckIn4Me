@@ -20,6 +20,7 @@ import com.davidivins.checkin4me.listeners.GPSTimeoutListener;
 
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 
 /**
  * GPSTimeoutMonitor
@@ -28,7 +29,9 @@ import android.os.SystemClock;
  */
 public class GPSTimeoutMonitor implements Runnable
 {
+	private static final String TAG      = GPSTimeoutMonitor.class.getName();
 	private static final int TEN_SECONDS = 10000;
+	
 	private GPSTimeoutListener activity;
 	private Handler handler;
 	 
@@ -49,6 +52,8 @@ public class GPSTimeoutMonitor implements Runnable
 	public void run()
 	{
 		SystemClock.sleep(TEN_SECONDS);
+		
+		Log.i(TAG, "GPS Location Timeout");
 		
 		if (null != handler)
 			handler.post(activity.getGPSTimeoutCallback());

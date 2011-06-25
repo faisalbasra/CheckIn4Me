@@ -23,7 +23,7 @@ import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 import com.google.ads.AdView;
 
-import com.davidivins.checkin4me.listeners.AdmobListener;
+import com.davidivins.checkin4me.monitors.AdmobMonitor;
 
 import android.app.Activity;
 import android.content.pm.ApplicationInfo;
@@ -36,7 +36,7 @@ import android.widget.LinearLayout;
 
 public class Ad 
 {
-	private static final String TAG          = "Ad";
+	private static final String TAG          = Ad.class.getName();
 		
 	private Activity activity                = null;
 	private Bundle meta_data                 = null;
@@ -146,7 +146,7 @@ public class Ad
 				
 				// set the ad visibility and listener
 				ad.setVisibility(View.VISIBLE);
-				ad.setAdListener(new AdmobListener());
+				ad.setAdListener(new AdmobMonitor());
 				
 				// load the ad
 				ad.loadAd(request);

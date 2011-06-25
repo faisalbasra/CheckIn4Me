@@ -14,7 +14,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
 //*****************************************************************************
-package com.davidivins.checkin4me.listeners;
+package com.davidivins.checkin4me.monitors;
 
 import android.util.Log;
 
@@ -23,13 +23,13 @@ import com.google.ads.AdListener;
 import com.google.ads.AdRequest.ErrorCode;
 
 /**
- * AdmobListener
+ * AdmobMonitor
  * 
  * @author david
  */
-public class AdmobListener implements AdListener
+public class AdmobMonitor implements AdListener
 {
-	private static final String TAG = "AdmobListener";
+	private static final String TAG = AdmobMonitor.class.getName();
 
 	/**
 	 * onDismissScreen

@@ -41,7 +41,7 @@ import android.widget.TextView;
  */
 public class LocaleAdapter extends ArrayAdapter<Locale>
 {
-	//private static final String TAG = "LocaleAdapter";
+	//private static final String TAG = LocaleAdapter.class.getName();
 	private Context context;
 	private int row_resource_id;
 	private ArrayList<Locale> items;

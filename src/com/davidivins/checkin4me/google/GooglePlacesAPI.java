@@ -41,7 +41,7 @@ import android.util.Log;
  */
 public class GooglePlacesAPI implements APIInterface
 {
-	private static final String TAG = "GooglePlacesAPI";
+	private static final String TAG = GooglePlacesAPI.class.getName();
 	
 	private int service_id;
 	private Properties config;

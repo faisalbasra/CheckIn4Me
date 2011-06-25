@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.davidivins.checkin4me.core.ServiceSetting;
-import com.davidivins.checkin4me.oauth.OAuthConnector;
 
 /**
  * ServiceInterface
@@ -33,7 +32,7 @@ public interface ServiceInterface
 	abstract public String getName();
 	abstract public int getLogoDrawable();
 	abstract public int getIconDrawable();
-	abstract public OAuthConnector getOAuthConnector();
+	abstract public OAuthConnectorInterface getOAuthConnector();
 	abstract public APIInterface getAPIInterface();
 	abstract public boolean connected();
 	abstract public boolean hasSettings();

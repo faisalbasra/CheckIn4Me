@@ -43,7 +43,7 @@ import android.util.Log;
  */
 public class GowallaAPI implements APIInterface
 {
-	private static final String TAG = "GowallaAPI";
+	private static final String TAG = GowallaAPI.class.getName();
 	
 	private int service_id;
 	private Properties config;

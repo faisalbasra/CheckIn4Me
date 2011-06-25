@@ -38,7 +38,7 @@ import android.util.Log;
  */
 public class HTTPRequest extends Request 
 {
-	private static final String TAG               = "HTTPRequest";
+	private static final String TAG               = HTTPRequest.class.getName();
 	private static final String RESPONSE_ENCODING = "UTF-8";
 	
 	/**

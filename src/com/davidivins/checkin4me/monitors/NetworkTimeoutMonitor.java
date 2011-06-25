@@ -20,6 +20,7 @@ import com.davidivins.checkin4me.listeners.NetworkTimeoutListener;
 
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 
 /**
  * NetworkTimeoutMonitor
@@ -28,7 +29,9 @@ import android.os.SystemClock;
  */
 public class NetworkTimeoutMonitor implements Runnable
 {
+	private static final String TAG            = NetworkTimeoutMonitor.class.getName();
 	private static final int FIFTHTEEN_SECONDS = 15000;
+	
 	private NetworkTimeoutListener activity;
 	private Handler handler;
 	 
@@ -49,6 +52,8 @@ public class NetworkTimeoutMonitor implements Runnable
 	public void run()
 	{
 		SystemClock.sleep(FIFTHTEEN_SECONDS);
+		
+		Log.i(TAG, "Network Location Timeout");
 		
 		if (null != handler)
 			handler.post(activity.getNetworkTimeoutCallback());

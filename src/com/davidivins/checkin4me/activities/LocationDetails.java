@@ -32,9 +32,11 @@ import com.davidivins.checkin4me.core.Services;
 import com.davidivins.checkin4me.interfaces.ServiceInterface;
 import com.davidivins.checkin4me.listeners.CheckInRequesterListener;
 import com.davidivins.checkin4me.listeners.CleanableProgressDialogListener;
+import com.davidivins.checkin4me.monitors.CheckInMessageOnClickMonitor;
 import com.davidivins.checkin4me.runnables.CheckInRequester;
 import com.davidivins.checkin4me.util.CleanableProgressDialog;
 import com.davidivins.checkin4me.util.LocationOverlay;
+
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
@@ -50,7 +52,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -71,33 +72,24 @@ import android.widget.Toast;
 /**
  * LocationDetails
  * 
+ * displays location details to the user, prompts for check-in services and message.
+ * 
  * @author david ivins
  */
-public class LocationDetails extends MapActivity 
+public class LocationDetails 
+	extends MapActivity 
 	implements OnClickListener, DialogInterface.OnClickListener, CleanableProgressDialogListener, CheckInRequesterListener
 {
-	private static final String TAG = "LocationDetails";
-	private static Properties config = null;
-	
-	Locale current_location = new Locale();
+	private static final String TAG                  = LocationDetails.class.getName();
+	private static Properties config                 = null;
 	private static ProgressDialog checking_in_dialog = null;
-	
-	private final Handler handler = new Handler(); 
-	
-	private CheckInRequester checkin_requester = null;
-	private Thread checkin_thread;
-	
-	// acts as callback from thread
-	private Runnable process_check_in = new Runnable() 
-	{
-		public void run() 
-		{
-			checkInComplete();
-		}
-	};
-	
+	private CheckInRequester checkin_requester       = null;
+	private Locale current_location                  = new Locale();
+
 	/**
 	 * onCreate
+	 * 
+	 * called at the creation of the activity
 	 * 
 	 * @param saved_instance_state
 	 */
@@ -106,8 +98,6 @@ public class LocationDetails extends MapActivity
 	{
 		super.onCreate(saved_instance_state);
 		GeneratedResources.generate(this);
-		
-		// set the layout for the current activity
 		setContentView(GeneratedResources.getLayout("location_details"));
 		
 		// display ad if this is not the pro version
@@ -130,13 +120,183 @@ public class LocationDetails extends MapActivity
 			}
 		}
 		
+		//
+		// list stuff
+		//
+		ListView list_view = (ListView)findViewById(GeneratedResources.getId("location_service_list"));
+		list_view.setTextFilterEnabled(true);
+		list_view.setBackgroundColor(Color.WHITE);
+		list_view.setCacheColorHint(Color.WHITE);
+		
+		// 
+		// button stuff
+		//
+		Button button = (Button)findViewById(GeneratedResources.getId("check_in_button"));
+		button.setOnClickListener(this);
+		
+		//
+		// display any location details
+		//
+		displayLocationDetails();
+	}
+	
+	/**
+	 * onStop
+	 * 
+	 * called when the activity stops
+	 */
+	@Override
+	public void onStop()
+	{
+		super.onStop();
+		cleanUp();
+	}
+	
+	/**
+	 * onDialogInterruptedByBackButton
+	 * 
+	 * called when a cleanable dialog box displayed by this activity is cancelled by the back button 
+	 */
+	public void onDialogInterruptedByBackButton() 
+	{
+		cleanUp();
+	}
+
+	/**
+	 * onDialogInterruptedBySearchButton
+	 * 
+	 * called when a cleanable dialog box displayed by this activity is cancelled by the search button
+	 */
+	public void onDialogInterruptedBySearchButton() 
+	{
+		cleanUp();
+	}
+	
+	/**
+	 * cleanUp
+	 * 
+	 * cancels any running checkins and removes and visible dialog or progress boxes
+	 */
+	private void cleanUp()
+	{
+		// cancel check-in requester if running
+		if (null != checkin_requester)
+			checkin_requester.cancel(true);
+		
+		// cancel any dialogs showing
+		if (checking_in_dialog != null && checking_in_dialog.isShowing())
+			checking_in_dialog.cancel();
+	}
+	
+	/**
+	 * onClick
+	 * 
+	 * processes a check-in button click.
+	 * 
+	 * @param View view
+	 */
+	public void onClick(View view) 
+	{	
+		// inflate the alert view
+		LayoutInflater factory = LayoutInflater.from(this);
+		final View alert_view = factory.inflate(GeneratedResources.getLayout("checkin_message"), null);
+        
+		// build alert box, input box, and onclick listener
+		AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		EditText input = (EditText)alert_view.findViewById(GeneratedResources.getId("checkin_message_text_entry"));
+		CheckInMessageOnClickMonitor listener = new CheckInMessageOnClickMonitor(this, input);
+		
+		// set alert options
+		alert.setView(alert_view);
+		alert.setMessage("Check-In Message:");
+		alert.setPositiveButton("Check-In", listener); 
+		alert.setNegativeButton("Cancel", listener);
+		alert.show();
+	}
+
+	/**
+	 * checkIn
+	 * 
+	 * performs a check-in given a message and the latest location data
+	 * 
+	 * @param message
+	 */
+	public void checkIn(String message)
+	{
+		// cancel acquiring location dialog
+		if (null != checking_in_dialog && checking_in_dialog.isShowing())
+			checking_in_dialog.cancel();
+		
+		// get list and adapter
+		ListView list_view = (ListView)findViewById(GeneratedResources.getId("location_service_list"));
+		ServiceCheckListAdapter adapter = (ServiceCheckListAdapter)list_view.getAdapter();
+		
+		// retrieve services that were checked
+		HashMap<Integer, Boolean> services_checked = adapter.getServicesChecked();
+		ArrayList<Integer> service_ids = new ArrayList<Integer>();
+		
+		// pull out services checked
+		Set<Integer> keys = services_checked.keySet();
+		for(int key : keys)
+		{
+			Log.i(TAG, "service connected id = " + key + " and checked state = " + services_checked.get(key));
+			
+			if (services_checked.get(key))
+				service_ids.add(key);
+		}
+		
+		// if there are no services ids checked, do not check-in, alert the user
+		if (service_ids.isEmpty())
+		{
+			Toast.makeText(this, "No services checked", Toast.LENGTH_SHORT).show();
+		}
+		else
+		{	
+			// display progress dialog to user
+			checking_in_dialog = new CleanableProgressDialog(this, this, "", "Checking in...", true);
+			checking_in_dialog.show();
+			
+			// create and start check-in thread
+			SharedPreferences persistent_storage = PreferenceManager.getDefaultSharedPreferences(this);
+			
+			// start check-in thread
+			checkin_requester = new CheckInRequester(this, this, service_ids, current_location, message, persistent_storage);
+			checkin_requester.execute();
+		}
+	}
+	
+	/**
+	 * checkInComplete
+	 * 
+	 * called at the completion of a check-in. cleans up and displays status of check-in.
+	 * 
+	 * @param checkin_statuses
+	 */
+	public void checkInComplete(HashMap<Integer, Boolean> checkin_statuses)
+	{
+		Log.i(TAG, "received check-in completed.");
+    	
+		// clean up
+		cleanUp();
+		
+		// display check in dialog
+		displayCheckInStatus(checkin_statuses);
+	}
+	
+	/**
+	 * displayLocationDetails
+	 * 
+	 * displays the latest location details to the user
+	 */
+	public void displayLocationDetails()
+	{
 		// load current location from preferences
 		SharedPreferences persistent_storage = PreferenceManager.getDefaultSharedPreferences(this);
 		current_location.load(persistent_storage);
 		
 		// load current longitude and latitude from preferences
 		Double current_longitude = new Double(persistent_storage.getString("current_longitude", "0"));
-		Double current_latitude = new Double(persistent_storage.getString("current_latitude", "0"));
+		Double current_latitude  = new Double(persistent_storage.getString("current_latitude", "0"));
 		
 		// 
 		// location name and address
@@ -179,15 +339,9 @@ public class LocationDetails extends MapActivity
 		LinearLayout map_layout = (LinearLayout)findViewById(GeneratedResources.getId("location_map"));
 		map_layout.addView(location_map);
 		
+		// 
+		// service list stuff
 		//
-		// list stuff
-		//
-		ListView list_view = (ListView)findViewById(GeneratedResources.getId("location_service_list"));
-		list_view.setTextFilterEnabled(true);
-		list_view.setBackgroundColor(Color.WHITE);
-		list_view.setCacheColorHint(Color.WHITE);
-
-		// add services to list
 		HashMap<Integer, String> service_id_location_id_xref = current_location.getServiceIdToLocationIdMap();
 		ArrayList<ServiceInterface> services = new ArrayList<ServiceInterface>();
 		Set<Integer> service_ids = service_id_location_id_xref.keySet();
@@ -198,130 +352,15 @@ public class LocationDetails extends MapActivity
 		}
 		
 		ServiceCheckListAdapter adapter = new ServiceCheckListAdapter(this, GeneratedResources.getLayout("location_details_row"), services);
-		list_view.setAdapter(adapter);
 		
-		// 
-		// button stuff
-		//
-		Button button = (Button)findViewById(GeneratedResources.getId("check_in_button"));
-		button.setOnClickListener(this);
-	}
-	
-	/**
-	 * onStop
-	 */
-	@Override
-	public void onStop()
-	{
-		super.onStop();
-		cleanUp();
-	}
-	
-	/**
-	 * onClick
-	 * 
-	 * @param View view
-	 */
-	public void onClick(View view) 
-	{	
-		LayoutInflater factory = LayoutInflater.from(this);
-		final View alert_view = factory.inflate(GeneratedResources.getLayout("checkin_message"), null);
-        
-		AlertDialog.Builder alert = new AlertDialog.Builder(this);
-		EditText input = (EditText)alert_view.findViewById(GeneratedResources.getId("checkin_message_text_entry"));
-		
-		alert.setView(alert_view);
-		alert.setMessage("Check-In Message:");
-		alert.setPositiveButton("Check-In", new CheckInMessageOnClickListener(input)); 
-		alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int button) {
-				dialog.cancel();
-			}
-		});
-		
-		alert.show();
-	}
-
-	/**
-	 * checkIn
-	 * 
-	 * @param message
-	 */
-	private void checkIn(String message)
-	{
-		// cancel acquiring location dialog
-		if (null != checking_in_dialog && checking_in_dialog.isShowing())
-			checking_in_dialog.cancel();
-		
-		// get list and adapter
 		ListView list_view = (ListView)findViewById(GeneratedResources.getId("location_service_list"));
-		ServiceCheckListAdapter adapter = (ServiceCheckListAdapter)list_view.getAdapter();
-		
-		// retrieve services that were checked
-		HashMap<Integer, Boolean> services_checked = adapter.getServicesChecked();
-		ArrayList<Integer> service_ids = new ArrayList<Integer>();
-		
-		// pull out services checked
-		Set<Integer> keys = services_checked.keySet();
-		for(int key : keys)
-		{
-			Log.i(TAG, "service connected id = " + key + " and checked state = " + services_checked.get(key));
-			if (services_checked.get(key))
-				service_ids.add(key);
-		}
-		
-		if (service_ids.isEmpty())
-		{
-			Toast.makeText(this, "No services checked", Toast.LENGTH_SHORT).show();
-		}
-		else
-		{		
-			checking_in_dialog = new CleanableProgressDialog(this, this, "", "Checking in...", true);
-			checking_in_dialog.show();
-			
-			// create and start check-in thread
-			SharedPreferences persistent_storage = PreferenceManager.getDefaultSharedPreferences(this);
-			checkin_requester = new CheckInRequester(this, this, handler, service_ids, current_location, message, persistent_storage);
-			checkin_thread = new Thread(checkin_requester, "CheckInThread");
-			checkin_thread.start();
-		}
-	}
-	
-	/**
-	 * onDialogInterruptedByBackButton
-	 */
-	public void onDialogInterruptedByBackButton() 
-	{
-		cleanUp();
-	}
-
-	/**
-	 * onDialogInterruptedBySearchButton
-	 */
-	public void onDialogInterruptedBySearchButton() 
-	{
-		cleanUp();
-	}
-	
-	/**
-	 * cleanUp
-	 */
-	private void cleanUp()
-	{
-		// cancel thread
-		if (null != checkin_thread)
-		{
-			handler.removeCallbacks(process_check_in);
-			process_check_in = null;
-		}	
-		
-		// cancel any dialogs showing
-		if (checking_in_dialog != null && checking_in_dialog.isShowing())
-			checking_in_dialog.cancel();
+		list_view.setAdapter(adapter);
 	}
 	
 	/**
 	 * displayCheckInStatus
+	 * 
+	 * displayes the check-in status to the user.
 	 * 
 	 * @param HashMap<Integer, Boolean> checkin_statuses
 	 */
@@ -333,7 +372,7 @@ public class LocationDetails extends MapActivity
 		// retrieve layout inflater
 		LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
 		View layout = inflater.inflate(GeneratedResources.getLayout("checkin_dialog"), 
-				(ViewGroup)findViewById(GeneratedResources.getId("checkin_root")));
+			(ViewGroup)findViewById(GeneratedResources.getId("checkin_root")));
 		LinearLayout checkin_root_dialog = (LinearLayout)layout.findViewById(GeneratedResources.getId("checkin_root"));
 
 		// add service icons to layout
@@ -421,6 +460,8 @@ public class LocationDetails extends MapActivity
 	/**
 	 * onClick
 	 * 
+	 * returns the user to the location list when the ok button is hit in the check-in status dialog
+	 * 
 	 * @param DialogInterface dialog
 	 * @param int which
 	 */
@@ -433,6 +474,8 @@ public class LocationDetails extends MapActivity
 	/**
 	 * isRouteDisplayed
 	 * 
+	 * override for isRouteDisplayed.
+	 * 
 	 * @return boolean
 	 */
 	@Override
@@ -442,77 +485,9 @@ public class LocationDetails extends MapActivity
 	}
 	
 	/**
-	 * checkInComplete
-	 */
-	protected void checkInComplete()
-	{
-		Log.i(TAG, "received check-in completed.");
-    	
-		// join thread even though we know it already completed
-		try 
-		{
-			if (checkin_thread != null)
-				checkin_thread.join();
-		} 
-		catch (InterruptedException e) 
-		{
-			Log.i(TAG, "Thread interrupted already");
-		}
-		
-		// cancel acquiring location dialog
-		if (null != checking_in_dialog && checking_in_dialog.isShowing())
-			checking_in_dialog.cancel();
-		
-		HashMap<Integer, Boolean> checkin_statuses = checkin_requester.getCheckInStatuses();
-
-		// display check in dialog
-		displayCheckInStatus(checkin_statuses);
-	}
-
-	/**
-	 * getCheckInCompletedCallback
-	 * 
-	 * @return Runnable
-	 */
-	public Runnable getCheckInCompletedCallback() 
-	{
-		return process_check_in;
-	}
-	
-	/**
-	 * CheckInMessageOnClickListener
-	 */
-	private class CheckInMessageOnClickListener implements DialogInterface.OnClickListener
-	{
-		private EditText input;
-		
-		/**
-		 * CheckInMessageOnClickListener
-		 * 
-		 * @param input
-		 */
-		public CheckInMessageOnClickListener(EditText input)
-		{
-			this.input = input;
-		}
-		
-		/**
-		 * onClick
-		 * 
-		 * @param DialogInterface dialog
-		 * @param int button
-		 */
-		public void onClick(DialogInterface dialog, int button) 
-		{
-			String message = input.getText().toString().trim();
-			
-			Log.i(TAG,"message = *" + message + "*");
-			checkIn(message);
-		}
-	}
-	
-	/**
 	 * onCreateOptionsMenu
+	 * 
+	 * displays the options menu when the options button is selected.
 	 * 
 	 * @param Menu menu
 	 */
@@ -527,6 +502,8 @@ public class LocationDetails extends MapActivity
 	/**
 	 * onOptionsItemSelected
 	 * 
+	 * performs option selected by the user.
+	 * 
 	 * @param MenuItem item
 	 */
 	@Override
@@ -535,12 +512,12 @@ public class LocationDetails extends MapActivity
 		boolean result = false;		
 		int id = item.getItemId();
 		
+		// load feedback option
 		if (GeneratedResources.getId("feedback") == id)
 		{
 			startActivity(new Intent(this, Feedback.class));
 			result = true;
 		}
-
 		
 		return result;
 	}

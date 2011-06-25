@@ -21,8 +21,8 @@ import java.util.Properties;
 
 import org.json.JSONObject;
 
+import com.davidivins.checkin4me.interfaces.OAuthConnectorInterface;
 import com.davidivins.checkin4me.oauth.OAuth2Request;
-import com.davidivins.checkin4me.oauth.OAuthConnector;
 import com.davidivins.checkin4me.oauth.OAuthResponse;
 
 import android.content.SharedPreferences;
@@ -35,9 +35,9 @@ import android.util.Log;
  * 
  * @author david ivins
  */
-public class GooglePlacesOAuthConnector implements OAuthConnector
+public class GooglePlacesOAuthConnector implements OAuthConnectorInterface
 {
-	private static final String TAG      = "GooglePlacesOAuthConnector";
+	private static final String TAG      = GooglePlacesOAuthConnector.class.getName();
 	private static final String ENCODING = "ISO-8859-1";
 
 	private Properties config;

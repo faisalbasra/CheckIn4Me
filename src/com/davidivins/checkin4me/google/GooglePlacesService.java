@@ -33,8 +33,8 @@ import com.davidivins.checkin4me.comparators.ServiceSettingComparator;
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.core.ServiceSetting;
 import com.davidivins.checkin4me.interfaces.APIInterface;
+import com.davidivins.checkin4me.interfaces.OAuthConnectorInterface;
 import com.davidivins.checkin4me.interfaces.ServiceInterface;
-import com.davidivins.checkin4me.oauth.OAuthConnector;
 
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -47,12 +47,12 @@ import android.util.Log;
  */
 public class GooglePlacesService implements ServiceInterface
 {
-	private static final String TAG = "GooglePlacesService";
+	private static final String TAG = GooglePlacesService.class.getName();
 
 	private int service_id;
 	private SharedPreferences persistent_storage;
 	private Properties config;
-	private OAuthConnector oauth_connector;
+	private OAuthConnectorInterface oauth_connector;
 	private APIInterface api_adapter;
 	private HashMap<String, ServiceSetting> settings;
 	
@@ -159,7 +159,7 @@ public class GooglePlacesService implements ServiceInterface
 	 * 
 	 * @return OAuthConnector
 	 */
-	public OAuthConnector getOAuthConnector() 
+	public OAuthConnectorInterface getOAuthConnector() 
 	{
 		return oauth_connector;
 	}

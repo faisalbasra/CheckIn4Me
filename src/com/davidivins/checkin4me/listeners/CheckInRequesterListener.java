@@ -16,7 +16,9 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.listeners;
 
+import java.util.HashMap;
+
 public interface CheckInRequesterListener 
 {
-	abstract public Runnable getCheckInCompletedCallback();
+	abstract public void checkInComplete(HashMap<Integer, Boolean> services);
 }

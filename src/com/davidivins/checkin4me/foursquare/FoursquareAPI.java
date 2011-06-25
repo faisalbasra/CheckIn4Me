@@ -41,7 +41,7 @@ import android.util.Log;
  */
 public class FoursquareAPI implements APIInterface
 {
-	private static final String TAG = "FoursquareAPI";
+	private static final String TAG = FoursquareAPI.class.getName();
 	
 	private int service_id;
 	private Properties config;

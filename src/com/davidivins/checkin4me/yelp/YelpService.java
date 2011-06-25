@@ -35,7 +35,7 @@
 //*/
 //public class YelpService implements ServiceInterface
 //{
-//	private static final String TAG = "YelpService";
+//	private static final String TAG = YelpService.class.getName();
 //	
 //	private Properties config;
 //	private OAuthConnector oauth_connector;

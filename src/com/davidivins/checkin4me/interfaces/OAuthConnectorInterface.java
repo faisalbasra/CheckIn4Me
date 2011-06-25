@@ -14,8 +14,10 @@
 //    You should have received a copy of the GNU General Public License
 //    along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
 //*****************************************************************************
-package com.davidivins.checkin4me.oauth;
+package com.davidivins.checkin4me.interfaces;
 
+
+import com.davidivins.checkin4me.oauth.OAuthResponse;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -26,7 +28,7 @@ import android.net.Uri;
  * 
  * @author david ivins
  */
-public abstract interface OAuthConnector
+public abstract interface OAuthConnectorInterface
 {
 	abstract OAuthResponse beginHandshake();
 	abstract boolean isSuccessfulInitialResponse(OAuthResponse response);

@@ -42,7 +42,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
  */
 public class ServiceCheckListAdapter extends ArrayAdapter<ServiceInterface> implements OnCheckedChangeListener
 {
-	//private static final String TAG = "ServiceCheckListAdapter";
+	//private static final String TAG = ServiceCheckListAdapter.class.getName();
 	private Context context;
 	private int row_resource_id;
 	private ArrayList<ServiceInterface> items;

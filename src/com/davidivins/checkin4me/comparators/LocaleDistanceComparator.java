@@ -26,9 +26,7 @@ import com.davidivins.checkin4me.core.Locale;
 * @author david ivins
 */
 public class LocaleDistanceComparator implements Comparator<Locale>
-{
-	//static private final String TAG = "LocaleDistanceComparator";
-	
+{	
 	/**
 	* compare
 	* 

@@ -40,7 +40,7 @@ import android.widget.TextView;
  */
 public class SettingsAdapter extends BaseExpandableListAdapter 
 {
-	//private static final String TAG = "SettingsAdapter";
+	//private static final String TAG = SettingsAdapter.class.getName();
 	private Activity activity = null;
 	private ArrayList<String> groups;
 	private ArrayList<ArrayList<ServiceSetting>> children;

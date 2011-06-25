@@ -29,7 +29,7 @@ import android.util.Log;
  */
 public class MetaData 
 {
-	private static final String TAG    = "MetaData";
+	private static final String TAG    = MetaData.class.getName();
 	private static Bundle meta_data    = null;
 	private static boolean good_bundle = false;
 	

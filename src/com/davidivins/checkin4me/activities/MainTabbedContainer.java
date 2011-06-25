@@ -30,7 +30,7 @@ import com.davidivins.checkin4me.core.Services;
 
 public class MainTabbedContainer extends TabActivity
 {
-	private static final String TAG                  = "MainTabbedContainer";
+	private static final String TAG                  = MainTabbedContainer.class.getName();
 
 	// tabs
 	public static final int SERVICE_CONNECTION_TAB   = 0;

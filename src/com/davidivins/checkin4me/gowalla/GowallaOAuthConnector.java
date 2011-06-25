@@ -21,8 +21,8 @@ import java.util.Properties;
 
 import org.json.JSONObject;
 
+import com.davidivins.checkin4me.interfaces.OAuthConnectorInterface;
 import com.davidivins.checkin4me.oauth.OAuth2Request;
-import com.davidivins.checkin4me.oauth.OAuthConnector;
 import com.davidivins.checkin4me.oauth.OAuthResponse;
 
 import android.content.SharedPreferences;
@@ -35,9 +35,9 @@ import android.util.Log;
  * 
  * @author david ivins
  */
-public class GowallaOAuthConnector implements OAuthConnector
+public class GowallaOAuthConnector implements OAuthConnectorInterface
 {
-	private static final String TAG = "GowallaOAuthConnector";
+	private static final String TAG      = GowallaOAuthConnector.class.getName();
 	private static final String ENCODING = "ISO-8859-1";
 
 	private Properties config;

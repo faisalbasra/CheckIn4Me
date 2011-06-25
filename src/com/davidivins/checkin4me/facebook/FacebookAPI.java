@@ -41,7 +41,7 @@ import android.util.Log;
  */
 public class FacebookAPI implements APIInterface
 {
-	private static final String TAG = "FacebookAPI";
+	private static final String TAG = FacebookAPI.class.getName();
 	
 	private int service_id;
 	private Properties config;
