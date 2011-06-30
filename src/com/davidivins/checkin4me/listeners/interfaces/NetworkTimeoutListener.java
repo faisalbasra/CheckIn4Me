@@ -14,9 +14,9 @@
 //    You should have received a copy of the GNU General Public License
 //    along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
 //*****************************************************************************
-package com.davidivins.checkin4me.listeners;
+package com.davidivins.checkin4me.listeners.interfaces;
 
-public interface LocationsRetrieverListener 
+public interface NetworkTimeoutListener 
 {
-	abstract public Runnable getLocationsRetrievedCallback();
+	abstract public void NetworkTimeout();
 }

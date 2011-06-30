@@ -23,7 +23,7 @@ import com.google.ads.AdRequest;
 import com.google.ads.AdSize;
 import com.google.ads.AdView;
 
-import com.davidivins.checkin4me.monitors.AdmobMonitor;
+import com.davidivins.checkin4me.listeners.implementations.AdmobListener;
 
 import android.app.Activity;
 import android.content.pm.ApplicationInfo;
@@ -146,7 +146,7 @@ public class Ad
 				
 				// set the ad visibility and listener
 				ad.setVisibility(View.VISIBLE);
-				ad.setAdListener(new AdmobMonitor());
+				ad.setAdListener(new AdmobListener());
 				
 				// load the ad
 				ad.loadAd(request);

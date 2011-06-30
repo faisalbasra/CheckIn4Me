@@ -14,11 +14,13 @@
 //    You should have received a copy of the GNU General Public License
 //    along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
 //*****************************************************************************
-package com.davidivins.checkin4me.listeners;
+package com.davidivins.checkin4me.listeners.interfaces;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
-public interface CheckInRequesterListener 
+import com.davidivins.checkin4me.core.Locale;
+
+public interface LocationsRetrieverListener 
 {
-	abstract public void checkInComplete(HashMap<Integer, Boolean> services);
+	abstract public void updateLocations(ArrayList<Locale> locations);
 }

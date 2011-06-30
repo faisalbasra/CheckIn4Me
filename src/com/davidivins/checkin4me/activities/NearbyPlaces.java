@@ -23,13 +23,13 @@ import com.davidivins.checkin4me.core.Ad;
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.core.Locale;
 import com.davidivins.checkin4me.core.Services;
-import com.davidivins.checkin4me.listeners.CleanableProgressDialogListener;
-import com.davidivins.checkin4me.listeners.GPSTimeoutListener;
-import com.davidivins.checkin4me.listeners.LocationsRetrieverListener;
-import com.davidivins.checkin4me.listeners.NetworkTimeoutListener;
-import com.davidivins.checkin4me.monitors.GPSTimeoutMonitor;
-import com.davidivins.checkin4me.monitors.NetworkTimeoutMonitor;
-import com.davidivins.checkin4me.runnables.LocationsRetriever;
+import com.davidivins.checkin4me.listeners.interfaces.CleanableProgressDialogListener;
+import com.davidivins.checkin4me.listeners.interfaces.GPSTimeoutListener;
+import com.davidivins.checkin4me.listeners.interfaces.LocationsRetrieverListener;
+import com.davidivins.checkin4me.listeners.interfaces.NetworkTimeoutListener;
+import com.davidivins.checkin4me.threads.GPSTimeoutMonitor;
+import com.davidivins.checkin4me.threads.LocationsRetriever;
+import com.davidivins.checkin4me.threads.NetworkTimeoutMonitor;
 import com.davidivins.checkin4me.util.CleanableProgressDialog;
 
 import android.app.AlertDialog;
@@ -71,18 +71,11 @@ public class NearbyPlaces extends ListActivity
 	private static final String TAG                        = NearbyPlaces.class.getName();
 	
 	private static ProgressDialog progress_dialog          = null;
-	private Thread locations_thread                        = null;
-	private Thread gps_timeout_thread                      = null;
-	private Thread network_timeout_thread                  = null;
-	private LocationsRetriever locations_runnable          = null;
-	private GPSTimeoutMonitor gps_timeout_runnable         = null;
-	private NetworkTimeoutMonitor network_timeout_runnable = null;
-	private boolean timeouts_cancelled                     = false;
 	
-	private Runnable locations_retrieved_callback          = null;
-	private Runnable gps_timeout_callback                  = null;
-	private Runnable network_timeout_callback              = null;
-	private Runnable keyboard_gone_callback                = null;
+	private LocationsRetriever locations_retriever         = null;
+	private GPSTimeoutMonitor gps_timeout_monitor          = null;
+	private NetworkTimeoutMonitor network_timeout_monitor  = null;
+
 	private Runnable display_progress_dialog               = null;
 	private Handler handler                                = null;
 
@@ -90,6 +83,7 @@ public class NearbyPlaces extends ListActivity
 	private String current_longitude                       = null;
 	private String current_latitude                        = null;
 	private String current_query                           = null;
+	
 		
 	/**
 	 * onCreate
@@ -101,6 +95,9 @@ public class NearbyPlaces extends ListActivity
 	{
 		super.onCreate(saved_instance_state);
 		GeneratedResources.generate(this);
+		
+		// temp fix until this is turned into an async task
+		handler = new Handler();
 		
 		// if no services are connected, display error message, otherwise, process intent
 		if (Services.getInstance(this).atLeastOneConnected())
@@ -172,86 +169,21 @@ public class NearbyPlaces extends ListActivity
 	}
 	
 	/**
-	 * setup
-	 */
-	private void setup()
-	{		
-		if (null == handler)
-			handler = new Handler();
-		
-		// acts as callback from locations thread
-		if (null == locations_retrieved_callback)
-		{
-			locations_retrieved_callback = new Runnable() 
-			{
-				public void run() 
-				{
-					newLocationsAvailable();
-				}
-			};
-		}
-		
-		// acts as callback from gps thread
-		if (null == gps_timeout_callback)
-		{
-			gps_timeout_callback = new Runnable()
-			{
-				public void run()
-				{
-					if (!timeouts_cancelled)
-						GPSTimeout();
-				}
-			};
-		}
-		
-		// acts as callback from network thread
-		if (null == network_timeout_callback)
-		{
-			network_timeout_callback = new Runnable()
-			{
-				public void run()
-				{
-					if (!timeouts_cancelled)
-						NetworkTimeout();
-				}
-			};
-		}
-		
-		// acts as callback from keyboard gone event
-		if (null == keyboard_gone_callback)
-		{
-			keyboard_gone_callback = new Runnable()
-			{
-				public void run()
-				{
-					NetworkTimeout();
-				}
-			};
-		}
-	}
-	
-	/**
 	 * cleanUp
 	 */
 	private void cleanUp()
 	{
-		// cleanup timeout threads
-		timeouts_cancelled = true;
+		// kill any running timeout threads
 		killTimeouts();
 		
 		// stop the gps when pausing the activity
 		stopLocationListener();
 		
 		// cancel location thread		
-		if (null != locations_thread)
+		if (null != locations_retriever)
 		{
-			if (null != handler)
-				handler.removeCallbacks(locations_retrieved_callback);
-			
-			if (null != locations_runnable)
-				locations_runnable.destroyHandler();
-			
-			locations_retrieved_callback = null;
+			locations_retriever.cancel(true);
+			locations_retriever = null;
 		}
 		
 		if (null != display_progress_dialog)
@@ -274,25 +206,18 @@ public class NearbyPlaces extends ListActivity
 	 */
 	private void killTimeouts()
 	{
-		if (null != gps_timeout_thread)
+		// cancel and delete gps timeout monitor thread if it exists
+		if (null != gps_timeout_monitor)
 		{
-			if (null != handler)
-				handler.removeCallbacks(gps_timeout_callback);
-			
-			if (null != gps_timeout_runnable)
-				gps_timeout_runnable.destroyHandler();
-			gps_timeout_callback = null;
+			gps_timeout_monitor.cancel(true);
+			gps_timeout_monitor = null;
 		}
 		
-		if (null != network_timeout_thread)
+		// cancel and delete network timeout monitor thread if it exists
+		if (null != network_timeout_monitor)
 		{
-			if (null != handler)
-				handler.removeCallbacks(network_timeout_callback);
-			
-			if (null != network_timeout_runnable)
-				network_timeout_runnable.destroyHandler();
-			
-			network_timeout_callback = null;
+			network_timeout_monitor.cancel(true);
+			network_timeout_monitor = null;
 		}
 	}
     
@@ -300,10 +225,7 @@ public class NearbyPlaces extends ListActivity
 	 * requestCoordinates
 	 */
 	public void requestCoordinates(boolean query_changed)
-	{
-		setup();
-		timeouts_cancelled = false;
-		
+	{		
 		// cancel acquiring location dialog
 		cancelProgressDialog();
 
@@ -312,9 +234,8 @@ public class NearbyPlaces extends ListActivity
 				LocationManager.GPS_PROVIDER))
 		{
 			// start timeout thread for gps coordinates
-			gps_timeout_runnable = new GPSTimeoutMonitor(this, handler);
-			gps_timeout_thread = new Thread(gps_timeout_runnable, "GPSTimeoutMonitor");
-			gps_timeout_thread.start();
+			gps_timeout_monitor = new GPSTimeoutMonitor(this);
+			gps_timeout_monitor.execute();
 				
 			// Register the listener with the Location Manager to receive location updates
 			stopLocationListener();
@@ -373,9 +294,8 @@ public class NearbyPlaces extends ListActivity
 				(mobile_network_info.isConnectedOrConnecting() || wifi_network_info.isConnectedOrConnecting()))
 		{
 			// start network location timeout
-			network_timeout_runnable = new NetworkTimeoutMonitor(this, handler);
-			network_timeout_thread = new Thread(network_timeout_runnable, "NetworkTimeoutMonitor");
-			network_timeout_thread.start();
+			network_timeout_monitor = new NetworkTimeoutMonitor(this);
+			network_timeout_monitor.execute();
 		
 			// Register the listener with the Location Manager to receive location updates
 			startNetworkLocationListener();
@@ -413,7 +333,7 @@ public class NearbyPlaces extends ListActivity
 	 */
 	public void onLocationChanged(Location location) 
 	{
-		timeouts_cancelled = true;
+		// kill any running timeout threads
 		killTimeouts();
 		
 		// set current location in ads
@@ -427,31 +347,28 @@ public class NearbyPlaces extends ListActivity
 		
 		// get longitude and latitude
 		current_longitude = Double.toString(location.getLongitude());
-		current_latitude = Double.toString(location.getLatitude());
+		current_latitude  = Double.toString(location.getLatitude());
 		
 		// get preferences for retrieving locations
 		SharedPreferences persistent_storage = PreferenceManager.getDefaultSharedPreferences(this);
-		Editor persistent_storage_editor = persistent_storage.edit();
+		Editor persistent_storage_editor     = persistent_storage.edit();
 		
 		// store user's current longitude and latitude
 		persistent_storage_editor.putString("current_longitude", current_longitude);
 		persistent_storage_editor.putString("current_latitude", current_latitude);
 		persistent_storage_editor.commit();
 
-		locations_runnable = new LocationsRetriever(this, this, handler, current_query, current_longitude, current_latitude, persistent_storage);
-		locations_thread = new Thread(locations_runnable, "LocationThread");
-		locations_thread.start();
+		// create locations retriever thread		
+		locations_retriever = new LocationsRetriever(this, this, current_query, current_longitude, current_latitude, persistent_storage);
+		locations_retriever.execute();
 	}
 	
-	/**
-	 * newLocationsAvailable
-	 */
-	public void newLocationsAvailable()
+	public void updateLocations(ArrayList<Locale> locations) 
 	{
 		Log.i(TAG, "received new location data.");
 		
 		// setup list for retrieved locations
-		current_locations = locations_runnable.getLocationsRetrieved();
+		current_locations = locations;
 		
 		// set locations list
 		setLocationsList();
@@ -511,38 +428,6 @@ public class NearbyPlaces extends ListActivity
 		{
 			this.setListAdapter(null);
 		}
-	}
-	
-	/**
-	 * getLocationsRetrievedCallback
-	 */
-	public Runnable getLocationsRetrievedCallback()
-	{
-		return locations_retrieved_callback;
-	}
-	
-	/**
-	 * getGPSTimeoutCallback
-	 */
-	public Runnable getGPSTimeoutCallback()
-	{
-		return gps_timeout_callback;
-	}
-	
-	/**
-	 * getNetworkTimeoutCallback
-	 */
-	public Runnable getNetworkTimeoutCallback()
-	{
-		return network_timeout_callback;
-	}
-	
-	/**
-	 * getKeyboardGoneCallback
-	 */
-	public Runnable getKeyboardGoneCallback()
-	{
-		return keyboard_gone_callback;
 	}
 	
 	/**
@@ -761,7 +646,7 @@ public class NearbyPlaces extends ListActivity
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
 		alert.setMessage("Would you like to clear your current search of \"" + current_query + "\" before refreshing?");
-		alert.setPositiveButton("Yes",new DialogInterface.OnClickListener() {
+		alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int button) {
 				current_query = null;
 				requestCoordinates(false);
@@ -819,7 +704,7 @@ public class NearbyPlaces extends ListActivity
 	/**
 	 * unused interface methods of GPS
 	 */
-	public void onStatusChanged(String provider, int status, Bundle extras) {}
-	public void onProviderEnabled(String provider) {}
-	public void onProviderDisabled(String provider) {}
+	public void onStatusChanged(String provider, int status, Bundle extras) { }
+	public void onProviderEnabled(String provider)                          { }
+	public void onProviderDisabled(String provider)                         { }
 }

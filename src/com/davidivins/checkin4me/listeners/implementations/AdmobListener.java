@@ -14,56 +14,71 @@
 //    You should have received a copy of the GNU General Public License
 //    along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
 //*****************************************************************************
-package com.davidivins.checkin4me.monitors;
+package com.davidivins.checkin4me.listeners.implementations;
 
-import com.davidivins.checkin4me.listeners.GPSTimeoutListener;
-
-import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Log;
 
+import com.google.ads.Ad;
+import com.google.ads.AdListener;
+import com.google.ads.AdRequest.ErrorCode;
+
 /**
- * GPSTimeoutMonitor
+ * AdmobListener
  * 
  * @author david
  */
-public class GPSTimeoutMonitor implements Runnable
+public class AdmobListener implements AdListener
 {
-	private static final String TAG      = GPSTimeoutMonitor.class.getName();
-	private static final int TEN_SECONDS = 10000;
-	
-	private GPSTimeoutListener activity;
-	private Handler handler;
-	 
+	private static final String TAG = AdmobListener.class.getName();
+
 	/**
-	 * GPSTimeoutMonitor
+	 * onDismissScreen
 	 * 
-	 * @param GPSTimeoutListener
+	 * @param ad
 	 */
-	public GPSTimeoutMonitor(GPSTimeoutListener activity, Handler handler)
+	public void onDismissScreen(Ad ad) 
 	{
-		this.activity = activity;
-		this.handler = handler;
+		Log.i(TAG, "onDismissScreen called");
 	}
-	
+
 	/**
-	 * run
+	 * onFailedToReceiveAd
+	 * 
+	 * @param ad
+	 * @param error
 	 */
-	public void run()
+	public void onFailedToReceiveAd(Ad ad, ErrorCode error) 
 	{
-		SystemClock.sleep(TEN_SECONDS);
-		
-		Log.i(TAG, "GPS Location Timeout");
-		
-		if (null != handler)
-			handler.post(activity.getGPSTimeoutCallback());
+		Log.i(TAG, "onFailedToReceiveAd called");
 	}
-	
+
 	/**
-	 * destroyHandler
+	 * onLeaveApplication
+	 * 
+	 * @param ad
 	 */
-	public void destroyHandler()
+	public void onLeaveApplication(Ad ad) 
 	{
-		handler = null;
+		Log.i(TAG, "onLeaveApplication called");
+	}
+
+	/**
+	 * onPresentScreen
+	 * 
+	 * @param ad
+	 */
+	public void onPresentScreen(Ad ad) 
+	{
+		Log.i(TAG, "onPresentScreen called");
+	}
+
+	/**
+	 * onReceiveAd
+	 * 
+	 * @param ad
+	 */
+	public void onReceiveAd(Ad ad) 
+	{
+		Log.i(TAG, "onReceiveAd called");
 	}
 }

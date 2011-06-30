@@ -14,9 +14,11 @@
 //    You should have received a copy of the GNU General Public License
 //    along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
 //*****************************************************************************
-package com.davidivins.checkin4me.listeners;
+package com.davidivins.checkin4me.listeners.interfaces;
 
-public interface GPSTimeoutListener 
+import java.util.HashMap;
+
+public interface CheckInRequesterListener 
 {
-	abstract public Runnable getGPSTimeoutCallback();
+	abstract public void checkInComplete(HashMap<Integer, Boolean> services);
 }

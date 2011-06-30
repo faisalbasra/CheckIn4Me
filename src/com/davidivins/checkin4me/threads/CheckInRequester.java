@@ -14,7 +14,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
 //*****************************************************************************
-package com.davidivins.checkin4me.runnables;
+package com.davidivins.checkin4me.threads;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ import android.os.AsyncTask;
 
 import com.davidivins.checkin4me.core.Locale;
 import com.davidivins.checkin4me.core.Services;
-import com.davidivins.checkin4me.listeners.CheckInRequesterListener;
+import com.davidivins.checkin4me.listeners.interfaces.CheckInRequesterListener;
 
 /**
  * CheckInRequester
@@ -71,7 +71,7 @@ public class CheckInRequester extends AsyncTask<Void, Void, HashMap<Integer, Boo
 	 * @return a hash map of ints and bools representing services and their statuses
 	 */
 	@Override
-	protected HashMap<Integer, Boolean> doInBackground(Void... params)
+	protected HashMap<Integer, Boolean> doInBackground(Void ... params)
 	{
 		return Services.getInstance(activity).checkIn(service_ids, location, message, persistent_storage);
     }

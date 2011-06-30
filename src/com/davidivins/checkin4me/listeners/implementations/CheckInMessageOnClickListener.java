@@ -14,7 +14,7 @@
 //    You should have received a copy of the GNU General Public License
 //    along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
 //*****************************************************************************
-package com.davidivins.checkin4me.monitors;
+package com.davidivins.checkin4me.listeners.implementations;
 
 import com.davidivins.checkin4me.activities.LocationDetails;
 
@@ -23,22 +23,22 @@ import android.util.Log;
 import android.widget.EditText;
 	
 /**
- * CheckInMessageOnClickMonitor
+ * CheckInMessageOnClickListener
  * 
  * processes button clicks when the user is adding a message to a check-in.
  */
-public class CheckInMessageOnClickMonitor implements DialogInterface.OnClickListener
+public class CheckInMessageOnClickListener implements DialogInterface.OnClickListener
 {
-	private static final String TAG = CheckInMessageOnClickMonitor.class.getName();
+	private static final String TAG = CheckInMessageOnClickListener.class.getName();
 	private LocationDetails activity;
 	private EditText input;
 	
 	/**
-	 * CheckInMessageOnClickMonitor
+	 * CheckInMessageOnClickListener
 	 * 
 	 * @param input
 	 */
-	public CheckInMessageOnClickMonitor(LocationDetails activity, EditText input)
+	public CheckInMessageOnClickListener(LocationDetails activity, EditText input)
 	{
 		this.activity = activity;
 		this.input    = input;

@@ -14,15 +14,9 @@
 //    You should have received a copy of the GNU General Public License
 //    along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
 //*****************************************************************************
-package com.davidivins.checkin4me.listeners;
+package com.davidivins.checkin4me.listeners.interfaces;
 
-/**
- * CleanableProgressDialogListener
- * 
- * @author david
- */
-public interface CleanableProgressDialogListener 
+public interface GPSTimeoutListener 
 {
-	abstract public void onDialogInterruptedBySearchButton();
-	abstract public void onDialogInterruptedByBackButton();
+	abstract public void GPSTimeout();
 }

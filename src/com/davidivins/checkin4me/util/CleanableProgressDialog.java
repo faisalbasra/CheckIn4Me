@@ -16,7 +16,7 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.util;
 
-import com.davidivins.checkin4me.listeners.CleanableProgressDialogListener;
+import com.davidivins.checkin4me.listeners.interfaces.CleanableProgressDialogListener;
 
 import android.app.Activity;
 import android.app.ProgressDialog;

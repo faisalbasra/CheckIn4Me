@@ -14,11 +14,11 @@
 //    You should have received a copy of the GNU General Public License
 //    along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
 //*****************************************************************************
-package com.davidivins.checkin4me.monitors;
+package com.davidivins.checkin4me.threads;
 
-import com.davidivins.checkin4me.listeners.NetworkTimeoutListener;
+import com.davidivins.checkin4me.listeners.interfaces.NetworkTimeoutListener;
 
-import android.os.Handler;
+import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -27,43 +27,48 @@ import android.util.Log;
  * 
  * @author david
  */
-public class NetworkTimeoutMonitor implements Runnable
+public class NetworkTimeoutMonitor extends AsyncTask<Void, Void, Void>
 {
-	private static final String TAG            = NetworkTimeoutMonitor.class.getName();
-	private static final int FIFTHTEEN_SECONDS = 15000;
+	private static final String TAG      = NetworkTimeoutMonitor.class.getName();
+	private static final int TEN_SECONDS = 10000;
 	
-	private NetworkTimeoutListener activity;
-	private Handler handler;
+	private NetworkTimeoutListener listener;
 	 
 	/**
 	 * NetworkTimeoutMonitor
 	 * 
 	 * @param NetworkTimeoutListener
 	 */
-	public NetworkTimeoutMonitor(NetworkTimeoutListener activity, Handler handler)
+	public NetworkTimeoutMonitor(NetworkTimeoutListener listener)
 	{
-		this.activity = activity;
-		this.handler = handler;
+		this.listener = listener;
 	}
 	
 	/**
-	 * run
+	 * doInBackground
+	 *
+	 * Waits 10 seconds
+	 * 
+	 * @return Void
 	 */
-	public void run()
+	@Override
+	protected Void doInBackground(Void ... params)
 	{
-		SystemClock.sleep(FIFTHTEEN_SECONDS);
-		
+		SystemClock.sleep(TEN_SECONDS);
 		Log.i(TAG, "Network Location Timeout");
-		
-		if (null != handler)
-			handler.post(activity.getNetworkTimeoutCallback());
-	}
-	
+		return null;
+    }
+
 	/**
-	 * destroyHandler
+	 * onPostExecute
+	 * 
+	 * notifies the listener of a timeout.
+	 * 
+	 * @param nothing
 	 */
-	public void destroyHandler()
+	@Override
+	protected void onPostExecute(Void nothing)
 	{
-		handler = null;
+		listener.NetworkTimeout();
 	}
 }

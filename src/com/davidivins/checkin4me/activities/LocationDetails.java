@@ -30,10 +30,10 @@ import com.davidivins.checkin4me.core.Locale;
 import com.davidivins.checkin4me.core.MetaData;
 import com.davidivins.checkin4me.core.Services;
 import com.davidivins.checkin4me.interfaces.ServiceInterface;
-import com.davidivins.checkin4me.listeners.CheckInRequesterListener;
-import com.davidivins.checkin4me.listeners.CleanableProgressDialogListener;
-import com.davidivins.checkin4me.monitors.CheckInMessageOnClickMonitor;
-import com.davidivins.checkin4me.runnables.CheckInRequester;
+import com.davidivins.checkin4me.listeners.implementations.CheckInMessageOnClickListener;
+import com.davidivins.checkin4me.listeners.interfaces.CheckInRequesterListener;
+import com.davidivins.checkin4me.listeners.interfaces.CleanableProgressDialogListener;
+import com.davidivins.checkin4me.threads.CheckInRequester;
 import com.davidivins.checkin4me.util.CleanableProgressDialog;
 import com.davidivins.checkin4me.util.LocationOverlay;
 
@@ -204,7 +204,7 @@ public class LocationDetails
 		// build alert box, input box, and onclick listener
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		EditText input = (EditText)alert_view.findViewById(GeneratedResources.getId("checkin_message_text_entry"));
-		CheckInMessageOnClickMonitor listener = new CheckInMessageOnClickMonitor(this, input);
+		CheckInMessageOnClickListener listener = new CheckInMessageOnClickListener(this, input);
 		
 		// set alert options
 		alert.setView(alert_view);
