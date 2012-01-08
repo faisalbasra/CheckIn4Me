@@ -43,7 +43,7 @@ import android.util.Log;
  */
 public class OAuth2Request extends Request 
 {
-	private static final String TAG               = OAuth2Request.class.getName();
+	private static final String TAG               = OAuth2Request.class.getSimpleName();
 	private static final String RESPONSE_ENCODING = "UTF-8";
 	
 	/**

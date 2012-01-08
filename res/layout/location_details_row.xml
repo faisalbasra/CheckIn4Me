@@ -19,12 +19,13 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content"
+	android:layout_gravity="center_vertical"
 	android:orientation="horizontal">
 	
 	<LinearLayout android:id="@+id/service_icon_and_name"
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
+		android:layout_height="fill_parent"
 		android:orientation="horizontal"
 		android:layout_weight="2"
 		android:layout_gravity="center"
@@ -34,8 +35,9 @@
 	<LinearLayout android:id="@+id/service_checkbox"
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
+		android:layout_height="fill_parent"
 		android:orientation="horizontal"
+		android:layout_gravity="center_vertical"
 		android:paddingRight="5dp">
 	</LinearLayout>
 </LinearLayout>

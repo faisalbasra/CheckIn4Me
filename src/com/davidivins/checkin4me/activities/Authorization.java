@@ -41,7 +41,7 @@ import android.widget.Toast;
  */
 public class Authorization extends Activity
 {	
-	private static final String TAG = Authorization.class.getName();
+	private static final String TAG = Authorization.class.getSimpleName();
 	
 	/**
 	 * onCreate
@@ -53,12 +53,14 @@ public class Authorization extends Activity
 	{
 		super.onCreate(saved_instance_state);
 		GeneratedResources.generate(this);
-		
 		setContentView(GeneratedResources.getLayout("authorization"));
+		
+		// create intent
 		Intent i = new Intent(Intent.ACTION_VIEW);
 		
+		// get shared preferences
 		SharedPreferences persistent_storage = PreferenceManager.getDefaultSharedPreferences(this);
-		Editor persistent_storage_editor = persistent_storage.edit();
+		Editor persistent_storage_editor     = persistent_storage.edit();
 
 		// check if a service was clicked to get here
 		if (getIntent().getIntExtra("service_id", -1) != -1)
@@ -122,7 +124,6 @@ public class Authorization extends Activity
 					oauth_connector.storeNecessaryCompletionResponseData(persistent_storage_editor, response);
 					
 					// start nearby places event
-					//NearbyPlaces.clearCurrentLocations(); // force refresh of nearby places when we return from authorization - NOT NEEDED?
 					i.putExtra("tab_to_display", MainTabbedContainer.NEARBY_PLACES_TAB);
 					i = new Intent(this, MainTabbedContainer.class);
 					

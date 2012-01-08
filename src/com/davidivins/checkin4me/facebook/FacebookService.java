@@ -47,7 +47,7 @@ import android.util.Log;
  */
 public class FacebookService implements ServiceInterface
 {
-	private static final String TAG = FacebookService.class.getName();
+	private static final String TAG = FacebookService.class.getSimpleName();
 	private int service_id;
 	private SharedPreferences persistent_storage;
 	private Properties config;

@@ -303,6 +303,7 @@ public class LocationDetails
 		//
 		TextView location_name = (TextView)findViewById(GeneratedResources.getId("location_name"));
 		location_name.setText(current_location.getName());
+		location_name.setTextSize(20);
 		
 		TextView location_description = (TextView)findViewById(GeneratedResources.getId("location_description"));
 		location_description.setText(current_location.getAddress());

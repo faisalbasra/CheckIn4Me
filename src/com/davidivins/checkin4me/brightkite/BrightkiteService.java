@@ -35,7 +35,7 @@
 // */
 //public class BrightkiteService implements ServiceInterface
 //{
-//	private static final String TAG = BrightkiteService.class.getName();
+//	private static final String TAG = BrightkiteService.class.getSimpleName();
 //	private Properties config;
 //	private int service_id;
 //	

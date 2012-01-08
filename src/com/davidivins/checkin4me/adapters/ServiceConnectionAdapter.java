@@ -35,7 +35,7 @@ import android.widget.LinearLayout;
  */
 public class ServiceConnectionAdapter extends ArrayAdapter<Integer>
 {
-	//private static final String TAG = LocaleAdapter.class.getName();
+	//private static final String TAG = LocaleAdapter.class.getSimpleName();
 	private Context context;
 	private int row_resource_id;
 	private ArrayList<Integer> logos;

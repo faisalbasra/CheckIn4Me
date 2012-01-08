@@ -36,7 +36,7 @@
 // */
 //public class YelpOAuthConnector implements OAuthConnector
 //{
-//	private static final String TAG      = YelpOAuthConnector.class.getName();
+//	private static final String TAG      = YelpOAuthConnector.class.getSimpleName();
 //	private static final String ENCODING = "ISO-8859-1";
 //
 //	private Properties config;

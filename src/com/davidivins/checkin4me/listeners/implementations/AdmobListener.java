@@ -29,7 +29,7 @@ import com.google.ads.AdRequest.ErrorCode;
  */
 public class AdmobListener implements AdListener
 {
-	private static final String TAG = AdmobListener.class.getName();
+	private static final String TAG = AdmobListener.class.getSimpleName();
 
 	/**
 	 * onDismissScreen

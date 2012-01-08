@@ -38,7 +38,7 @@ import android.widget.TextView;
  */
 public class Settings extends Activity
 {
-	//static private final String TAG = Settings.class.getName();
+	//static private final String TAG = Settings.class.getSimpleName();
 	
 	/**
 	 * onCreate

@@ -38,7 +38,7 @@ import android.util.Log;
  */
 public class Services
 {
-	private static final String TAG = Services.class.getName();
+	private static final String TAG = Services.class.getSimpleName();
 	private static Services instance;	
 	private ArrayList<ServiceInterface> services;
 	

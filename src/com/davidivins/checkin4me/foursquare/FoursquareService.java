@@ -47,7 +47,7 @@ import android.util.Log;
  */
 public class FoursquareService implements ServiceInterface
 {
-	private static final String TAG = FoursquareService.class.getName();
+	private static final String TAG = FoursquareService.class.getSimpleName();
 
 	private int service_id;
 	private SharedPreferences persistent_storage;

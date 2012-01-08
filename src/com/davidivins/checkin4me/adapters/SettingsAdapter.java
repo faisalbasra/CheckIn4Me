@@ -40,7 +40,7 @@ import android.widget.TextView;
  */
 public class SettingsAdapter extends BaseExpandableListAdapter 
 {
-	//private static final String TAG = SettingsAdapter.class.getName();
+	//private static final String TAG = SettingsAdapter.class.getSimpleName();
 	private Activity activity = null;
 	private ArrayList<String> groups;
 	private ArrayList<ArrayList<ServiceSetting>> children;
@@ -116,7 +116,8 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 		textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
 		
 		// Set the text starting position
-		textView.setPadding(45, 0, 0, 0);
+		textView.setPadding(45, 0, 0, 0);		
+		textView.setTextSize(20);
 		
 		return textView;
 	}

@@ -24,6 +24,7 @@ import com.davidivins.checkin4me.interfaces.ServiceInterface;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
  */
 public class ServiceCheckListAdapter extends ArrayAdapter<ServiceInterface> implements OnCheckedChangeListener
 {
-	//private static final String TAG = ServiceCheckListAdapter.class.getName();
+	//private static final String TAG = ServiceCheckListAdapter.class.getSimpleName();
 	private Context context;
 	private int row_resource_id;
 	private ArrayList<ServiceInterface> items;
@@ -114,6 +115,7 @@ public class ServiceCheckListAdapter extends ArrayAdapter<ServiceInterface> impl
 			TextView name = new TextView(parent.getContext());
 			name.setText(service.getName());
 			name.setTextColor(Color.BLACK);
+			name.setTextSize(20);
 
 			// create check box and determine user's default behavior for checking in with this service
 			CheckBox check_box = new CheckBox(parent.getContext());
@@ -136,6 +138,12 @@ public class ServiceCheckListAdapter extends ArrayAdapter<ServiceInterface> impl
 			icon_and_name_layout.addView(icon);
 			icon_and_name_layout.addView(name);
 			check_box_layout.addView(check_box);
+			
+			// center everything vertically
+			name.setGravity(Gravity.CENTER_VERTICAL);
+			icon_and_name_layout.setGravity(Gravity.CENTER_VERTICAL);
+			check_box.setGravity(Gravity.CENTER_VERTICAL);
+			check_box_layout.setGravity(Gravity.CENTER_VERTICAL);
 		}
 			
 		return view;

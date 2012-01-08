@@ -42,7 +42,7 @@ import android.os.Bundle;
  */
 public class ServiceConnection extends ListActivity implements OnItemClickListener
 {
-	private static final String TAG               = ServiceConnection.class.getName();
+	private static final String TAG               = ServiceConnection.class.getSimpleName();
 	private static int latest_service_id_selected = 0;
 	
 	/**

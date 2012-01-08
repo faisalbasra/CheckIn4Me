@@ -38,7 +38,7 @@
 //*/
 //public class YelpAPI implements APIInterface
 //{
-//	private static final String TAG = YelpAPIAdapter.class.getName();
+//	private static final String TAG = YelpAPIAdapter.class.getSimpleName();
 //	
 //	private int service_id;
 //	private Properties config;

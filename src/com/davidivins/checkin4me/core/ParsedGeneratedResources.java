@@ -25,7 +25,7 @@ import java.util.HashMap;
 
 public class ParsedGeneratedResources implements GeneratedResourcesInterface
 {
-	private static final String TAG = ParsedGeneratedResources.class.getName();
+	private static final String TAG = ParsedGeneratedResources.class.getSimpleName();
 	private HashMap<String, HashMap<String, Integer>> resources;
 	
 	/**

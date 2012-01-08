@@ -37,7 +37,7 @@ import android.util.Log;
  */
 public class FoursquareOAuthConnector implements OAuthConnectorInterface
 {
-	private static final String TAG      = FoursquareOAuthConnector.class.getName();
+	private static final String TAG      = FoursquareOAuthConnector.class.getSimpleName();
 	private static final String ENCODING = "ISO-8859-1";
 
 	private Properties config;
@@ -229,5 +229,12 @@ public class FoursquareOAuthConnector implements OAuthConnectorInterface
 		persistent_storage_editor.remove("foursquare_oauth_token"); // clear old unused oauth 1.0 token from systems
 		persistent_storage_editor.commit();
 	}
+	
+	/**
+	 * createTestUsers
+	 * 
+	 * creates any necessary gowalla test users.
+	 */
+	public OAuthResponse createTestUsers(SharedPreferences persistent_storage) { return new OAuthResponse(); }
 }
 

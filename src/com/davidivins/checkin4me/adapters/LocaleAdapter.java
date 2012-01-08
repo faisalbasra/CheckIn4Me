@@ -41,7 +41,7 @@ import android.widget.TextView;
  */
 public class LocaleAdapter extends ArrayAdapter<Locale>
 {
-	//private static final String TAG = LocaleAdapter.class.getName();
+	//private static final String TAG = LocaleAdapter.class.getSimpleName();
 	private Context context;
 	private int row_resource_id;
 	private ArrayList<Locale> items;
@@ -98,6 +98,7 @@ public class LocaleAdapter extends ArrayAdapter<Locale>
 			TextView tv = new TextView(parent.getContext());
 			tv.setText(location.getName());
 			tv.setTextColor(Color.BLACK);
+			tv.setTextSize(20);
 			text_line.addView(tv);
 			
 			Set<Integer> services_with_location = location.getServiceIdToLocationIdMap().keySet();

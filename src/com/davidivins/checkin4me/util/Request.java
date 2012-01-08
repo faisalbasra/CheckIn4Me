@@ -28,7 +28,7 @@ import android.util.Log;
  */
 abstract public class Request 
 {
-	protected static final String TAG      = Request.class.getName();
+	protected static final String TAG      = Request.class.getSimpleName();
 	protected static final String ENCODING = "ISO-8859-1";
 
 	protected String method;

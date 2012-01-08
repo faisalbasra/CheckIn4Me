@@ -44,7 +44,7 @@
 // */
 //public class YelpOAuthRequest extends Request 
 //{
-//	private static final String TAG               = YelpOAuthRequest.class.getName();
+//	private static final String TAG               = YelpOAuthRequest.class.getSimpleName();
 //	private static final String RESPONSE_ENCODING = "UTF-8";
 //	
 //	/**

@@ -23,7 +23,7 @@ import android.util.Log;
 
 public class GeneratedResources
 {
-	private static final String TAG                                = GeneratedResources.class.getName();
+	private static final String TAG                                = GeneratedResources.class.getSimpleName();
 	private static GeneratedResourcesInterface generated_resources = null;
 	private static boolean good_meta_data                          = false;
 	

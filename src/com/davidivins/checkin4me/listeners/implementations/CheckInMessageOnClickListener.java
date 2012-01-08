@@ -29,7 +29,7 @@ import android.widget.EditText;
  */
 public class CheckInMessageOnClickListener implements DialogInterface.OnClickListener
 {
-	private static final String TAG = CheckInMessageOnClickListener.class.getName();
+	private static final String TAG = CheckInMessageOnClickListener.class.getSimpleName();
 	private LocationDetails activity;
 	private EditText input;
 	

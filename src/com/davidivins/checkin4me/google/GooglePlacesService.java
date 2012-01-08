@@ -47,7 +47,7 @@ import android.util.Log;
  */
 public class GooglePlacesService implements ServiceInterface
 {
-	private static final String TAG = GooglePlacesService.class.getName();
+	private static final String TAG = GooglePlacesService.class.getSimpleName();
 
 	private int service_id;
 	private SharedPreferences persistent_storage;

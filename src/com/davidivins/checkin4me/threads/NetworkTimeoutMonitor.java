@@ -29,7 +29,7 @@ import android.util.Log;
  */
 public class NetworkTimeoutMonitor extends AsyncTask<Void, Void, Void>
 {
-	private static final String TAG      = NetworkTimeoutMonitor.class.getName();
+	private static final String TAG      = NetworkTimeoutMonitor.class.getSimpleName();
 	private static final int TEN_SECONDS = 10000;
 	
 	private NetworkTimeoutListener listener;

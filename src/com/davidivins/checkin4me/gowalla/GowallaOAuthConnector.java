@@ -37,7 +37,7 @@ import android.util.Log;
  */
 public class GowallaOAuthConnector implements OAuthConnectorInterface
 {
-	private static final String TAG      = GowallaOAuthConnector.class.getName();
+	private static final String TAG      = GowallaOAuthConnector.class.getSimpleName();
 	private static final String ENCODING = "ISO-8859-1";
 
 	private Properties config;
@@ -228,4 +228,11 @@ public class GowallaOAuthConnector implements OAuthConnectorInterface
 		persistent_storage_editor.remove("gowalla_code");
 		persistent_storage_editor.commit();
 	}
+
+	/**
+	 * createTestUsers
+	 * 
+	 * creates any necessary gowalla test users.
+	 */
+	public OAuthResponse createTestUsers(SharedPreferences persistent_storage) { return new OAuthResponse(); }
 }

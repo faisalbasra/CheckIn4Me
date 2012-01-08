@@ -40,4 +40,5 @@ public abstract interface OAuthConnectorInterface
 	abstract boolean isSuccessfulCompletionResponse(OAuthResponse response);
 	abstract void storeNecessaryCompletionResponseData(Editor persistent_storage_editor, OAuthResponse response);
 	abstract void clearTemporaryData(Editor persistent_storage_editor);
+	abstract OAuthResponse createTestUsers(SharedPreferences persistent_storage);
 }

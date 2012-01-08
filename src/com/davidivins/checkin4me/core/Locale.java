@@ -32,7 +32,7 @@ import android.util.Log;
  */
 public class Locale 
 {
-	private static final String TAG = Locale.class.getName();
+	private static final String TAG = Locale.class.getSimpleName();
 	private String name;
 	private String description;
 

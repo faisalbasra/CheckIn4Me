@@ -17,7 +17,7 @@
      ***************************************************************************** -->
 <settings>
 	<setting>
-		<display_name>Check-In Checkbox Default</display_name>
+		<display_name>Check-In Default</display_name>
 		<pref_name>gowalla_check_in_default</pref_name>
 	</setting>
 	

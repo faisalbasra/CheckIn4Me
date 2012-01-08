@@ -31,7 +31,7 @@ import com.google.android.apps.analytics.GoogleAnalyticsTracker;
  */
 public class Analytics 
 {
-	private static final String TAG = Analytics.class.getName();
+	private static final String TAG = Analytics.class.getSimpleName();
 	private Properties config;
 	private GoogleAnalyticsTracker tracker;
 	

@@ -37,7 +37,7 @@ import android.util.Log;
  */
 public class FacebookOAuthConnector implements OAuthConnectorInterface
 {
-	private static final String TAG      = FacebookOAuthConnector.class.getName();
+	private static final String TAG      = FacebookOAuthConnector.class.getSimpleName();
 	private static final String ENCODING = "ISO-8859-1";
 
 	private Properties config;
@@ -220,4 +220,66 @@ public class FacebookOAuthConnector implements OAuthConnectorInterface
 		persistent_storage_editor.remove("facebook_code");
 		persistent_storage_editor.commit();
 	}
+	
+	/**
+	 * createTestUsers
+	 * 
+	 * this is currently disabled by facebook for native apps.
+	 * 
+	 * creates any necessary test users.
+	 */
+	public OAuthResponse createTestUsers(SharedPreferences persistent_storage) 
+	{
+		return null;
+//		Log.i(TAG, "creating test users");
+//		
+//		OAuthResponse response                   = new OAuthResponse();
+//		OAuthResponse app_access_token_response  = getAppAccessToken();
+//		TreeMap<String, String> query_parameters = app_access_token_response.getQueryParameters();
+//		
+//		if (query_parameters.containsKey("access_token"))
+//		{
+//			String access_token = query_parameters.get("access_token");
+//			
+//			OAuth2Request request = new OAuth2Request(
+//				config.getProperty("oauth_http_method"), config.getProperty("oauth_host"), 
+//				"/" + config.getProperty("app_id") + config.getProperty("oauth_test_user_endpoint"));
+//			
+//			request.addQueryParameter("installed", "true");
+//			request.addQueryParameter("permissions", config.getProperty("oauth_scope"));
+//			request.addQueryParameter("method", config.getProperty("api_checkin_http_method").toLowerCase());
+//			request.addQueryParameterAndEncode("access_token", access_token);
+//			
+//			response = (OAuthResponse)request.execute();
+//			
+//			Log.i(TAG, "response string = " + response.getResponseString());
+//		}
+//		else
+//		{
+//			Log.i(TAG, "failed to get app access token");
+//		}
+//		
+//		return response;
+	}
+	
+//	private OAuthResponse getAppAccessToken()
+//	{
+//		Log.i(TAG, "getting app access token");
+//
+//		OAuthResponse response = new OAuthResponse();
+//		
+//		OAuth2Request request = new OAuth2Request(
+//			config.getProperty("oauth_http_method"), config.getProperty("oauth_host"), 
+//			config.getProperty("oauth_access_token_endpoint"));
+//		
+//		request.addQueryParameter("client_id", config.getProperty("app_id"));
+//		request.addQueryParameter("client_secret", config.getProperty("oauth_client_secret"));
+//		request.addQueryParameter("grant_type", "client_credentials");
+//		request.addQueryParameter("redirect_uri", oauth_redirect_uri);
+//
+//		response = (OAuthResponse)request.execute();
+//		
+//		Log.i(TAG, "response string = " + response.getResponseString());
+//		return response;
+//	}
 }
