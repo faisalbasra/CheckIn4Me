@@ -2,7 +2,7 @@ CheckIn4Me (formerly a school project) is an in-development Android application 
 Currently, Foursquare and Gowalla check-ins are supported.  In the future, the goal is to have other services working, such as
 Yelp, Brightkite, Facebook Places, and/or SCVNGR.
 
-Below are some screenshots of the application.
+Below are some screenshots of the application. 
 
 ![Service Connection](https://github.com/davidivins/CheckIn4Me/raw/master/presentation/images/connect_services_screen.png "Service Connection")
 ........
