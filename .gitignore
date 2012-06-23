@@ -1,5 +1,5 @@
 /keys.txt
-
+*.idea
 /res/raw/.DS_Store
 /src/.DS_Store
 /src/com/.DS_Store
