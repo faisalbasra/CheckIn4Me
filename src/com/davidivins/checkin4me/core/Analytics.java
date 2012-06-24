@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,13 +16,12 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.core;
 
-import java.io.InputStream;
-import java.util.Properties;
-
 import android.app.Activity;
 import android.util.Log;
-
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
+
+import java.io.InputStream;
+import java.util.Properties;
 
 /**
  * Analytics
