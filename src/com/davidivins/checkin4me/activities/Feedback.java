@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -42,8 +42,8 @@ public class Feedback extends Activity
 		setContentView(GeneratedResources.getLayout("feedback"));
 
 		// display getSatisfaction page in web view
-	    WebView view = (WebView)findViewById(GeneratedResources.getId("feedback"));
-	    view.getSettings().setJavaScriptEnabled(true);
-	    view.loadUrl("https://getsatisfaction.com/checkin4me/");
+		WebView view = (WebView)findViewById(GeneratedResources.getId("feedback"));
+		view.getSettings().setJavaScriptEnabled(true);
+		view.loadUrl("https://getsatisfaction.com/checkin4me/");
 	}
 }

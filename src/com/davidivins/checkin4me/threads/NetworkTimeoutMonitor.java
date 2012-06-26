@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ public class NetworkTimeoutMonitor extends AsyncTask<Void, Void, Void>
 	/**
 	 * NetworkTimeoutMonitor
 	 * 
-	 * @param NetworkTimeoutListener
+	 * @param listener
 	 */
 	public NetworkTimeoutMonitor(NetworkTimeoutListener listener)
 	{

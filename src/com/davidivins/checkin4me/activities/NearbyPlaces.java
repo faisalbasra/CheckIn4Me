@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -15,22 +15,6 @@
 //    along with CheckIn4Me.  If not, see <http://www.gnu.org/licenses/>.
 //*****************************************************************************
 package com.davidivins.checkin4me.activities;
-
-import java.util.ArrayList;
-
-import com.davidivins.checkin4me.adapters.LocaleAdapter;
-import com.davidivins.checkin4me.core.Ad;
-import com.davidivins.checkin4me.core.GeneratedResources;
-import com.davidivins.checkin4me.core.Locale;
-import com.davidivins.checkin4me.core.Services;
-import com.davidivins.checkin4me.listeners.interfaces.CleanableProgressDialogListener;
-import com.davidivins.checkin4me.listeners.interfaces.GPSTimeoutListener;
-import com.davidivins.checkin4me.listeners.interfaces.LocationsRetrieverListener;
-import com.davidivins.checkin4me.listeners.interfaces.NetworkTimeoutListener;
-import com.davidivins.checkin4me.threads.GPSTimeoutMonitor;
-import com.davidivins.checkin4me.threads.LocationsRetriever;
-import com.davidivins.checkin4me.threads.NetworkTimeoutMonitor;
-import com.davidivins.checkin4me.util.CleanableProgressDialog;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -49,15 +33,26 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
+import com.davidivins.checkin4me.adapters.LocaleAdapter;
+import com.davidivins.checkin4me.core.Ad;
+import com.davidivins.checkin4me.core.GeneratedResources;
+import com.davidivins.checkin4me.core.Locale;
+import com.davidivins.checkin4me.core.Services;
+import com.davidivins.checkin4me.listeners.interfaces.CleanableProgressDialogListener;
+import com.davidivins.checkin4me.listeners.interfaces.GPSTimeoutListener;
+import com.davidivins.checkin4me.listeners.interfaces.LocationsRetrieverListener;
+import com.davidivins.checkin4me.listeners.interfaces.NetworkTimeoutListener;
+import com.davidivins.checkin4me.threads.GPSTimeoutMonitor;
+import com.davidivins.checkin4me.threads.LocationsRetriever;
+import com.davidivins.checkin4me.threads.NetworkTimeoutMonitor;
+import com.davidivins.checkin4me.util.CleanableProgressDialog;
+
+import java.util.ArrayList;
 
 /**
  * NearbyPlaces
@@ -88,7 +83,7 @@ public class NearbyPlaces extends ListActivity
 	/**
 	 * onCreate
 	 * 
-	 * @param Bundle savedInstanceState
+	 * @param saved_instance_state
 	 */
 	@Override
 	public void onCreate(Bundle saved_instance_state)
@@ -329,7 +324,7 @@ public class NearbyPlaces extends ListActivity
 	/**
 	 * onLocationChanged
 	 * 
-	 * @param Locale location
+	 * @param location
 	 */
 	public void onLocationChanged(Location location) 
 	{
@@ -362,7 +357,12 @@ public class NearbyPlaces extends ListActivity
 		locations_retriever = new LocationsRetriever(this, this, current_query, current_longitude, current_latitude, persistent_storage);
 		locations_retriever.execute();
 	}
-	
+
+	/**
+	 * updateLocations
+	 *
+	 * @param locations
+	 */
 	public void updateLocations(ArrayList<Locale> locations) 
 	{
 		Log.i(TAG, "received new location data.");
@@ -379,6 +379,8 @@ public class NearbyPlaces extends ListActivity
 
 	/**
 	 * displayProgressDialog
+	 *
+	 * @param text
 	 */
 	public void startProgressDialog(String text)
 	{
@@ -433,7 +435,7 @@ public class NearbyPlaces extends ListActivity
 	/**
 	 * onCreateOptionsMenu
 	 * 
-	 * @param Menu menu
+	 * @param menu
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
@@ -470,7 +472,7 @@ public class NearbyPlaces extends ListActivity
 	/**
 	 * onOptionsItemSelected
 	 * 
-	 * @param MenuItem item
+	 * @param item
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) 
@@ -501,10 +503,10 @@ public class NearbyPlaces extends ListActivity
 		}
 		else if (GeneratedResources.getId("qr_code") == id)
 		{
-	        Intent intent = new Intent("com.google.zxing.client.android.SCAN");
-	        intent.setPackage("com.google.zxing.client.android");
-	        intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
-	        startActivityForResult(intent, 0);
+			Intent intent = new Intent("com.google.zxing.client.android.SCAN");
+			intent.setPackage("com.google.zxing.client.android");
+			intent.putExtra("SCAN_MODE", "QR_CODE_MODE");
+			startActivityForResult(intent, 0);
 			result = true;
 		}
 		else
@@ -560,10 +562,10 @@ public class NearbyPlaces extends ListActivity
 	/**
 	 * onItemClick
 	 * 
-	 * @param AdapterView<?> adapter_view
-	 * @param View view
-	 * @param int  
-	 * @param long arg3
+	 * @param adapter_view
+	 * @param view
+	 * @param position
+	 * @param arg3
 	 */
 	public void onItemClick(AdapterView<?> adapter_view, View view, int position, long arg3) 
 	{
@@ -572,6 +574,7 @@ public class NearbyPlaces extends ListActivity
 	
 	/**
 	 * storeLocationAndViewDetails
+	 *
 	 * @param location_index
 	 */
 	public void storeLocationAndViewDetails(int location_index)

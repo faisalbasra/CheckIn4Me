@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -70,7 +70,7 @@ public class LocationsRetriever extends AsyncTask<Void, Void,  ArrayList<Locale>
 	protected ArrayList<Locale> doInBackground(Void ... params)
 	{
 		return Services.getInstance(activity).getAllLocations(query, longitude, latitude, persistent_storage);
-    }
+	}
 
 	/**
 	 * onPostExecute

@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,25 +16,23 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.gowalla;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Properties;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.util.Log;
 import com.davidivins.checkin4me.comparators.LocaleDistanceComparator;
 import com.davidivins.checkin4me.core.Locale;
 import com.davidivins.checkin4me.interfaces.APIInterface;
 import com.davidivins.checkin4me.oauth.OAuth2Request;
 import com.davidivins.checkin4me.oauth.OAuthResponse;
 import com.davidivins.checkin4me.util.HTTPRequest;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Properties;
 
 /**
  * GowallaAPI
@@ -54,8 +52,8 @@ public class GowallaAPI implements APIInterface
 	/**
 	 * GowallaAPI
 	 * 
-	 * @param Properties config
-	 * @param int service_id
+	 * @param config
+	 * @param service_id
 	 */
 	public GowallaAPI(Properties config, int service_id)
 	{
@@ -175,7 +173,7 @@ public class GowallaAPI implements APIInterface
 		/**
 		 * setLocationsFromJson
 		 * 
-		 * @param json
+		 * @param json_string
 		 * @throws JSONException 
 		 */
 		synchronized private void setLocationsFromJson(String json_string)
@@ -318,7 +316,7 @@ public class GowallaAPI implements APIInterface
 		/**
 		 * setStatusFromJson
 		 * 
-		 * @param json
+		 * @param json_string
 		 * @throws JSONException 
 		 */
 		synchronized private boolean setStatusFromJson(String json_string)
@@ -360,8 +358,8 @@ public class GowallaAPI implements APIInterface
 			if (persistent_storage.getString("gowalla_refresh_token", "-1") != "-1")
 			{
 				OAuth2Request request = new OAuth2Request(
-						config.getProperty("oauth_http_method"), config.getProperty("oauth_host"), 
-						config.getProperty("oauth_access_token_endpoint"));
+					config.getProperty("oauth_http_method"), config.getProperty("oauth_host"),
+					config.getProperty("oauth_access_token_endpoint"));
 				
 				request.addQueryParameter("grant_type", "refresh_token");
 				request.addQueryParameter("client_id", config.getProperty("oauth_client_id"));

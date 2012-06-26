@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,29 +16,26 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.google;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Properties;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.util.Log;
 import com.davidivins.checkin4me.comparators.ServiceSettingComparator;
 import com.davidivins.checkin4me.core.GeneratedResources;
 import com.davidivins.checkin4me.core.ServiceSetting;
 import com.davidivins.checkin4me.interfaces.APIInterface;
 import com.davidivins.checkin4me.interfaces.OAuthConnectorInterface;
 import com.davidivins.checkin4me.interfaces.ServiceInterface;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.util.Log;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Properties;
 
 /**
  * GooglePlacesService
@@ -195,6 +192,8 @@ public class GooglePlacesService implements ServiceInterface
 	 
 	/**
 	 * getSettingsAsHashMap
+	 *
+	 * @return HashMap<String, ServiceSetting>
 	 */
 	public HashMap<String, ServiceSetting> getSettingsAsHashMap()
 	{
@@ -203,6 +202,8 @@ public class GooglePlacesService implements ServiceInterface
 	 
 	/**
 	 * getSettingsAsArrayList
+	 *
+	 * ArrayList<ServiceSetting>
 	 */
 	public ArrayList<ServiceSetting> getSettingsAsArrayList()
 	{

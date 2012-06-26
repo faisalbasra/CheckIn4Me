@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@ public class Authorization extends Activity
 	/**
 	 * onCreate
 	 * 
-	 * @param Bundle saved_instance_state
+	 * @param saved_instance_state
 	 */
 	@Override
 	public void onCreate(Bundle saved_instance_state)
@@ -164,7 +164,7 @@ public class Authorization extends Activity
 	/**
 	 * onCreateOptionsMenu
 	 * 
-	 * @param Menu menu
+	 * @param menu
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
@@ -177,7 +177,7 @@ public class Authorization extends Activity
 	/**
 	 * onOptionsItemSelected
 	 * 
-	 * @param MenuItem item
+	 * @param item
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) 
@@ -191,7 +191,6 @@ public class Authorization extends Activity
 			result = true;
 		}
 
-		
 		return result;
 	}
 }

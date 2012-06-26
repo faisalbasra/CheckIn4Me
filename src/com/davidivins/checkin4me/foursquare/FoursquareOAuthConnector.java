@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,19 +16,17 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.foursquare;
 
-import java.net.URLEncoder;
-import java.util.Properties;
-
-import org.json.JSONObject;
-
-import com.davidivins.checkin4me.interfaces.OAuthConnectorInterface;
-import com.davidivins.checkin4me.oauth.OAuth2Request;
-import com.davidivins.checkin4me.oauth.OAuthResponse;
-
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.util.Log;
+import com.davidivins.checkin4me.interfaces.OAuthConnectorInterface;
+import com.davidivins.checkin4me.oauth.OAuth2Request;
+import com.davidivins.checkin4me.oauth.OAuthResponse;
+import org.json.JSONObject;
+
+import java.net.URLEncoder;
+import java.util.Properties;
 
 /**
  * FoursquareOAuthConnector
@@ -76,7 +74,7 @@ public class FoursquareOAuthConnector implements OAuthConnectorInterface
 	/**
 	 * isSuccessfulInitialResponse
 	 * 
-	 * @param OAuthResponse
+	 * @param response
 	 * @return boolean
 	 */
 	public boolean isSuccessfulInitialResponse(OAuthResponse response) 
@@ -87,11 +85,17 @@ public class FoursquareOAuthConnector implements OAuthConnectorInterface
 	/**
 	 * storeNecessaryInitialResponseData
 	 * 
-	 * @param Editor
-	 * @param OAuthResponse
+	 * @param persistent_storage_editor
+	 * @param response
 	 */
 	public void storeNecessaryInitialResponseData(Editor persistent_storage_editor, OAuthResponse response) { }
 
+	/**
+	 * generateAuthorizationURL
+	 *
+	 * @param persistent_storage
+	 * @return
+	 */
 	public String generateAuthorizationURL(SharedPreferences persistent_storage) 
 	{
 		String url = config.getProperty("oauth_host", "OAUTH_HOST_HERE") 
@@ -108,7 +112,7 @@ public class FoursquareOAuthConnector implements OAuthConnectorInterface
 	/**
 	 * isSuccessfulAuthorizationResponse
 	 * 
-	 * @param Uri
+	 * @param response
 	 * @return boolean
 	 */
 	public boolean isSuccessfulAuthorizationResponse(Uri response) 
@@ -125,8 +129,8 @@ public class FoursquareOAuthConnector implements OAuthConnectorInterface
 	/**
 	 * storeNecessaryAuthorizationResponseData
 	 * 
-	 * @param Editor
-	 * @param Uri
+	 * @param persistent_storage_editor
+	 * @param response
 	 */
 	public void storeNecessaryAuthorizationResponseData(Editor persistent_storage_editor, Uri response)
 	{
@@ -138,8 +142,8 @@ public class FoursquareOAuthConnector implements OAuthConnectorInterface
 	/**
 	 * completeHandshake
 	 * 
-	 * @param SharedPreferences
-	 * @param Uri
+	 * @param persistent_storage
+	 * @param previous_response
 	 * @return OAuthResponse
 	 */
 	public OAuthResponse completeHandshake(SharedPreferences persistent_storage, Uri previous_response) 
@@ -150,9 +154,9 @@ public class FoursquareOAuthConnector implements OAuthConnectorInterface
 		if (persistent_storage.getString("foursquare_code", null) != null)
 		{
 			OAuth2Request request = new OAuth2Request(
-					config.getProperty("oauth_http_method", "OAUTH_HTTP_METHOD_HERE"), 
-					config.getProperty("oauth_host", "OAUTH_HOST_HERE"), 
-					config.getProperty("oauth_access_token_endpoint", "OAUTH_ACCESS_TOKEN_ENDPOINT_HERE"));
+				config.getProperty("oauth_http_method", "OAUTH_HTTP_METHOD_HERE"),
+				config.getProperty("oauth_host", "OAUTH_HOST_HERE"),
+				config.getProperty("oauth_access_token_endpoint", "OAUTH_ACCESS_TOKEN_ENDPOINT_HERE"));
 			
 			request.addQueryParameter("client_id", config.getProperty("oauth_client_id", "OAUTH_CLIENT_ID_HERE"));
 			request.addQueryParameter("client_secret", config.getProperty("oauth_client_secret", "OAUTH_CLIENT_SECRET_HERE"));
@@ -173,7 +177,7 @@ public class FoursquareOAuthConnector implements OAuthConnectorInterface
 	/**
 	 * isSuccessfulCompletionResponse
 	 * 
-	 * @param OAuthResponse response
+	 * @param response
 	 * @return boolean
 	 */
 	public boolean isSuccessfulCompletionResponse(OAuthResponse response) 
@@ -198,8 +202,8 @@ public class FoursquareOAuthConnector implements OAuthConnectorInterface
 	/**
 	 * storeNecessaryCompletionResponseData
 	 * 
-	 * @param Editor
-	 * @param OAuthResponse
+	 * @param persistent_storage_editor
+	 * @param response
 	 */
 	public void storeNecessaryCompletionResponseData(Editor persistent_storage_editor, OAuthResponse response) 
 	{ 
@@ -219,7 +223,7 @@ public class FoursquareOAuthConnector implements OAuthConnectorInterface
 	/**
 	 * clearTemporarySettings
 	 * 
-	 * @param Editor
+	 * @param persistent_storage_editor
 	 */
 	public void clearTemporaryData(Editor persistent_storage_editor)
 	{
@@ -233,7 +237,7 @@ public class FoursquareOAuthConnector implements OAuthConnectorInterface
 	/**
 	 * createTestUsers
 	 * 
-	 * creates any necessary gowalla test users.
+	 * creates any necessary foursquare test users.
 	 */
 	public OAuthResponse createTestUsers(SharedPreferences persistent_storage) { return new OAuthResponse(); }
 }

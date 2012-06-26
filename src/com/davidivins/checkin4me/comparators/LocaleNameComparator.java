@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,9 +16,9 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.comparators;
 
-import java.util.Comparator;
-
 import com.davidivins.checkin4me.core.Locale;
+
+import java.util.Comparator;
 
 /**
  * LocaleNameComparator
@@ -30,8 +30,8 @@ public class LocaleNameComparator implements Comparator<Locale>
 	/**
 	 * compare
 	 * 
-	 * @param Locale location_1
-	 * @param Locale location_2
+	 * @param location_1
+	 * @param location_2
 	 * @return int
 	 */
 	public int compare(Locale location_1, Locale location_2)

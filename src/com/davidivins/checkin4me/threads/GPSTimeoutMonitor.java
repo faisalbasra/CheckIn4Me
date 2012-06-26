@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -37,7 +37,7 @@ public class GPSTimeoutMonitor extends AsyncTask<Void, Void, Void>
 	/**
 	 * GPSTimeoutMonitor
 	 * 
-	 * @param GPSTimeoutListener
+	 * @param listener
 	 */
 	public GPSTimeoutMonitor(GPSTimeoutListener listener)
 	{
@@ -57,7 +57,7 @@ public class GPSTimeoutMonitor extends AsyncTask<Void, Void, Void>
 		SystemClock.sleep(TEN_SECONDS);
 		Log.i(TAG, "GPS Location Timeout");
 		return null;
-    }
+	}
 
 	/**
 	 * onPostExecute

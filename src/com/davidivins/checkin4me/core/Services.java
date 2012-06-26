@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,20 +16,17 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.core;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import com.davidivins.checkin4me.facebook.FacebookService;
-import com.davidivins.checkin4me.foursquare.FoursquareService;
-//import com.davidivins.checkin4me.google.GooglePlacesService;
-import com.davidivins.checkin4me.gowalla.GowallaService;
-import com.davidivins.checkin4me.interfaces.ServiceInterface;
-
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import com.davidivins.checkin4me.facebook.FacebookService;
+import com.davidivins.checkin4me.foursquare.FoursquareService;
+import com.davidivins.checkin4me.interfaces.ServiceInterface;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Services
@@ -55,7 +52,7 @@ public class Services
 		services.add(new FacebookService(service_count++, persistent_storage, resources));
 		services.add(new FoursquareService(service_count++, persistent_storage, resources));
 		//services.add(new GooglePlacesService(service_count++, persistent_storage, resources));
-		services.add(new GowallaService(service_count++, persistent_storage, resources));
+		//services.add(new GowallaService(service_count++, persistent_storage, resources));
 	}
 	
 	/**
@@ -113,7 +110,6 @@ public class Services
 	/**
 	 * getConnectedServicesAsArrayList
 	 * 
-	 * @param SharedPreferences persistent_storage
 	 * @return ArrayList<Service>
 	 */
 	public ArrayList<ServiceInterface> getConnectedServicesAsArrayList()
@@ -148,7 +144,6 @@ public class Services
 	/**
 	 * atLeastOneConnected
 	 * 
-	 * @param prefs
 	 * @return boolean
 	 */
 	public boolean atLeastOneConnected()
@@ -170,10 +165,10 @@ public class Services
 	/**
 	 * getAllLocations
 	 * 
-	 * @param String query
-	 * @param String longitude
-	 * @param String latutude
-	 * @param SharedParameters persistent_storage
+	 * @param query
+	 * @param longitude
+	 * @param latitude
+	 * @param persistent_storage
 	 * @return ArrayList<Locale>
 	 */
 	public ArrayList<Locale> getAllLocations(String query, String longitude, String latitude, SharedPreferences persistent_storage)

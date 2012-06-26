@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,13 +16,13 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.core;
 
+import com.davidivins.checkin4me.comparators.LocaleNameComparator;
+import com.davidivins.checkin4me.comparators.LocaleServicesTotalComparator;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
-
-import com.davidivins.checkin4me.comparators.LocaleNameComparator;
-import com.davidivins.checkin4me.comparators.LocaleServicesTotalComparator;
 
 public class Algorithms 
 {
@@ -35,7 +35,7 @@ public class Algorithms
 	 * 
 	 * merges locations from service api provided location lists into one list
 	 * 
-	 * @param ArrayList<ArrayList<Locale>> location_lists
+	 * @param location_lists
 	 * @return ArrayList<Locale>
 	 */
 	synchronized static public ArrayList<Locale> mergeLocations(ArrayList<ArrayList<Locale>> location_lists)
@@ -145,10 +145,10 @@ public class Algorithms
 	 * 
 	 * gets the distance between two places in km given the places' longitudes and latitudes.
 	 * 
-	 * @param double longitude_1
-	 * @param double latitude_1
-	 * @param double longitude_2
-	 * @param double latitude_2
+	 * @param longitude_1
+	 * @param latitude_1
+	 * @param longitude_2
+	 * @param latitude_2
 	 * @return double distance
 	 */
 	public static double getDistance(double longitude_1, double latitude_1, double longitude_2, double latitude_2)
@@ -168,7 +168,7 @@ public class Algorithms
 	/**
 	 * getNameVariations
 	 * 
-	 * @param String name
+	 * @param name
 	 * @return ArrayList<String>
 	 */
 	private static ArrayList<String> getNameVariations(String name)

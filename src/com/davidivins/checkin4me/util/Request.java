@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,10 +16,11 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.util;
 
+import android.util.Log;
+
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.TreeMap;
-import android.util.Log;
 
 /**
  * Request
@@ -120,8 +121,8 @@ abstract public class Request
 	/**
 	 * addHeader
 	 * 
-	 * @param String key
-	 * @param String value
+	 * @param key
+	 * @param value
 	 */
 	public void addHeader(String key, String value)
 	{
@@ -156,7 +157,6 @@ abstract public class Request
 		{
 			Log.i(TAG, "Encoding doesn't exist!?");
 		}
-		
 	}
 	
 	/**

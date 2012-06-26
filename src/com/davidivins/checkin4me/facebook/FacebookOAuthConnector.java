@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,19 +16,18 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.facebook;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Properties;
-import java.util.TreeMap;
-
-import com.davidivins.checkin4me.interfaces.OAuthConnectorInterface;
-import com.davidivins.checkin4me.oauth.OAuth2Request;
-import com.davidivins.checkin4me.oauth.OAuthResponse;
-
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.util.Log;
+import com.davidivins.checkin4me.interfaces.OAuthConnectorInterface;
+import com.davidivins.checkin4me.oauth.OAuth2Request;
+import com.davidivins.checkin4me.oauth.OAuthResponse;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Properties;
+import java.util.TreeMap;
 
 /**
  * FacebookOAuthConnector
@@ -76,7 +75,7 @@ public class FacebookOAuthConnector implements OAuthConnectorInterface
 	/**
 	 * isSuccessfulInitialResponse
 	 * 
-	 * @param OAuthResponse
+	 * @param response
 	 * @return boolean
 	 */
 	public boolean isSuccessfulInitialResponse(OAuthResponse response) 
@@ -87,10 +86,10 @@ public class FacebookOAuthConnector implements OAuthConnectorInterface
 	/**
 	 * storeNecessaryInitialResponseData
 	 * 
-	 * @param Editor
-	 * @param OAuthResponse
+	 * @param persistent_storage_editor
+	 * @param response
 	 */
-	public void storeNecessaryInitialResponseData(Editor persistent_storageEditor, OAuthResponse response) { }
+	public void storeNecessaryInitialResponseData(Editor persistent_storage_editor, OAuthResponse response) { }
 
 	public String generateAuthorizationURL(SharedPreferences persistent_storage) 
 	{
@@ -107,7 +106,7 @@ public class FacebookOAuthConnector implements OAuthConnectorInterface
 	/**
 	 * isSuccessfulAuthorizationResponse
 	 * 
-	 * @param Uri
+	 * @param response
 	 * @return boolean
 	 */
 	public boolean isSuccessfulAuthorizationResponse(Uri response) 
@@ -124,8 +123,8 @@ public class FacebookOAuthConnector implements OAuthConnectorInterface
 	/**
 	 * storeNecessaryAuthorizationResponseData
 	 * 
-	 * @param Editor
-	 * @param Uri
+	 * @param persistent_storage_editor
+	 * @param response
 	 */
 	public void storeNecessaryAuthorizationResponseData(Editor persistent_storage_editor, Uri response)
 	{
@@ -137,8 +136,8 @@ public class FacebookOAuthConnector implements OAuthConnectorInterface
 	/**
 	 * completeHandshake
 	 * 
-	 * @param SharedPreferences
-	 * @param Uri
+	 * @param persistent_storage
+	 * @param previous_response
 	 * @return OAuthResponse
 	 */
 	public OAuthResponse completeHandshake(SharedPreferences persistent_storage, Uri previous_response) 
@@ -169,8 +168,8 @@ public class FacebookOAuthConnector implements OAuthConnectorInterface
 	
 	/**
 	 * isSuccessfulCompletionResponse
-	 * 
-	 * @param OAuthResponse response
+	 *
+	 * @param response
 	 * @return boolean
 	 */
 	public boolean isSuccessfulCompletionResponse(OAuthResponse response) 
@@ -189,8 +188,8 @@ public class FacebookOAuthConnector implements OAuthConnectorInterface
 	/**
 	 * storeNecessaryCompletionResponseData
 	 * 
-	 * @param Editor
-	 * @param OAuthResponse
+	 * @param persistent_storage_editor
+	 * @param response
 	 */
 	public void storeNecessaryCompletionResponseData(Editor persistent_storage_editor, OAuthResponse response) 
 	{
@@ -212,7 +211,7 @@ public class FacebookOAuthConnector implements OAuthConnectorInterface
 	/**
 	 * clearTemporarySettings
 	 * 
-	 * @param Editor
+	 * @param persistent_storage_editor
 	 */
 	public void clearTemporaryData(Editor persistent_storage_editor)
 	{

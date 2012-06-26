@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,14 +16,13 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.core;
 
-import java.util.HashMap;
-import java.util.Set;
-
-import com.google.android.maps.GeoPoint;
-
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.util.Log;
+import com.google.android.maps.GeoPoint;
+
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Location
@@ -118,7 +117,7 @@ public class Locale
 	/**
 	 * setDescription
 	 * 
-	 * @param String description
+	 * @param description
 	 */
 	public void setDescription(String description)
 	{
@@ -172,7 +171,8 @@ public class Locale
 	/**
 	 * calculateAndSetDistance
 	 * 
-	 * @param String
+	 * @param user_longitude
+	 * @param user_latitude
 	 */
 	public void calculateAndSetDistanceFromUser(double user_longitude, double user_latitude)
 	{
@@ -206,8 +206,8 @@ public class Locale
 	/**
 	 * mapServiceIdToLocationId
 	 * 
-	 * @param Integer service_id
-	 * @param String location_id
+	 * @param service_id
+	 * @param location_id
 	 */
 	public void mapServiceIdToLocationId(int service_id, String location_id)
 	{
@@ -227,7 +227,7 @@ public class Locale
 	/**
 	 * store
 	 * 
-	 * @param SharedPreferences persistent_storage
+	 * @param persistent_storage
 	 */
 	public void store(SharedPreferences persistent_storage)
 	{
@@ -268,7 +268,7 @@ public class Locale
 	/**
 	 * load
 	 * 
-	 * @param SharedPreferences persistent_storage
+	 * @param persistent_storage
 	 */
 	public void load(SharedPreferences persistent_storage)
 	{

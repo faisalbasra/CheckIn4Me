@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,34 +16,6 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.activities;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-
-import com.davidivins.checkin4me.adapters.ServiceCheckListAdapter;
-import com.davidivins.checkin4me.core.Ad;
-import com.davidivins.checkin4me.core.GeneratedResources;
-import com.davidivins.checkin4me.core.Locale;
-import com.davidivins.checkin4me.core.MetaData;
-import com.davidivins.checkin4me.core.Services;
-import com.davidivins.checkin4me.interfaces.ServiceInterface;
-import com.davidivins.checkin4me.listeners.implementations.CheckInMessageOnClickListener;
-import com.davidivins.checkin4me.listeners.interfaces.CheckInRequesterListener;
-import com.davidivins.checkin4me.listeners.interfaces.CleanableProgressDialogListener;
-import com.davidivins.checkin4me.threads.CheckInRequester;
-import com.davidivins.checkin4me.util.CleanableProgressDialog;
-import com.davidivins.checkin4me.util.LocationOverlay;
-
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapActivity;
-import com.google.android.maps.MapController;
-import com.google.android.maps.MapView;
-import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
-
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -54,20 +26,23 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
+import com.davidivins.checkin4me.adapters.ServiceCheckListAdapter;
+import com.davidivins.checkin4me.core.*;
+import com.davidivins.checkin4me.core.Locale;
+import com.davidivins.checkin4me.interfaces.ServiceInterface;
+import com.davidivins.checkin4me.listeners.implementations.CheckInMessageOnClickListener;
+import com.davidivins.checkin4me.listeners.interfaces.CheckInRequesterListener;
+import com.davidivins.checkin4me.listeners.interfaces.CleanableProgressDialogListener;
+import com.davidivins.checkin4me.threads.CheckInRequester;
+import com.davidivins.checkin4me.util.CleanableProgressDialog;
+import com.davidivins.checkin4me.util.LocationOverlay;
+import com.google.android.maps.*;
+
+import java.io.InputStream;
+import java.util.*;
 
 /**
  * LocationDetails
@@ -193,7 +168,7 @@ public class LocationDetails
 	 * 
 	 * processes a check-in button click.
 	 * 
-	 * @param View view
+	 * @param view
 	 */
 	public void onClick(View view) 
 	{	
@@ -363,7 +338,7 @@ public class LocationDetails
 	 * 
 	 * displayes the check-in status to the user.
 	 * 
-	 * @param HashMap<Integer, Boolean> checkin_statuses
+	 * @param checkin_statuses
 	 */
 	public void displayCheckInStatus(HashMap<Integer, Boolean> checkin_statuses)
 	{
@@ -463,8 +438,8 @@ public class LocationDetails
 	 * 
 	 * returns the user to the location list when the ok button is hit in the check-in status dialog
 	 * 
-	 * @param DialogInterface dialog
-	 * @param int which
+	 * @param dialog
+	 * @param which
 	 */
 	public void onClick(DialogInterface dialog, int which) 
 	{
@@ -490,7 +465,7 @@ public class LocationDetails
 	 * 
 	 * displays the options menu when the options button is selected.
 	 * 
-	 * @param Menu menu
+	 * @param menu
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
@@ -505,7 +480,7 @@ public class LocationDetails
 	 * 
 	 * performs option selected by the user.
 	 * 
-	 * @param MenuItem item
+	 * @param item
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) 

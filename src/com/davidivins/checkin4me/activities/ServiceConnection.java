@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -48,7 +48,7 @@ public class ServiceConnection extends ListActivity implements OnItemClickListen
 	/**
 	 * onCreate
 	 * 
-	 * @param Bundle savedInstanceState
+	 * @param saved_instance_state
 	 */
 	@Override
 	public void onCreate(Bundle saved_instance_state)
@@ -73,10 +73,10 @@ public class ServiceConnection extends ListActivity implements OnItemClickListen
 	/**
 	 * onItemClick
 	 * 
-	 * @param AdapterView<?> arg0
-	 * @param View view
-	 * @param int position
-	 * @param long row
+	 * @param arg0
+	 * @param view
+	 * @param position
+	 * @param row
 	 */
 	public void onItemClick(AdapterView<?> arg0, View view, int position, long row) 
 	{
@@ -134,7 +134,7 @@ public class ServiceConnection extends ListActivity implements OnItemClickListen
 	/**
 	 * onCreateOptionsMenu
 	 * 
-	 * @param Menu menu
+	 * @param menu
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) 
@@ -147,7 +147,7 @@ public class ServiceConnection extends ListActivity implements OnItemClickListen
 	/**
 	 * onOptionsItemSelected
 	 * 
-	 * @param MenuItem item
+	 * @param item
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) 

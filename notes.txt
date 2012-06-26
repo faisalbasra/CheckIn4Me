@@ -15,3 +15,12 @@ need to support this format too?? - m.foursquare.com/venue/xxx
 http://touch.facebook.com/places/checkin.php?refid=17
 in header:
 Location:	http://touch.facebook.com/profile.php?id=131842916861087&refid=17&_rdr
+
+
+twitter:
+https://dev.twitter.com/docs/api/1/get/geo/reverse_geocode
+https://api.twitter.com/1/geo/reverse_geocode.json?lat=39.957113&long=-75.190292
+
+google places:
+https://developers.google.com/maps/documentation/places/#PlaceSearches
+https://maps.googleapis.com/maps/api/place/search/json?location=39.957,-75.190&key=AIzaSyDpCWS2H-M3IE6nejphvGvfc1lfQe-wUEc&sensor=true&radius=500

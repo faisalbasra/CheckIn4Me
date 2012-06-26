@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,23 +16,21 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.google;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Properties;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import android.content.SharedPreferences;
+import android.util.Log;
 import com.davidivins.checkin4me.comparators.LocaleDistanceComparator;
 import com.davidivins.checkin4me.core.Locale;
 import com.davidivins.checkin4me.interfaces.APIInterface;
 import com.davidivins.checkin4me.oauth.OAuth2Request;
 import com.davidivins.checkin4me.oauth.OAuthResponse;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import android.content.SharedPreferences;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Properties;
 
 /**
  * GooglePlacesAPI
@@ -52,8 +50,8 @@ public class GooglePlacesAPI implements APIInterface
 	/**
 	 * GooglePlacesAPI
 	 * 
-	 * @param Properties config
-	 * @param int service_id
+	 * @param config
+	 * @param service_id
 	 */
 	public GooglePlacesAPI(Properties config, int service_id)
 	{
@@ -147,8 +145,8 @@ public class GooglePlacesAPI implements APIInterface
 
 			// build new oauth request
 			OAuth2Request request = new OAuth2Request(
-					config.getProperty("api_http_method"), config.getProperty("api_host"), 
-					config.getProperty("api_version") + config.getProperty("api_locations_endpoint"));
+				config.getProperty("api_http_method"), config.getProperty("api_host"),
+				config.getProperty("api_version") + config.getProperty("api_locations_endpoint"));
 			
 			// set request headers
 			request.addHeader("User-Agent", "CheckIn4Me:2.0");  // TODO: set this from meta-data
@@ -178,7 +176,7 @@ public class GooglePlacesAPI implements APIInterface
 		/**
 		 * setLocationsFromJson
 		 * 
-		 * @param json
+		 * @param json_string
 		 */
 		synchronized private void setLocationsFromJson(String json_string, String query)
 		{
@@ -243,7 +241,7 @@ public class GooglePlacesAPI implements APIInterface
 
 							// create a new locale object with the venue's data
 							Locale location = new Locale(name, description, longitude, latitude,
-									address, city, state, zip);
+								address, city, state, zip);
 							location.calculateAndSetDistanceFromUser(user_longitude, user_latitude);
 							location.mapServiceIdToLocationId(service_id, venue_id);
 							
@@ -341,7 +339,7 @@ public class GooglePlacesAPI implements APIInterface
 		/**
 		 * setLocationsFromJson
 		 * 
-		 * @param json
+		 * @param json_string
 		 */
 		synchronized private void setLocationsFromJson(String json_string)
 		{

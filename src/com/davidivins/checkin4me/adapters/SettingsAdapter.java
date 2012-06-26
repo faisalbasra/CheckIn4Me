@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,22 +16,17 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.adapters;
 
-import java.util.ArrayList;
-
-import com.davidivins.checkin4me.core.ServiceSetting;
-import com.davidivins.checkin4me.core.Services;
-import com.davidivins.checkin4me.interfaces.ServiceInterface;
-
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
+import com.davidivins.checkin4me.core.ServiceSetting;
+import com.davidivins.checkin4me.core.Services;
+import com.davidivins.checkin4me.interfaces.ServiceInterface;
+
+import java.util.ArrayList;
 
 /**
  * SettingsAdapter
@@ -66,8 +61,8 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 	/**
 	 * getChild
 	 * 
-	 * @param int group_position
-	 * @param int child_position
+	 * @param group_position
+	 * @param child_position
 	 * @return Object
 	 */
 	public Object getChild(int group_position, int child_position) 
@@ -78,8 +73,8 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 	/**
 	 * getChildId
 	 * 
-	 * @param int group_position
-	 * @param int child_position
+	 * @param group_position
+	 * @param child_position
 	 * @return long
 	 */
 	public long getChildId(int group_position, int child_position) 
@@ -90,7 +85,7 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 	/**
 	 * getChildrenCount
 	 * 
-	 * @param int group_position
+	 * @param group_position
 	 * @return int
 	 */
 	public int getChildrenCount(int group_position) 
@@ -125,11 +120,11 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 	/**
 	 * getChildView
 	 * 
-	 * @param int group_position
-	 * @param int child_position
-	 * @param boolean is_last_child
-	 * @param View convert_view
-	 * @param ViewGroup parent
+	 * @param group_position
+	 * @param child_position
+	 * @param is_last_child
+	 * @param convert_view
+	 * @param parent
 	 * @return View
 	 */
 	public View getChildView(int group_position, int child_position, boolean is_last_child, View convert_view, ViewGroup parent) 
@@ -182,7 +177,7 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 	/**
 	 * getGroup
 	 * 
-	 * @param int group_position
+	 * @param group_position
 	 * @return Object
 	 */
 	public Object getGroup(int group_position) 
@@ -203,7 +198,7 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 	/**
 	 * getGroupId
 	 * 
-	 * @param int group_position
+	 * @param group_position
 	 * @return long
 	 */
 	public long getGroupId(int group_position) 
@@ -214,10 +209,10 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 	/**
 	 * getGroupView
 	 * 
-	 * @param int group_position
-	 * @param boolean is_expanded
-	 * @param View convert_view
-	 * @param ViewGroup parent
+	 * @param group_position
+	 * @param is_expanded
+	 * @param convert_view
+	 * @param parent
 	 * @return View
 	 */
 	public View getGroupView(int group_position, boolean is_expanded, View convert_view, ViewGroup parent) 
@@ -235,8 +230,8 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 	/**
 	 * isChildSelectable
 	 * 
-	 * @param int group_position
-	 * @param int child_position
+	 * @param group_position
+	 * @param child_position
 	 * @return boolean
 	 */
 	public boolean isChildSelectable(int group_position, int child_position) 

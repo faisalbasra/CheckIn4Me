@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,10 +16,6 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.adapters;
 
-import java.util.ArrayList;
-
-import com.davidivins.checkin4me.core.GeneratedResources;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +23,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import com.davidivins.checkin4me.core.GeneratedResources;
+
+import java.util.ArrayList;
 
 /**
  * ServiceConnectionAdapter
@@ -43,10 +42,9 @@ public class ServiceConnectionAdapter extends ArrayAdapter<Integer>
 	/**
 	 * ServiceConnectionAdapter
 	 * 
-	 * @param activity
 	 * @param context
 	 * @param row_resource_id
-	 * @param items
+	 * @param logos
 	 */
 	public ServiceConnectionAdapter(Context context, int row_resource_id, ArrayList<Integer> logos) 
 	{
@@ -59,9 +57,9 @@ public class ServiceConnectionAdapter extends ArrayAdapter<Integer>
 	/**
 	 * getView
 	 * 
-	 * @param int position
-	 * @param View convert_view
-	 * @param ViewGroup parent
+	 * @param position
+	 * @param convert_view
+	 * @param parent
 	 * @return View
 	 */
 	@Override

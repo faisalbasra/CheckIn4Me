@@ -1,6 +1,9 @@
 /keys.txt
 *.idea
 *.iml
+R.java
+BuildConfig.java
+*.apk
 gen/
 bin/
 /res/raw/.DS_Store

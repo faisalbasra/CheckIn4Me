@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,14 +16,13 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.util;
 
-import java.util.ArrayList;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.OverlayItem;
+
+import java.util.ArrayList;
 
 /**
  * LocationOverlay
@@ -61,7 +60,7 @@ public class LocationOverlay extends ItemizedOverlay<OverlayItem>
 	/**
 	 * onTap
 	 * 
-	 * @param int index
+	 * @param index
 	 * @return boolean
 	 */
 	@Override
@@ -78,7 +77,7 @@ public class LocationOverlay extends ItemizedOverlay<OverlayItem>
 	/**
 	 * createItem
 	 * 
-	 * @param int i
+	 * @param i
 	 * @return OverlayItem
 	 */
 	@Override

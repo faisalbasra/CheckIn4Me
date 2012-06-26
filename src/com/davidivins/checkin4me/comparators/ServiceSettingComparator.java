@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,9 +16,9 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.comparators;
 
-import java.util.Comparator;
-
 import com.davidivins.checkin4me.core.ServiceSetting;
+
+import java.util.Comparator;
 
 /**
 * ServiceSettingComparator
@@ -30,8 +30,8 @@ public class ServiceSettingComparator implements Comparator<ServiceSetting>
 	/**
 	* compare
 	* 
-	* @param ServiceSetting location_1
-	* @param ServiceSetting location_2
+	* @param setting_1
+	* @param setting_2
 	* @return int
 	*/
 	public int compare(ServiceSetting setting_1, ServiceSetting setting_2)
