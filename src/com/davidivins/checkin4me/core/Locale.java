@@ -22,6 +22,7 @@ import android.util.Log;
 import com.google.android.maps.GeoPoint;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -45,7 +46,7 @@ public class Locale
 	
 	private double distance_from_user;
 	
-	HashMap<Integer, String> service_location_ids;
+	Map<Integer, String> service_location_ids;
 	
 	/**
 	 * Location
@@ -217,9 +218,9 @@ public class Locale
 	/**
 	 * getServiceIdToLocationIdMap
 	 * 
-	 * @return HashMap<Integer, String>
+	 * @return Map<Integer, String>
 	 */
-	public HashMap<Integer, String> getServiceIdToLocationIdMap()
+	public Map<Integer, String> getServiceIdToLocationIdMap()
 	{
 		return service_location_ids;
 	}

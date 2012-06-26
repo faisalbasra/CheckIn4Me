@@ -27,10 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * GowallaAPI
@@ -44,7 +41,7 @@ public class FacebookAPI implements APIInterface
 	private int service_id;
 	private Properties config;
 	
-	private ArrayList<Locale> latest_locations;
+	private List<Locale> latest_locations;
 	private boolean latest_checkin_status;
 	
 	/**
@@ -78,9 +75,9 @@ public class FacebookAPI implements APIInterface
 	/**
 	 * getLatestLocations
 	 * 
-	 * @return ArrayList<Locale>
+	 * @return List<Locale>
 	 */
-	public ArrayList<Locale> getLatestLocations()
+	public List<Locale> getLatestLocations()
 	{
 		Collections.sort(latest_locations, new LocaleDistanceComparator());
 		return latest_locations;
@@ -262,7 +259,7 @@ public class FacebookAPI implements APIInterface
 				config.getProperty("api_checkin_http_method"), config.getProperty("api_host"), 
 				config.getProperty("api_checkin_endpoint"));
 			
-			HashMap<Integer, String> service_id_location_id_xref = location.getServiceIdToLocationIdMap();
+			Map<Integer, String> service_id_location_id_xref = location.getServiceIdToLocationIdMap();
 			String place_id = service_id_location_id_xref.get(service_id);
 			
 			// set query parameters

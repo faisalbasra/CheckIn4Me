@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -22,11 +22,12 @@ import com.davidivins.checkin4me.interfaces.GeneratedResourcesInterface;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ParsedGeneratedResources implements GeneratedResourcesInterface
 {
 	private static final String TAG = ParsedGeneratedResources.class.getSimpleName();
-	private HashMap<String, HashMap<String, Integer>> resources;
+	private Map<String, Map<String, Integer>> resources;
 	
 	/**
 	 * ParsedGeneratedResources
@@ -35,7 +36,7 @@ public class ParsedGeneratedResources implements GeneratedResourcesInterface
 	 */
 	public ParsedGeneratedResources(String class_name) 
 	{
-		resources = new HashMap<String, HashMap<String, Integer>>();
+		resources = new HashMap<String, Map<String, Integer>>();
 		
 		try
 		{
@@ -45,7 +46,7 @@ public class ParsedGeneratedResources implements GeneratedResourcesInterface
 	            
 			for (Class<?> current_class : r_classes)
 			{
-				HashMap<String, Integer> current_class_fields = new HashMap<String, Integer>();
+				Map<String, Integer> current_class_fields = new HashMap<String, Integer>();
 				Field[] fields = current_class.getDeclaredFields();
 				
 				String[] current_class_name = current_class.getName().split("\\.");

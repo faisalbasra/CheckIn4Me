@@ -19,10 +19,7 @@ package com.davidivins.checkin4me.core;
 import com.davidivins.checkin4me.comparators.LocaleNameComparator;
 import com.davidivins.checkin4me.comparators.LocaleServicesTotalComparator;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 
 public class Algorithms 
 {
@@ -36,18 +33,18 @@ public class Algorithms
 	 * merges locations from service api provided location lists into one list
 	 * 
 	 * @param location_lists
-	 * @return ArrayList<Locale>
+	 * @return List<Locale>
 	 */
-	synchronized static public ArrayList<Locale> mergeLocations(ArrayList<ArrayList<Locale>> location_lists)
+	synchronized static public List<Locale> mergeLocations(List<List<Locale>> location_lists)
 	{
 		int current_index = 0;
-		ArrayList<Locale> locations = new ArrayList<Locale>();
-		HashMap< String, ArrayList<Integer> > name_indexes = new HashMap< String, ArrayList<Integer> >();
+		List<Locale> locations = new ArrayList<Locale>();
+		Map<String, List<Integer>> name_indexes = new HashMap<String, List<Integer>>();
 		
 		// if we don't have an empty list of location lists
 		if (!location_lists.isEmpty())
 		{
-			for (ArrayList<Locale> location_list : location_lists)
+			for (List<Locale> location_list : location_lists)
 			{
 				for (Locale location : location_list)
 				{
@@ -64,7 +61,7 @@ public class Algorithms
 							// if the two locations are further than 1 km from each other, treat as different places
 							if (distance <= 1.0)
 							{
-								HashMap<Integer,String> map_id_location_id_xref = location.getServiceIdToLocationIdMap();
+								Map<Integer,String> map_id_location_id_xref = location.getServiceIdToLocationIdMap();
 								Set<Integer> keys = map_id_location_id_xref.keySet();
 								
 								for (int key : keys) // will only be one item for locations coming directly from api calls
@@ -90,7 +87,7 @@ public class Algorithms
 							locations.add(current_index, location);
 							
 							// get all possible xref names
-							ArrayList<String> name_variations = getNameVariations(location.getName().toLowerCase());	
+							List<String> name_variations = getNameVariations(location.getName().toLowerCase());
 
 							// create arrays if necessary
 							for (String name_variation : name_variations)
@@ -114,7 +111,7 @@ public class Algorithms
 						locations.add(current_index, location);
 						
 						// get all possible xref names
-						ArrayList<String> name_variations = getNameVariations(location.getName().toLowerCase());	
+						List<String> name_variations = getNameVariations(location.getName().toLowerCase());
 
 						// create arrays if necessary
 						for (String name_variation : name_variations)
@@ -169,11 +166,11 @@ public class Algorithms
 	 * getNameVariations
 	 * 
 	 * @param name
-	 * @return ArrayList<String>
+	 * @return List<String>
 	 */
-	private static ArrayList<String> getNameVariations(String name)
+	private static List<String> getNameVariations(String name)
 	{
-		ArrayList<String> name_variations = new ArrayList<String>();
+		List<String> name_variations = new ArrayList<String>();
 		
 		name_variations.add(name);
 		name_variations.add(name.replace("'", ""));

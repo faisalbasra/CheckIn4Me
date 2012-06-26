@@ -25,7 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import com.davidivins.checkin4me.core.GeneratedResources;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ServiceConnectionAdapter
@@ -37,7 +37,7 @@ public class ServiceConnectionAdapter extends ArrayAdapter<Integer>
 	//private static final String TAG = LocaleAdapter.class.getSimpleName();
 	private Context context;
 	private int row_resource_id;
-	private ArrayList<Integer> logos;
+	private List<Integer> logos;
 
 	/**
 	 * ServiceConnectionAdapter
@@ -46,7 +46,7 @@ public class ServiceConnectionAdapter extends ArrayAdapter<Integer>
 	 * @param row_resource_id
 	 * @param logos
 	 */
-	public ServiceConnectionAdapter(Context context, int row_resource_id, ArrayList<Integer> logos) 
+	public ServiceConnectionAdapter(Context context, int row_resource_id, List<Integer> logos)
 	{
 		super(context, row_resource_id, logos);
 		this.context = context;

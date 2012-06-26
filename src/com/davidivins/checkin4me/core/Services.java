@@ -27,6 +27,8 @@ import com.davidivins.checkin4me.interfaces.ServiceInterface;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Services
@@ -37,7 +39,7 @@ public class Services
 {
 	private static final String TAG = Services.class.getSimpleName();
 	private static Services instance;	
-	private ArrayList<ServiceInterface> services;
+	private List<ServiceInterface> services;
 	
 	/**
 	 * Services
@@ -82,21 +84,21 @@ public class Services
 	}
 	
 	/**
-	 * getServicesAsArrayList
+	 * getServicesAsList
 	 * 
-	 * @return ArrayList<Service>
+	 * @return List<Service>
 	 */
-	public ArrayList<ServiceInterface> getServicesAsArrayList()
+	public List<ServiceInterface> getServicesAsList()
 	{
 		return services;
 	}
 	
 	/**
-	 * getServicesWithSettingsAsArrayList
+	 * getServicesWithSettingsAsList
 	 */
-	public ArrayList<ServiceInterface> getConnectedServicesWithSettingsAsArrayList()
+	public List<ServiceInterface> getConnectedServicesWithSettingsAsList()
 	{
-		ArrayList<ServiceInterface> services_with_settings = new ArrayList<ServiceInterface>();
+		List<ServiceInterface> services_with_settings = new ArrayList<ServiceInterface>();
 		
 		for (ServiceInterface service : services)
 		{
@@ -108,13 +110,13 @@ public class Services
 	}
 	
 	/**
-	 * getConnectedServicesAsArrayList
+	 * getConnectedServicesAsList
 	 * 
-	 * @return ArrayList<Service>
+	 * @return List<Service>
 	 */
-	public ArrayList<ServiceInterface> getConnectedServicesAsArrayList()
+	public List<ServiceInterface> getConnectedServicesAsList()
 	{
-		ArrayList<ServiceInterface> connected_services = new ArrayList<ServiceInterface>();
+		List<ServiceInterface> connected_services = new ArrayList<ServiceInterface>();
 		
 		for (ServiceInterface service : services)
 		{
@@ -127,11 +129,11 @@ public class Services
 	/**
 	 * getLogoDrawables
 	 * 
-	 * @return ArrayList<Integer>
+	 * @return List<Integer>
 	 */
-	public ArrayList<Integer> getLogoDrawables()
+	public List<Integer> getLogoDrawables()
 	{
-		ArrayList<Integer> drawables = new ArrayList<Integer>();
+		List<Integer> drawables = new ArrayList<Integer>();
 		
 		for (ServiceInterface service : services)
 		{
@@ -169,12 +171,12 @@ public class Services
 	 * @param longitude
 	 * @param latitude
 	 * @param persistent_storage
-	 * @return ArrayList<Locale>
+	 * @return List<Locale>
 	 */
-	public ArrayList<Locale> getAllLocations(String query, String longitude, String latitude, SharedPreferences persistent_storage)
+	public List<Locale> getAllLocations(String query, String longitude, String latitude, SharedPreferences persistent_storage)
 	{
-		ArrayList<Thread> threads = new ArrayList<Thread>();
-		ArrayList<ArrayList<Locale>> location_lists = new ArrayList<ArrayList<Locale>>();
+		List<Thread> threads = new ArrayList<Thread>();
+		List<List<Locale>> location_lists = new ArrayList<List<Locale>>();
 		
 		// get location request threads
 		for (ServiceInterface service : services)
@@ -223,10 +225,10 @@ public class Services
 	 * @param location
 	 * @param persistent_storage
 	 */
-	public HashMap<Integer, Boolean> checkIn(ArrayList<Integer> service_ids, Locale location, String message, SharedPreferences persistent_storage)
+	public Map<Integer, Boolean> checkIn(List<Integer> service_ids, Locale location, String message, SharedPreferences persistent_storage)
 	{
-		ArrayList<Thread> threads = new ArrayList<Thread>();
-		HashMap<Integer, Boolean> checkin_statuses = new HashMap<Integer, Boolean>();
+		List<Thread> threads = new ArrayList<Thread>();
+		Map<Integer, Boolean> checkin_statuses = new HashMap<Integer, Boolean>();
 		
 		// get location request threads
 		for (int service_id : service_ids)

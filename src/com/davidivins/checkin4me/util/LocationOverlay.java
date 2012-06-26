@@ -23,6 +23,7 @@ import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.OverlayItem;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * LocationOverlay
@@ -31,7 +32,7 @@ import java.util.ArrayList;
  */
 public class LocationOverlay extends ItemizedOverlay<OverlayItem>
 {
-	private ArrayList<OverlayItem> overlays = new ArrayList<OverlayItem>();
+	private List<OverlayItem> overlays = new ArrayList<OverlayItem>();
 	private Context context;
 	
 	/**

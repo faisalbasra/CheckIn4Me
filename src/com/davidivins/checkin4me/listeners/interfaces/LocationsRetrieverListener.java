@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,11 +16,11 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.listeners.interfaces;
 
-import java.util.ArrayList;
-
 import com.davidivins.checkin4me.core.Locale;
+
+import java.util.List;
 
 public interface LocationsRetrieverListener 
 {
-	abstract public void updateLocations(ArrayList<Locale> locations);
+	abstract public void updateLocations(List<Locale> locations);
 }

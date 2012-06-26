@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,10 +16,10 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.interfaces;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.davidivins.checkin4me.core.ServiceSetting;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * ServiceInterface
@@ -36,6 +36,6 @@ public interface ServiceInterface
 	abstract public APIInterface getAPIInterface();
 	abstract public boolean connected();
 	abstract public boolean hasSettings();
-	abstract public HashMap<String, ServiceSetting> getSettingsAsHashMap();
-	abstract public ArrayList<ServiceSetting> getSettingsAsArrayList();
+	abstract public Map<String, ServiceSetting> getSettingsAsMap();
+	abstract public List<ServiceSetting> getSettingsAsList();
 }

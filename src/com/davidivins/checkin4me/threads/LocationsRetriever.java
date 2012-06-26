@@ -16,22 +16,21 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.threads;
 
-import android.os.AsyncTask;
 import android.app.Activity;
 import android.content.SharedPreferences;
-
+import android.os.AsyncTask;
 import com.davidivins.checkin4me.core.Locale;
-import com.davidivins.checkin4me.listeners.interfaces.LocationsRetrieverListener;
 import com.davidivins.checkin4me.core.Services;
+import com.davidivins.checkin4me.listeners.interfaces.LocationsRetrieverListener;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * LocationsRetriever
  * 
  * @author david
  */
-public class LocationsRetriever extends AsyncTask<Void, Void,  ArrayList<Locale>> 
+public class LocationsRetriever extends AsyncTask<Void, Void, List<Locale>>
 {
 	private Activity activity;
 	private LocationsRetrieverListener listener;
@@ -67,7 +66,7 @@ public class LocationsRetriever extends AsyncTask<Void, Void,  ArrayList<Locale>
 	 * @return an array list of locales
 	 */
 	@Override
-	protected ArrayList<Locale> doInBackground(Void ... params)
+	protected List<Locale> doInBackground(Void ... params)
 	{
 		return Services.getInstance(activity).getAllLocations(query, longitude, latitude, persistent_storage);
 	}
@@ -80,7 +79,7 @@ public class LocationsRetriever extends AsyncTask<Void, Void,  ArrayList<Locale>
 	 * @param locations
 	 */
 	@Override
-	protected void onPostExecute(ArrayList<Locale> locations)
+	protected void onPostExecute(List<Locale> locations)
 	{
 		listener.updateLocations(locations);
 	}

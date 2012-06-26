@@ -32,10 +32,7 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * GooglePlacesService
@@ -51,7 +48,7 @@ public class GooglePlacesService implements ServiceInterface
 	private Properties config;
 	private OAuthConnectorInterface oauth_connector;
 	private APIInterface api_adapter;
-	private HashMap<String, ServiceSetting> settings;
+	private Map<String, ServiceSetting> settings;
 	
 	/**
 	 * GooglePlacesService
@@ -191,23 +188,23 @@ public class GooglePlacesService implements ServiceInterface
 	}
 	 
 	/**
-	 * getSettingsAsHashMap
+	 * getSettingsAsMap
 	 *
-	 * @return HashMap<String, ServiceSetting>
+	 * @return Map<String, ServiceSetting>
 	 */
-	public HashMap<String, ServiceSetting> getSettingsAsHashMap()
+	public Map<String, ServiceSetting> getSettingsAsMap()
 	{
 		return settings;
 	}
 	 
 	/**
-	 * getSettingsAsArrayList
+	 * getSettingsAsList
 	 *
-	 * ArrayList<ServiceSetting>
+	 * List<ServiceSetting>
 	 */
-	public ArrayList<ServiceSetting> getSettingsAsArrayList()
+	public List<ServiceSetting> getSettingsAsList()
 	{
-		ArrayList<ServiceSetting> settings_list = new ArrayList<ServiceSetting>();
+		List<ServiceSetting> settings_list = new ArrayList<ServiceSetting>();
 	 
 		for (String key : settings.keySet())
 		{

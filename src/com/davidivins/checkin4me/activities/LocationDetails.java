@@ -207,8 +207,8 @@ public class LocationDetails
 		ServiceCheckListAdapter adapter = (ServiceCheckListAdapter)list_view.getAdapter();
 		
 		// retrieve services that were checked
-		HashMap<Integer, Boolean> services_checked = adapter.getServicesChecked();
-		ArrayList<Integer> service_ids = new ArrayList<Integer>();
+		Map<Integer, Boolean> services_checked = adapter.getServicesChecked();
+		List<Integer> service_ids = new ArrayList<Integer>();
 		
 		// pull out services checked
 		Set<Integer> keys = services_checked.keySet();
@@ -247,7 +247,7 @@ public class LocationDetails
 	 * 
 	 * @param checkin_statuses
 	 */
-	public void checkInComplete(HashMap<Integer, Boolean> checkin_statuses)
+	public void checkInComplete(Map<Integer, Boolean> checkin_statuses)
 	{
 		Log.i(TAG, "received check-in completed.");
     	
@@ -318,8 +318,8 @@ public class LocationDetails
 		// 
 		// service list stuff
 		//
-		HashMap<Integer, String> service_id_location_id_xref = current_location.getServiceIdToLocationIdMap();
-		ArrayList<ServiceInterface> services = new ArrayList<ServiceInterface>();
+		Map<Integer, String> service_id_location_id_xref = current_location.getServiceIdToLocationIdMap();
+		List<ServiceInterface> services = new ArrayList<ServiceInterface>();
 		Set<Integer> service_ids = service_id_location_id_xref.keySet();
 		
 		for(int service_id : service_ids)
@@ -340,7 +340,7 @@ public class LocationDetails
 	 * 
 	 * @param checkin_statuses
 	 */
-	public void displayCheckInStatus(HashMap<Integer, Boolean> checkin_statuses)
+	public void displayCheckInStatus(Map<Integer, Boolean> checkin_statuses)
 	{
 		boolean some_succeeded = false;
 		boolean some_failed = false;

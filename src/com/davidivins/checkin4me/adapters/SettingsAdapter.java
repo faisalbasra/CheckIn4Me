@@ -27,6 +27,7 @@ import com.davidivins.checkin4me.core.Services;
 import com.davidivins.checkin4me.interfaces.ServiceInterface;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * SettingsAdapter
@@ -37,23 +38,23 @@ public class SettingsAdapter extends BaseExpandableListAdapter
 {
 	//private static final String TAG = SettingsAdapter.class.getSimpleName();
 	private Activity activity = null;
-	private ArrayList<String> groups;
-	private ArrayList<ArrayList<ServiceSetting>> children;
+	private List<String> groups;
+	private List<List<ServiceSetting>> children;
 	
 	public SettingsAdapter(Activity activity)
 	{
 		this.activity = activity;
 
 		groups = new ArrayList<String>();
-		children = new ArrayList<ArrayList<ServiceSetting>>();
+		children = new ArrayList<List<ServiceSetting>>();
 		
-		ArrayList<ServiceInterface> services = 
-			Services.getInstance(activity).getConnectedServicesWithSettingsAsArrayList();
+		List<ServiceInterface> services =
+			Services.getInstance(activity).getConnectedServicesWithSettingsAsList();
 
 		for (ServiceInterface service : services)
 		{
 			groups.add(service.getName() + " Settings");			
-			ArrayList<ServiceSetting> settings = service.getSettingsAsArrayList();
+			List<ServiceSetting> settings = service.getSettingsAsList();
 			children.add(settings);			
 		}
 	}

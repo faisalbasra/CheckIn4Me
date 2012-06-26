@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,25 +16,19 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.adapters;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import com.davidivins.checkin4me.core.GeneratedResources;
-import com.davidivins.checkin4me.interfaces.ServiceInterface;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import com.davidivins.checkin4me.core.GeneratedResources;
+import com.davidivins.checkin4me.interfaces.ServiceInterface;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * ServiceCheckListAdapter
@@ -46,19 +40,18 @@ public class ServiceCheckListAdapter extends ArrayAdapter<ServiceInterface> impl
 	//private static final String TAG = ServiceCheckListAdapter.class.getSimpleName();
 	private Context context;
 	private int row_resource_id;
-	private ArrayList<ServiceInterface> items;
+	private List<ServiceInterface> items;
 	
 	private HashMap<Integer, Boolean> services_checked;
 
 	/**
 	 * ServiceCheckListAdapter
 	 * 
-	 * @param activity
 	 * @param context
 	 * @param row_resource_id
 	 * @param items
 	 */
-	public ServiceCheckListAdapter(Context context, int row_resource_id, ArrayList<ServiceInterface> items) 
+	public ServiceCheckListAdapter(Context context, int row_resource_id, List<ServiceInterface> items)
 	{
 		super(context, row_resource_id, items);
 		this.context = context;
@@ -75,9 +68,9 @@ public class ServiceCheckListAdapter extends ArrayAdapter<ServiceInterface> impl
 	/**
 	 * getView
 	 * 
-	 * @param int position
-	 * @param View convert_view
-	 * @param ViewGroup parent
+	 * @param position
+	 * @param convert_view
+	 * @param parent
 	 * @return View
 	 */
 	@Override
@@ -120,9 +113,9 @@ public class ServiceCheckListAdapter extends ArrayAdapter<ServiceInterface> impl
 			// create check box and determine user's default behavior for checking in with this service
 			CheckBox check_box = new CheckBox(parent.getContext());
 			boolean is_checked = false;
-			if (service.getSettingsAsHashMap().containsKey(service.getName().toLowerCase() + "_check_in_default"))
+			if (service.getSettingsAsMap().containsKey(service.getName().toLowerCase() + "_check_in_default"))
 			{
-				is_checked = service.getSettingsAsHashMap().get(
+				is_checked = service.getSettingsAsMap().get(
 						service.getName().toLowerCase() + "_check_in_default").getPrefValue();
 				check_box.setChecked(is_checked);
 			}
@@ -152,8 +145,8 @@ public class ServiceCheckListAdapter extends ArrayAdapter<ServiceInterface> impl
 	/**
 	 * onCheckedChanged
 	 * 
-	 * @param CompountButton button_view
-	 * @param boolean is_checked
+	 * @param button_view
+	 * @param is_checked
 	 */
 	public void onCheckedChanged(CompoundButton button_view, boolean is_checked) 
 	{

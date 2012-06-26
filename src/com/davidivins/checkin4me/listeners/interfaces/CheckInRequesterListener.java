@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,9 +16,9 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.listeners.interfaces;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public interface CheckInRequesterListener 
 {
-	abstract public void checkInComplete(HashMap<Integer, Boolean> services);
+	abstract public void checkInComplete(Map<Integer, Boolean> services);
 }

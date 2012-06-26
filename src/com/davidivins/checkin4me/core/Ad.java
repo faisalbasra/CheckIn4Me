@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,21 +16,19 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.core;
 
-import java.io.InputStream;
-import java.util.Properties;
-
-import com.google.ads.AdRequest;
-import com.google.ads.AdSize;
-import com.google.ads.AdView;
-
-import com.davidivins.checkin4me.listeners.implementations.AdmobListener;
-
 import android.app.Activity;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import com.davidivins.checkin4me.listeners.implementations.AdmobListener;
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
+
+import java.io.InputStream;
+import java.util.Properties;
 
 public class Ad 
 {

@@ -23,19 +23,19 @@ import com.davidivins.checkin4me.core.Locale;
 import com.davidivins.checkin4me.core.Services;
 import com.davidivins.checkin4me.listeners.interfaces.CheckInRequesterListener;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * CheckInRequester
  * 
  * @author david
  */
-public class CheckInRequester extends AsyncTask<Void, Void, HashMap<Integer, Boolean>> 
+public class CheckInRequester extends AsyncTask<Void, Void, Map<Integer, Boolean>>
 {
 	Activity                 activity;
 	CheckInRequesterListener listener;
-	ArrayList<Integer>       service_ids;
+	List<Integer>            service_ids;
 	Locale                   location;
 	String                   message;
 	SharedPreferences        persistent_storage;
@@ -50,7 +50,7 @@ public class CheckInRequester extends AsyncTask<Void, Void, HashMap<Integer, Boo
 	 * @param message
 	 * @param persistent_storage
 	 */
-	public CheckInRequester(Activity activity, CheckInRequesterListener listener, ArrayList<Integer> service_ids, 
+	public CheckInRequester(Activity activity, CheckInRequesterListener listener, List<Integer> service_ids,
 		Locale location, String message, SharedPreferences persistent_storage)
 	{
 		this.activity           = activity;
@@ -69,7 +69,7 @@ public class CheckInRequester extends AsyncTask<Void, Void, HashMap<Integer, Boo
 	 * @return a hash map of ints and bools representing services and their statuses
 	 */
 	@Override
-	protected HashMap<Integer, Boolean> doInBackground(Void ... params)
+	protected Map<Integer, Boolean> doInBackground(Void ... params)
 	{
 		return Services.getInstance(activity).checkIn(service_ids, location, message, persistent_storage);
 	}
@@ -82,7 +82,7 @@ public class CheckInRequester extends AsyncTask<Void, Void, HashMap<Integer, Boo
 	 * @param checkin_statuses
 	 */
 	@Override
-	protected void onPostExecute(HashMap<Integer, Boolean> checkin_statuses)
+	protected void onPostExecute(Map<Integer, Boolean> checkin_statuses)
 	{
 		listener.checkInComplete(checkin_statuses);
 	}

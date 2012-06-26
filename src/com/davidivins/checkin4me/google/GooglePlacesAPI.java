@@ -27,10 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * GooglePlacesAPI
@@ -44,7 +41,7 @@ public class GooglePlacesAPI implements APIInterface
 	private int service_id;
 	private Properties config;
 	
-	private ArrayList<Locale> latest_locations;
+	private List<Locale> latest_locations;
 	private boolean latest_checkin_status;
 	
 	/**
@@ -78,9 +75,9 @@ public class GooglePlacesAPI implements APIInterface
 	/**
 	 * getLatestLocations
 	 * 
-	 * @return ArrayList<Locale>
+	 * @return List<Locale>
 	 */
-	public ArrayList<Locale> getLatestLocations()
+	public List<Locale> getLatestLocations()
 	{
 		Collections.sort(latest_locations, new LocaleDistanceComparator());
 		return latest_locations;
@@ -304,7 +301,7 @@ public class GooglePlacesAPI implements APIInterface
 			request.addQueryParameter("oauth_token", 
 					persistent_storage.getString("foursquare_oauth_token_secret", "FOURSQUARE_ACCESS_TOKEN_HERE"));
 			
-			HashMap<Integer, String> service_id_location_id_xref = location.getServiceIdToLocationIdMap();
+			Map<Integer, String> service_id_location_id_xref = location.getServiceIdToLocationIdMap();
 			String vid = service_id_location_id_xref.get(service_id);
 			
 			request.addQueryParameter("venueId", vid);

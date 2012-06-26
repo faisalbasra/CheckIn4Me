@@ -15,11 +15,10 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.interfaces;
 
-import java.util.ArrayList;
-
+import android.content.SharedPreferences;
 import com.davidivins.checkin4me.core.Locale;
 
-import android.content.SharedPreferences;
+import java.util.List;
 
 /**
  * APIInterface
@@ -29,7 +28,7 @@ import android.content.SharedPreferences;
 public interface APIInterface 
 {
 	abstract public Runnable getLocationsThread(String query, String longitude, String latitude, SharedPreferences persistent_storage);
-	abstract public ArrayList<Locale> getLatestLocations();
+	abstract public List<Locale> getLatestLocations();
 	abstract public Runnable getCheckInThread(Locale location, String message, SharedPreferences persistent_storage);
 	abstract public boolean getLatestCheckInStatus();
 }

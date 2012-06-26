@@ -52,7 +52,7 @@ import com.davidivins.checkin4me.threads.LocationsRetriever;
 import com.davidivins.checkin4me.threads.NetworkTimeoutMonitor;
 import com.davidivins.checkin4me.util.CleanableProgressDialog;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * NearbyPlaces
@@ -74,7 +74,7 @@ public class NearbyPlaces extends ListActivity
 	private Runnable display_progress_dialog               = null;
 	private Handler handler                                = null;
 
-	private ArrayList<Locale> current_locations            = null;
+	private List<Locale> current_locations                 = null;
 	private String current_longitude                       = null;
 	private String current_latitude                        = null;
 	private String current_query                           = null;
@@ -363,7 +363,7 @@ public class NearbyPlaces extends ListActivity
 	 *
 	 * @param locations
 	 */
-	public void updateLocations(ArrayList<Locale> locations) 
+	public void updateLocations(List<Locale> locations)
 	{
 		Log.i(TAG, "received new location data.");
 		

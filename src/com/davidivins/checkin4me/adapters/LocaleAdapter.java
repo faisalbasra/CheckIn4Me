@@ -1,5 +1,5 @@
 //*****************************************************************************
-//    This file is part of CheckIn4Me.  Copyright © 2010  David Ivins
+//    This file is part of CheckIn4Me.  Copyright ï¿½ 2010  David Ivins
 //
 //    CheckIn4Me is free software: you can redistribute it and/or modify
 //    it under the terms of the GNU General Public License as published by
@@ -16,13 +16,6 @@
 //*****************************************************************************
 package com.davidivins.checkin4me.adapters;
 
-import java.util.ArrayList;
-import java.util.Set;
-
-import com.davidivins.checkin4me.core.GeneratedResources;
-import com.davidivins.checkin4me.core.Locale;
-import com.davidivins.checkin4me.core.Services;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -33,6 +26,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.davidivins.checkin4me.core.GeneratedResources;
+import com.davidivins.checkin4me.core.Locale;
+import com.davidivins.checkin4me.core.Services;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * LocationAdapter
@@ -44,17 +43,16 @@ public class LocaleAdapter extends ArrayAdapter<Locale>
 	//private static final String TAG = LocaleAdapter.class.getSimpleName();
 	private Context context;
 	private int row_resource_id;
-	private ArrayList<Locale> items;
+	private List<Locale> items;
 
 	/**
 	 * LocationAdapter
 	 * 
-	 * @param activity
 	 * @param context
 	 * @param row_resource_id
 	 * @param items
 	 */
-	public LocaleAdapter(Context context, int row_resource_id, ArrayList<Locale> items) 
+	public LocaleAdapter(Context context, int row_resource_id, List<Locale> items)
 	{
 		super(context, row_resource_id, items);
 		this.context = context;
@@ -65,9 +63,9 @@ public class LocaleAdapter extends ArrayAdapter<Locale>
 	/**
 	 * getView
 	 * 
-	 * @param int position
-	 * @param View convert_view
-	 * @param ViewGroup parent
+	 * @param position
+	 * @param convert_view
+	 * @param parent
 	 * @return View
 	 */
 	@Override

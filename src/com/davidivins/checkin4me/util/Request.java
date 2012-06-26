@@ -20,6 +20,7 @@ import android.util.Log;
 
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -35,8 +36,8 @@ abstract public class Request
 	protected String method;
 	protected String host;
 	protected String endpoint;
-	protected HashMap<String, String> headers;
-	protected TreeMap<String, String> query_parameters;
+	protected Map<String, String> headers;
+	protected Map<String, String> query_parameters;
 	
 	/**
 	 * Request
@@ -194,7 +195,7 @@ abstract public class Request
 	 * 
 	 * @return TreeMap<String, String>
 	 */
-	public TreeMap<String, String> getQueryParameters()
+	public Map<String, String> getQueryParameters()
 	{
 		return query_parameters;
 	}
