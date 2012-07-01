@@ -1,4 +1,5 @@
 /keys.txt
+*.properties
 *.idea
 *.iml
 R.java
